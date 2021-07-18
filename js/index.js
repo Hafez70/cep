@@ -46,7 +46,6 @@ function generateContainer() {
     });
 }
 
-
 function getOS() {
     var userAgent = window.navigator.userAgent,
         platform = window.navigator.platform,
