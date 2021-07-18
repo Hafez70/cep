@@ -594,15 +594,15 @@ function getSubMenuItems(subMenuPath, sourcPath) {
     return sunbMenu;
 }
 
-//getMainDirectories("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/files/Texts",1);
-function getMainDirectories(myPath,catIndex) {
+//getMainDirectories("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/packages");
+function getMainDirectories(myPath) {
     try {
 
         var files = [];
         var textsubFolder = Folder(myPath).getFiles();
-        var textPath = 'assets/files/Texts';
+        var textPath = 'assets/packages';
         for (var i = 0; i < textsubFolder.length; i++) {
-            if (textsubFolder[i] instanceof Folder && i === catIndex) {
+            if (textsubFolder[i] instanceof Folder) {
                 var subMenus = getSubMenuItems(textsubFolder[i].fullName, textPath + '/' + textsubFolder[i].name);
                  files.push({
                      menuName: textsubFolder[i].name.replace(/%20/g, " "),
@@ -619,19 +619,20 @@ function getMainDirectories(myPath,catIndex) {
     }
 }
 
-//getCategiries("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/files/Texts");
+//getCategiries("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/packages");
 function getCategiries(myPath) {
     try {
         var files = [];
         var textsubFolder = Folder(myPath).getFiles();
-        var textPath = 'assets/files/texts';
+        var textPath = 'assets/packages';
         for (var i = 0; i < textsubFolder.length; i++) {
+
             if (textsubFolder[i] instanceof Folder) {
                 files.push({
                     CatName: textsubFolder[i].name.replace(/%20/, " "),
                     CatPath: textsubFolder[i].fullName,
                     CatIndex: i,
-                    //subMenuNames: subMenus,
+                    subMenuNames: subMenus,
                     demo: './' + textPath + '/' + textsubFolder[i].name + '/demo.gif',
                 });
             }
@@ -643,7 +644,7 @@ function getCategiries(myPath) {
     }
 }
 
-//ImportFile("~/AppData/Roaming/Adobe/CEP/extensions/hafez-test/assets/files/texts/simple-text-lists/moving/slide-down-to-up/slide-down-to-up.aep");
+//ImportFile("~/AppData/Roaming/Adobe/CEP/extensions/hafez-test/assets/packages/simple-text-lists/moving/slide-down-to-up/slide-down-to-up.aep");
 function ImportFile(filePath) {
     try {
         var item = new ImportOptions();
@@ -714,7 +715,7 @@ function getAllLayersInComp(compIndex) {
 
 }
 
-//importStickyTextWithBeamEffect("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/files/texts/simple-text-lists/tooltip/tooltip-with-beam/tooltip-with-beam.aep",2,2,3,"",false,1);
+//importStickyTextWithBeamEffect("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/simple-text-lists/tooltip/tooltip-with-beam/tooltip-with-beam.aep",2,2,3,"",false,1);
 
 function importStickyTextWithBeamEffect(projPath, parentCompIndex, firstLayerIndex, secondLayerIndex, myText, fromCti, specificTime , endTime) {
 

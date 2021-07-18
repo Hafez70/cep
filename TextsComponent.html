@@ -247,69 +247,6 @@
     </div>
 </div>
 <div id="mydiv" class="d-block-xxs bg-dark text-light">the Panel size is too small</div>
-<!-- Modal -->
-<div class="modal fade" id="stickySettingModal" tabindex="-1" role="dialog" aria-labelledby="stickyTextSetting"
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Sticky Text Setting</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body position-relative">
-                <form class="row g-3 needs-validation" id="stickyImportFomr" novalidate>
-                    <div class="col-12 position-relative">
-                        <label for="stickyTextSourceInput" class="form-label">Your Text</label>
-                        <input type="text" class="form-control" id="stickyTextSourceInput" placeholder="Sample Text"
-                               maxlength="50">
-                    </div>
-                    <div class="col-12 position-relative">
-                        <label for="compSelect" class="form-label">select Comp to Import</label>
-                        <select class="form-select form-select-sm" aria-label=".form-select-sm"
-                                onchange="compSelected(this.value)" id="compSelect">
-
-                        </select>
-                    </div>
-
-                    <div class="col-12 has-validation position-relative">
-                        <label for="startlayerSelect" class="form-label">select start Position Layer</label>
-                        <select class="form-select form-select-sm mt-2" aria-label=".form-select-sm"
-                                id="startlayerSelect"
-                                required>
-
-                        </select>
-                        <div class="invalid-tooltip">
-                            Please choose a Layer
-                        </div>
-                    </div>
-                    <div class="col-12 has-validation position-relative">
-                        <label for="endlayerSelect" class="form-label">select Layer for Text to Stick to!</label>
-                        <select class="form-select form-select-sm mt-2" aria-label=".form-select-sm" id="endlayerSelect"
-                                required>
-
-                        </select>
-                        <div class="invalid-tooltip">
-                            Please choose a Layer
-                        </div>
-                    </div>
-                    <label for="endlayerSelect" class="form-label">For better result choose two different Layers</label>
-                    <div class="form-check form-switch">
-                        <input type="checkbox" class="form-check-input" id="startTimeSwitch"
-                               onchange="startTimeChangestickyImportFomr(this.checked)">
-                        <label id="startTimeSwitchLabel" class="form-check-label" for="startTimeSwitch">start from
-                            current CTI</label>
-                        <input type="number" value="0" disabled class="form-control" id="startTimeSpecificValue"
-                               placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="importSticky()" type="submit">Import</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script>
 

@@ -160,19 +160,19 @@
             background: linear-gradient(45deg, #54d400 48%, #1b1e21 48%);
         }
 
-        #sidebarMenu>li>a:before {
+        #sidebarMenu > li > a:before {
             font-family: "Font Awesome 5 Free";
             font-weight: 900;
             content: "\f07c";
         }
 
-        #sidebarMenu>li>a.collapsed:before {
+        #sidebarMenu > li > a.collapsed:before {
             font-family: "Font Awesome 5 Free";
             font-weight: 900;
             content: "\f07b";
         }
 
-        #sidebarMenu>li>.nav>li>a:before {
+        #sidebarMenu > li > .nav > li > a:before {
             font-family: "Font Awesome 5 Free";
             font-weight: 900;
             content: "\f061";
@@ -298,44 +298,112 @@
         </button>
     </div>
     <div class="container-fluid d-flex flex-fill" id="mainContent">
-        
+
         <div class="row flex-fill">
-            <div class="col-sm-3 col-2 pr-3 d-flex flex-column m-2 border-start-0 border-bottom-0 border-light "
+            <div class="col-md-3 col-lg-2 pr-3 d-flex flex-column m-2 border-start-0 border-bottom-0 border-light "
                  style=" background-color: #2f2e2e !important;" id="mySidebar">
-                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white ">
-                    <span class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none fs-5 d-none d-sm-inline">Tools</span>
-                    <ul class="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start list-group list-group-flush"
+                <div class="d-flex flex-column align-items-start p-0 text-white ">
+                    <span class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none fs-5">Tools</span>
+                    <ul class="nav flex-sm-row flex-column mb-sm-auto mb-0 align-items-start list-group list-group-flush"
                         id="sidebarMenu">
-                        <li class="w-100 ">
-                            <a href="#submenu1" data-bs-toggle="collapse" data-bs-target="#submenu1"
-                               aria-expanded="false" class="px-0 align-middle text-light collapsed">
-                                <span class="ms-1 d-none d-sm-inline">Dashboard</span>
-                            </a>
-                            <ul class="ps-3 collapse fade nav flex-column ms-1 list-group list-group-flush" id="submenu1"
-                                data-bs-parent="#sidebarMenu">
-                                <li class="w-100">
-                                    <a href="#" class="px-0 align-self-end text-light"> <span
-                                            class="d-none d-sm-inline">Item</span> 1
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="px-0 align-self-end text-light"> <span
-                                            class="d-none d-sm-inline">Item</span> 2
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="m-3 col p-0 text-light">
+            <div class="col row m-auto justify-content-start p-3" id="gridSystem">
             </div>
         </div>
     </div>
 </div>
 
 <div id="mydiv" class="d-block-xxs bg-dark text-light">the Panel size is too small</div>
+<!-- Modal -->
+<div class="modal fade" id="stickySettingModal" tabindex="-1" role="dialog" aria-labelledby="stickyTextSetting"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content text-light bg-dark">
+            <div class="modal-header">
+                <h5 class="modal-title text-light" id="exampleModalLongTitle">Pre Setting</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body position-relative">
+                <form class="row g-3 needs-validation" id="stickyImportFomr" novalidate>
+                    <div class="col-12 position-relative">
+                        <label for="stickyTextSourceInput" class="form-label ">Your Text</label>
+                        <input type="text" size=""
+                               class="form-control text-light bg-dark border-top-0 border-end-0 border-light"
+                               id="stickyTextSourceInput" placeholder="Sample Text"
+                               maxlength="50">
+                    </div>
+                    <div class="col-12 position-relative">
+                        <label for="compSelect" class="form-label">select Comp to Import</label>
+                        <select class="form-select form-select-sm text-light bg-dark border-top-0 border-end-0 border-light"
+                                aria-label=".form-select-sm"
+                                onchange="compSelected(this.value)" id="compSelect">
+
+                        </select>
+                    </div>
+
+                    <div class="col-6 has-validation position-relative">
+                        <label for="startlayerSelect" class="form-label">Start Point</label>
+                        <select class="form-select form-select-sm mt-2 text-light bg-dark border-top-0 border-end-0 border-light"
+                                aria-label=".form-select-sm"
+                                id="startlayerSelect"
+                                required>
+
+                        </select>
+                        <div class="invalid-tooltip">
+                            Please choose a Layer
+                        </div>
+                    </div>
+                    <div class="col-6 has-validation position-relative">
+                        <label for="endlayerSelect" class="form-label">End Point</label>
+                        <select class="form-select form-select-sm mt-2 text-light bg-dark border-top-0 border-end-0 border-light"
+                                aria-label=".form-select-sm" id="endlayerSelect"
+                                required>
+
+                        </select>
+                        <div class="invalid-tooltip">
+                            Please choose a Layer
+                        </div>
+                    </div>
+                    <div class="col-12 has-validation position-relative">
+                        <div class="form-check form-switch">
+                            <label id="startTimeSwitchLabel" class="form-check-label" for="startTimeSwitch">start from
+                                current CTI</label>
+                            <input type="checkbox" class="form-check-input border-light" id="startTimeSwitch"
+                                   onchange="startTimeChangestickyImportFomr(this.checked)">
+
+                        </div>
+
+                    </div>
+                    <div class="col-6 has-validation position-relative disabled"  style="opacity:0.2;">
+                        <label for="startlayerSelect" class="form-label">Start Time</label>
+                        <input type="number" value="0" disabled
+                               class="form-control text-light bg-dark  border-top-0 border-end-0 border-light"
+                               id="startTimeSpecificValue"
+                               placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
+                        <div class="invalid-tooltip">
+                            Please choose a Layer
+                        </div>
+                    </div>
+                    <div class="col-6 has-validation position-relative disabled" style="opacity:0.2;">
+                        <label for="endlayerSelect" class="form-label">End Time</label>
+                        <input type="number" value="0" disabled
+                               class="form-control text-light bg-dark  border-top-0 border-end-0 border-light"
+                               id="endTimeSpecificValue"
+                               placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="importSticky()" type="submit">Import</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 </body>
 </html>
