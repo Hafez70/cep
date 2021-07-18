@@ -716,10 +716,11 @@ function getAllLayersInComp(compIndex) {
 
 //importStickyTextWithBeamEffect("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/files/texts/simple-text-lists/tooltip/tooltip-with-beam/tooltip-with-beam.aep",2,2,3,"",false,1);
 
-function importStickyTextWithBeamEffect(projPath, parentCompIndex, firstLayerIndex, secondLayerIndex, myText, fromCti, specificTime) {
+function importStickyTextWithBeamEffect(projPath, parentCompIndex, firstLayerIndex, secondLayerIndex, myText, fromCti, specificTime , endTime) {
 
     var comps = [];
     var _startTime = 0;
+    var _endTime = 0;
 
     var proj = app.project;
     var parent = undefined;
@@ -733,6 +734,16 @@ function importStickyTextWithBeamEffect(projPath, parentCompIndex, firstLayerInd
         _startTime = parent.time;
     } else if (specificTime !== 0) {
         _startTime = specificTime;
+    }
+
+    if(_startTime >= endTime)
+    {
+        return "{'error' :'end time is not correct!'}"
+    }
+
+    if((_startTime + endTime) >  parent.workAreaDuration)
+    {
+        return "{'error' :'wrong time range!'}"
     }
 
     var startLayer = parent.layer(firstLayerIndex);
@@ -772,7 +783,7 @@ function importStickyTextWithBeamEffect(projPath, parentCompIndex, firstLayerInd
     textCompInParent.selected = false;
 
     if (textCompInParent.transform.position.canSetExpression) {
-        textCompInParent.transform.position.expression = 'effect("Layer Control")("Layer").transform.position';
+        textCompInParent.transform.position.expression = 'effect("Layer Control")("Layer").toComp([0,0,0])';
     }
 
     var MyBeamCounter = 0;

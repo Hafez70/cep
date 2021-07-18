@@ -22,27 +22,46 @@ function getFilesTree(myPath) {
     csInterface.evalScript('getCategiries("' + myPath + '")', function (res) {
         contentTree = JSON.parse(res);
         if (contentTree.length > 0) {
-            generateContainer();
+            generateSideBar();
         }
     });
 }
 
-function generateContainer() {
+function generateSideBar() {
     $('#gridSystem').empty();
     contentTree.map((val, indx, arr) => {
-        $('#gridSystem').append('<div class="col-xxsm-12 col-xsm-6 col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1 ">\n' +
-            '            <div class="card-body bg-dark h-100 m-0 p-3 small-card background-folder-card">\n' +
-            '                <a href="./TextsComponent.html?catIndex=' + val.CatIndex + '">\n' +
-            '                    <div class="position-relative bg-dark small-card-image-container ">\n' +
-            '                        <img id="imgText" src="'+ val.demo +'" class="card-img-top w-100 ">\n' +
-            '                        <div class="w-100 h-auto description-over-image bg-dark">\n' +
-            '                            <p class="text-light p-0 m-0 w-100 text-center">'+val.CatName+'</p>\n' +
-            '                        </div>\n' +
-            '                    </div>\n' +
-            '                </a>\n' +
-            '            </div>\n' +
-            '        </div>'
-        )
+        // $('#gridSystem').append('<div class="col-xxsm-12 col-xsm-6 col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1 ">\n' +
+        //     '            <div class="card-body bg-dark h-100 m-0 p-3 small-card background-folder-card">\n' +
+        //     '                <a href="./TextsComponent.html?catIndex=' + val.CatIndex + '">\n' +
+        //     '                    <div class="position-relative bg-dark small-card-image-container ">\n' +
+        //     '                        <img id="imgText" src="'+ val.demo +'" class="card-img-top w-100 ">\n' +
+        //     '                        <div class="w-100 h-auto description-over-image bg-dark">\n' +
+        //     '                            <p class="text-light p-0 m-0 w-100 text-center">'+val.CatName+'</p>\n' +
+        //     '                        </div>\n' +
+        //     '                    </div>\n' +
+        //     '                </a>\n' +
+        //     '            </div>\n' +
+        //     '        </div>'
+        // )
+    });
+}
+
+function generateContainer() {
+    //$('#gridSystem').empty();
+    contentTree.map((val, indx, arr) => {
+        // $('#gridSystem').append('<div class="col-xxsm-12 col-xsm-6 col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1 ">\n' +
+        //     '            <div class="card-body bg-dark h-100 m-0 p-3 small-card background-folder-card">\n' +
+        //     '                <a href="./TextsComponent.html?catIndex=' + val.CatIndex + '">\n' +
+        //     '                    <div class="position-relative bg-dark small-card-image-container ">\n' +
+        //     '                        <img id="imgText" src="'+ val.demo +'" class="card-img-top w-100 ">\n' +
+        //     '                        <div class="w-100 h-auto description-over-image bg-dark">\n' +
+        //     '                            <p class="text-light p-0 m-0 w-100 text-center">'+val.CatName+'</p>\n' +
+        //     '                        </div>\n' +
+        //     '                    </div>\n' +
+        //     '                </a>\n' +
+        //     '            </div>\n' +
+        //     '        </div>'
+        // )
     });
 }
 

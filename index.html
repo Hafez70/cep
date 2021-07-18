@@ -160,6 +160,24 @@
             background: linear-gradient(45deg, #54d400 48%, #1b1e21 48%);
         }
 
+        #sidebarMenu>li>a:before {
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            content: "\f07c";
+        }
+
+        #sidebarMenu>li>a.collapsed:before {
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            content: "\f07b";
+        }
+
+        #sidebarMenu>li>.nav>li>a:before {
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            content: "\f061";
+        }
+
     </style>
     <title>hafez test window</title>
     <script src="js/jquery-3.6.0.min.js"></script>
@@ -173,39 +191,30 @@
     <script type="text/javascript">
 
         $(function () {
-            //if (!firstTime || firstTime === "0") {
-            $('#mySlider').hide();
-            $('#myHeader').hide();
-            $('#myNavBar').hide();
-            $('#mainContainer').hide();
-            $('#gridSystem').hide();
-            $('#splash').fadeIn(100, function () {
-                setTimeout(function () {
-                    $('#splash').fadeOut(500, function () {
-                        $('#myHeader').fadeIn(200, function () {
-                            $('#myNavBar').fadeIn(200, function () {
-                                $('#mainContainer').fadeIn(200, function () {
-                                    $('#mySlider').fadeIn(200, function () {
-                                        $('#gridSystem').fadeIn(200);
-                                        //localStorage.setItem("first_time","1");
-                                    });
-                                });
-                            });
-                        });
-                    });
-                }, 500);
-            });
-            //} else {
-            //    $('#splash').hide();
-            //}
+            // //if (!firstTime || firstTime === "0") {
+            // $('#mySlider').hide();
+            // $('#myHeader').hide();
+            // $('#myNavBar').hide();
+            // $('#mainContainer').hide();
+            // $('#gridSystem').hide();
+            // $('#myHeader').fadeIn(200, function () {
+            //     $('#myNavBar').fadeIn(200, function () {
+            //         $('#mainContainer').fadeIn(200, function () {
+            //             $('#mySlider').fadeIn(200, function () {
+            //                 $('#gridSystem').fadeIn(200);
+            //                 //localStorage.setItem("first_time","1");
+            //             });
+            //         });
+            //     });
+            // });
         });
+
     </script>
 
 
 </head>
-<body class="bg-dark h-100 position-relative">
-<div id="splash" class="splash-screen" style="text-align: center; background-color: #070A0B;"><img
-        src="./assets/images/splash-screen.gif"/></div>
+<body class="bg-dark h-100 position-relative" style="max-height: 100%">
+
 <header class="topbar d-none-xxs" id="myHeader">
     <div class="container">
         <div class="row">
@@ -220,6 +229,7 @@
         </div>
     </div>
 </header>
+
 <nav class=" navbar navbar-expand-sm navbar-dark bg-dark d-none-xxs" id="myNavBar">
     <div class="container-fluid">
         <div class="d-flex flex-grow-1">
@@ -242,8 +252,9 @@
         </div>
     </div>
 </nav>
-<div class="row w-100 m-0 p-1" id="mainContainer">
-    <div id="mySlider" class="carousel slide homeSlider" data-bs-ride="carousel" >
+
+<div class=" d-flex flex-column" id="mainContainer">
+    <div id="mySlider" class="carousel slide homeSlider" data-bs-ride="carousel">
         <div class="carousel-indicators mb-0 pb-0">
             <button type="button" data-bs-target="#mySlider" data-bs-slide-to="0" class="active"
                     aria-current="true" aria-label="Slide 1"></button>
@@ -286,65 +297,45 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-    <div class="container row m-auto justify-content-start" id="gridSystem">
-<!--        <div class="col-xxsm-12 col-xsm-6 col-6 col-sm-4 col-md-3 col-lg-2 col-xl-2 p-1 ">-->
-<!--            <div class="card-body bg-dark h-100 m-0 p-3 small-card background-folder-card">-->
-<!--                <a href="./TextsComponent.html">-->
-<!--                    <div class="position-relative bg-dark small-card-image-container ">-->
-<!--                        <img id="imgText" src="./assets/images/one-beam-text.gif" class="card-img-top w-100 ">-->
-<!--                        <div class="w-100 h-auto description-over-image bg-dark">-->
-<!--                            <p class="text-light p-0 m-0 w-100 text-center">Sticky One Hand</p>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </a>-->
-<!--            </div>-->
-<!--        </div>-->
-        <!--        <div class="d-sm-none d-md-block d-lg-block d-xl-block col-xsm-12 col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4  p-1-->
-        <!--         small-card first-triple-home float-start float-sm-end">-->
-        <!--            <div class="card-body bg-dark h-100 m-0 p-1">-->
-        <!--                <div class="position-relative card-img-top bg-dark ">-->
-        <!--                    <img id="imgIntor" src="./assets/images/intro.gif" class="card-img-top w-100 h-100">-->
-        <!--                    <div class="w-100 h-auto description-over-image bg-dark">-->
-        <!--                        <h5 class="text-light">Awesome Intro</h5>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--        <div class="d-sm-none d-md-block d-lg-block d-xl-block col-xsm-12 col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4  p-1-->
-        <!--        small-card first-triple-home float-end float-sm-end">-->
-        <!--            <div class="card-body bg-dark h-100 m-0 p-1">-->
-        <!--                <div class="position-relative card-img-top bg-dark ">-->
-        <!--                    <img id="imgUtils" src="./assets/images/utils.gif" class="card-img-top w-100 h-100">-->
-        <!--                    <div class="w-100 h-auto description-over-image bg-dark">-->
-        <!--                        <h5 class="text-light">TimeTraveling Tools</h5>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
-        <!--        <div class="d-none d-sm-block d-md-none d-lg-none d-xl-none col-sm-6">-->
-        <!--            <div class="col-12 m-auto p-1 small-card first-triple-home float-start float-sm-end">-->
-        <!--                <div class="card-body bg-dark h-100 m-0 p-1">-->
-        <!--                    <div class="position-relative card-img-top bg-dark ">-->
-        <!--                        <img id="imgIntor-sm" src="./assets/images/intro.gif" class="card-img-top w-100 h-100">-->
-        <!--                        <div class="w-100 h-auto description-over-image bg-dark">-->
-        <!--                            <h5 class="text-light">Awesome Intro</h5>-->
-        <!--                        </div>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--            <div class="col-12 m-auto p-1 small-card first-triple-home float-end float-sm-end">-->
-        <!--                <div class="card-body bg-dark h-100 m-0 p-1">-->
-        <!--                    <div class="position-relative card-img-top bg-dark ">-->
-        <!--                        <img id="imgUtils-sm" src="./assets/images/utils.gif" class="card-img-top w-100 h-100">-->
-        <!--                        <div class="w-100 h-auto description-over-image bg-dark">-->
-        <!--                            <h5 class="text-light">TimeTraveling Tools</h5>-->
-        <!--                        </div>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
+    <div class="container-fluid d-flex flex-fill" id="mainContent">
+        
+        <div class="row flex-fill">
+            <div class="col-sm-3 col-2 pr-3 d-flex flex-column m-2 border-start-0 border-bottom-0 border-light "
+                 style=" background-color: #2f2e2e !important;" id="mySidebar">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white ">
+                    <span class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none fs-5 d-none d-sm-inline">Tools</span>
+                    <ul class="nav flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start list-group list-group-flush"
+                        id="sidebarMenu">
+                        <li class="w-100 ">
+                            <a href="#submenu1" data-bs-toggle="collapse" data-bs-target="#submenu1"
+                               aria-expanded="false" class="px-0 align-middle text-light collapsed">
+                                <span class="ms-1 d-none d-sm-inline">Dashboard</span>
+                            </a>
+                            <ul class="ps-3 collapse fade nav flex-column ms-1 list-group list-group-flush" id="submenu1"
+                                data-bs-parent="#sidebarMenu">
+                                <li class="w-100">
+                                    <a href="#" class="px-0 align-self-end text-light"> <span
+                                            class="d-none d-sm-inline">Item</span> 1
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="px-0 align-self-end text-light"> <span
+                                            class="d-none d-sm-inline">Item</span> 2
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="m-3 col p-0 text-light">
+            </div>
+        </div>
     </div>
 </div>
+
 <div id="mydiv" class="d-block-xxs bg-dark text-light">the Panel size is too small</div>
+
 </body>
 </html>
