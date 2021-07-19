@@ -1,144 +1,144 @@
 ﻿(function () {
     //  json2.js
-//  2017-06-12
-//  Public Domain.
-//  NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+    //  2017-06-12
+    //  Public Domain.
+    //  NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
 
-//  USE YOUR OWN COPY. IT IS EXTREMELY UNWISE TO LOAD CODE FROM SERVERS YOU DO
-//  NOT CONTROL.
+    //  USE YOUR OWN COPY. IT IS EXTREMELY UNWISE TO LOAD CODE FROM SERVERS YOU DO
+    //  NOT CONTROL.
 
-//  This file creates a global JSON object containing two methods: stringify
-//  and parse. This file provides the ES5 JSON capability to ES3 systems.
-//  If a project might run on IE8 or earlier, then this file should be included.
-//  This file does nothing on ES5 systems.
+    //  This file creates a global JSON object containing two methods: stringify
+    //  and parse. This file provides the ES5 JSON capability to ES3 systems.
+    //  If a project might run on IE8 or earlier, then this file should be included.
+    //  This file does nothing on ES5 systems.
 
-//      JSON.stringify(value, replacer, space)
-//          value       any JavaScript value, usually an object or array.
-//          replacer    an optional parameter that determines how object
-//                      values are stringified for objects. It can be a
-//                      function or an array of strings.
-//          space       an optional parameter that specifies the indentation
-//                      of nested structures. If it is omitted, the text will
-//                      be packed without extra whitespace. If it is a number,
-//                      it will specify the number of spaces to indent at each
-//                      level. If it is a string (such as "\t" or "&nbsp;"),
-//                      it contains the characters used to indent at each level.
-//          This method produces a JSON text from a JavaScript value.
-//          When an object value is found, if the object contains a toJSON
-//          method, its toJSON method will be called and the result will be
-//          stringified. A toJSON method does not serialize: it returns the
-//          value represented by the name/value pair that should be serialized,
-//          or undefined if nothing should be serialized. The toJSON method
-//          will be passed the key associated with the value, and this will be
-//          bound to the value.
+    //      JSON.stringify(value, replacer, space)
+    //          value       any JavaScript value, usually an object or array.
+    //          replacer    an optional parameter that determines how object
+    //                      values are stringified for objects. It can be a
+    //                      function or an array of strings.
+    //          space       an optional parameter that specifies the indentation
+    //                      of nested structures. If it is omitted, the text will
+    //                      be packed without extra whitespace. If it is a number,
+    //                      it will specify the number of spaces to indent at each
+    //                      level. If it is a string (such as "\t" or "&nbsp;"),
+    //                      it contains the characters used to indent at each level.
+    //          This method produces a JSON text from a JavaScript value.
+    //          When an object value is found, if the object contains a toJSON
+    //          method, its toJSON method will be called and the result will be
+    //          stringified. A toJSON method does not serialize: it returns the
+    //          value represented by the name/value pair that should be serialized,
+    //          or undefined if nothing should be serialized. The toJSON method
+    //          will be passed the key associated with the value, and this will be
+    //          bound to the value.
 
-//          For example, this would serialize Dates as ISO strings.
+    //          For example, this would serialize Dates as ISO strings.
 
-//              Date.prototype.toJSON = function (key) {
-//                  function f(n) {
-//                      // Format integers to have at least two digits.
-//                      return (n < 10)
-//                          ? "0" + n
-//                          : n;
-//                  }
-//                  return this.getUTCFullYear()   + "-" +
-//                       f(this.getUTCMonth() + 1) + "-" +
-//                       f(this.getUTCDate())      + "T" +
-//                       f(this.getUTCHours())     + ":" +
-//                       f(this.getUTCMinutes())   + ":" +
-//                       f(this.getUTCSeconds())   + "Z";
-//              };
+    //              Date.prototype.toJSON = function (key) {
+    //                  function f(n) {
+    //                      // Format integers to have at least two digits.
+    //                      return (n < 10)
+    //                          ? "0" + n
+    //                          : n;
+    //                  }
+    //                  return this.getUTCFullYear()   + "-" +
+    //                       f(this.getUTCMonth() + 1) + "-" +
+    //                       f(this.getUTCDate())      + "T" +
+    //                       f(this.getUTCHours())     + ":" +
+    //                       f(this.getUTCMinutes())   + ":" +
+    //                       f(this.getUTCSeconds())   + "Z";
+    //              };
 
-//          You can provide an optional replacer method. It will be passed the
-//          key and value of each member, with this bound to the containing
-//          object. The value that is returned from your method will be
-//          serialized. If your method returns undefined, then the member will
-//          be excluded from the serialization.
+    //          You can provide an optional replacer method. It will be passed the
+    //          key and value of each member, with this bound to the containing
+    //          object. The value that is returned from your method will be
+    //          serialized. If your method returns undefined, then the member will
+    //          be excluded from the serialization.
 
-//          If the replacer parameter is an array of strings, then it will be
-//          used to select the members to be serialized. It filters the results
-//          such that only members with keys listed in the replacer array are
-//          stringified.
+    //          If the replacer parameter is an array of strings, then it will be
+    //          used to select the members to be serialized. It filters the results
+    //          such that only members with keys listed in the replacer array are
+    //          stringified.
 
-//          Values that do not have JSON representations, such as undefined or
-//          functions, will not be serialized. Such values in objects will be
-//          dropped; in arrays they will be replaced with null. You can use
-//          a replacer function to replace those with JSON values.
+    //          Values that do not have JSON representations, such as undefined or
+    //          functions, will not be serialized. Such values in objects will be
+    //          dropped; in arrays they will be replaced with null. You can use
+    //          a replacer function to replace those with JSON values.
 
-//          JSON.stringify(undefined) returns undefined.
+    //          JSON.stringify(undefined) returns undefined.
 
-//          The optional space parameter produces a stringification of the
-//          value that is filled with line breaks and indentation to make it
-//          easier to read.
+    //          The optional space parameter produces a stringification of the
+    //          value that is filled with line breaks and indentation to make it
+    //          easier to read.
 
-//          If the space parameter is a non-empty string, then that string will
-//          be used for indentation. If the space parameter is a number, then
-//          the indentation will be that many spaces.
+    //          If the space parameter is a non-empty string, then that string will
+    //          be used for indentation. If the space parameter is a number, then
+    //          the indentation will be that many spaces.
 
-//          Example:
+    //          Example:
 
-//          text = JSON.stringify(["e", {pluribus: "unum"}]);
-//          // text is '["e",{"pluribus":"unum"}]'
+    //          text = JSON.stringify(["e", {pluribus: "unum"}]);
+    //          // text is '["e",{"pluribus":"unum"}]'
 
-//          text = JSON.stringify(["e", {pluribus: "unum"}], null, "\t");
-//          // text is '[\n\t"e",\n\t{\n\t\t"pluribus": "unum"\n\t}\n]'
+    //          text = JSON.stringify(["e", {pluribus: "unum"}], null, "\t");
+    //          // text is '[\n\t"e",\n\t{\n\t\t"pluribus": "unum"\n\t}\n]'
 
-//          text = JSON.stringify([new Date()], function (key, value) {
-//              return this[key] instanceof Date
-//                  ? "Date(" + this[key] + ")"
-//                  : value;
-//          });
-//          // text is '["Date(---current time---)"]'
+    //          text = JSON.stringify([new Date()], function (key, value) {
+    //              return this[key] instanceof Date
+    //                  ? "Date(" + this[key] + ")"
+    //                  : value;
+    //          });
+    //          // text is '["Date(---current time---)"]'
 
-//      JSON.parse(text, reviver)
-//          This method parses a JSON text to produce an object or array.
-//          It can throw a SyntaxError exception.
+    //      JSON.parse(text, reviver)
+    //          This method parses a JSON text to produce an object or array.
+    //          It can throw a SyntaxError exception.
 
-//          The optional reviver parameter is a function that can filter and
-//          transform the results. It receives each of the keys and values,
-//          and its return value is used instead of the original value.
-//          If it returns what it received, then the structure is not modified.
-//          If it returns undefined then the member is deleted.
+    //          The optional reviver parameter is a function that can filter and
+    //          transform the results. It receives each of the keys and values,
+    //          and its return value is used instead of the original value.
+    //          If it returns what it received, then the structure is not modified.
+    //          If it returns undefined then the member is deleted.
 
-//          Example:
+    //          Example:
 
-//          // Parse the text. Values that look like ISO date strings will
-//          // be converted to Date objects.
+    //          // Parse the text. Values that look like ISO date strings will
+    //          // be converted to Date objects.
 
-//          myData = JSON.parse(text, function (key, value) {
-//              var a;
-//              if (typeof value === "string") {
-//                  a =
-//   /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
-//                  if (a) {
-//                      return new Date(Date.UTC(
-//                         +a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]
-//                      ));
-//                  }
-//                  return value;
-//              }
-//          });
+    //          myData = JSON.parse(text, function (key, value) {
+    //              var a;
+    //              if (typeof value === "string") {
+    //                  a =
+    //   /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+    //                  if (a) {
+    //                      return new Date(Date.UTC(
+    //                         +a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]
+    //                      ));
+    //                  }
+    //                  return value;
+    //              }
+    //          });
 
-//          myData = JSON.parse(
-//              "[\"Date(09/09/2001)\"]",
-//              function (key, value) {
-//                  var d;
-//                  if (
-//                      typeof value === "string"
-//                      && value.slice(0, 5) === "Date("
-//                      && value.slice(-1) === ")"
-//                  ) {
-//                      d = new Date(value.slice(5, -1));
-//                      if (d) {
-//                          return d;
-//                      }
-//                  }
-//                  return value;
-//              }
-//          );
+    //          myData = JSON.parse(
+    //              "[\"Date(09/09/2001)\"]",
+    //              function (key, value) {
+    //                  var d;
+    //                  if (
+    //                      typeof value === "string"
+    //                      && value.slice(0, 5) === "Date("
+    //                      && value.slice(-1) === ")"
+    //                  ) {
+    //                      d = new Date(value.slice(5, -1));
+    //                      if (d) {
+    //                          return d;
+    //                      }
+    //                  }
+    //                  return value;
+    //              }
+    //          );
 
-//  This is a reference implementation. You are free to copy, modify, or
-//  redistribute.
+    //  This is a reference implementation. You are free to copy, modify, or
+    //  redistribute.
 
     /*jslint
         eval, for, this
@@ -152,8 +152,8 @@
     */
 
 
-// Create a JSON object only if one does not already exist. We create the
-// methods in a closure to avoid creating global variables.
+    // Create a JSON object only if one does not already exist. We create the
+    // methods in a closure to avoid creating global variables.
 
     if (typeof JSON !== "object") {
         JSON = {};
@@ -215,26 +215,26 @@
 
         function quote(string) {
 
-// If the string contains no control characters, no quote characters, and no
-// backslash characters, then we can safely slap some quotes around it.
-// Otherwise we must also replace the offending characters with safe escape
-// sequences.
+            // If the string contains no control characters, no quote characters, and no
+            // backslash characters, then we can safely slap some quotes around it.
+            // Otherwise we must also replace the offending characters with safe escape
+            // sequences.
 
             rx_escapable.lastIndex = 0;
             return rx_escapable.test(string)
                 ? "\"" + string.replace(rx_escapable, function (a) {
-                var c = meta[a];
-                return typeof c === "string"
-                    ? c
-                    : "\\u" + ("0000" + a.charCodeAt(0).toString(16)).slice(-4);
-            }) + "\""
+                    var c = meta[a];
+                    return typeof c === "string"
+                        ? c
+                        : "\\u" + ("0000" + a.charCodeAt(0).toString(16)).slice(-4);
+                }) + "\""
                 : "\"" + string + "\"";
         }
 
 
         function str(key, holder) {
 
-// Produce a string from holder[key].
+            // Produce a string from holder[key].
 
             var i;          // The loop counter.
             var k;          // The member key.
@@ -244,7 +244,7 @@
             var partial;
             var value = holder[key];
 
-// If the value has a toJSON method, call it to obtain a replacement value.
+            // If the value has a toJSON method, call it to obtain a replacement value.
 
             if (
                 value
@@ -254,14 +254,14 @@
                 value = value.toJSON(key);
             }
 
-// If we were called with a replacer function, then call the replacer to
-// obtain a replacement value.
+            // If we were called with a replacer function, then call the replacer to
+            // obtain a replacement value.
 
             if (typeof rep === "function") {
                 value = rep.call(holder, key, value);
             }
 
-// What happens next depends on the value's type.
+            // What happens next depends on the value's type.
 
             switch (typeof value) {
                 case "string":
@@ -269,7 +269,7 @@
 
                 case "number":
 
-// JSON numbers must be finite. Encode non-finite numbers as null.
+                    // JSON numbers must be finite. Encode non-finite numbers as null.
 
                     return (isFinite(value))
                         ? String(value)
@@ -278,43 +278,43 @@
                 case "boolean":
                 case "null":
 
-// If the value is a boolean or null, convert it to a string. Note:
-// typeof null does not produce "null". The case is included here in
-// the remote chance that this gets fixed someday.
+                    // If the value is a boolean or null, convert it to a string. Note:
+                    // typeof null does not produce "null". The case is included here in
+                    // the remote chance that this gets fixed someday.
 
                     return String(value);
 
-// If the type is "object", we might be dealing with an object or an array or
-// null.
+                // If the type is "object", we might be dealing with an object or an array or
+                // null.
 
                 case "object":
 
-// Due to a specification blunder in ECMAScript, typeof null is "object",
-// so watch out for that case.
+                    // Due to a specification blunder in ECMAScript, typeof null is "object",
+                    // so watch out for that case.
 
                     if (!value) {
                         return "null";
                     }
 
-// Make an array to hold the partial results of stringifying this object value.
+                    // Make an array to hold the partial results of stringifying this object value.
 
                     gap += indent;
                     partial = [];
 
-// Is the value an array?
+                    // Is the value an array?
 
                     if (Object.prototype.toString.apply(value) === "[object Array]") {
 
-// The value is an array. Stringify every element. Use null as a placeholder
-// for non-JSON values.
+                        // The value is an array. Stringify every element. Use null as a placeholder
+                        // for non-JSON values.
 
                         length = value.length;
                         for (i = 0; i < length; i += 1) {
                             partial[i] = str(i, value) || "null";
                         }
 
-// Join all of the elements together, separated with commas, and wrap them in
-// brackets.
+                        // Join all of the elements together, separated with commas, and wrap them in
+                        // brackets.
 
                         v = partial.length === 0
                             ? "[]"
@@ -332,7 +332,7 @@
                         return v;
                     }
 
-// If the replacer is an array, use it to select the members to be stringified.
+                    // If the replacer is an array, use it to select the members to be stringified.
 
                     if (rep && typeof rep === "object") {
                         length = rep.length;
@@ -351,7 +351,7 @@
                         }
                     } else {
 
-// Otherwise, iterate through all of the keys in the object.
+                        // Otherwise, iterate through all of the keys in the object.
 
                         for (k in value) {
                             if (Object.prototype.hasOwnProperty.call(value, k)) {
@@ -367,8 +367,8 @@
                         }
                     }
 
-// Join all of the member texts together, separated with commas,
-// and wrap them in braces.
+                    // Join all of the member texts together, separated with commas,
+                    // and wrap them in braces.
 
                     v = partial.length === 0
                         ? "{}"
@@ -380,7 +380,7 @@
             }
         }
 
-// If the JSON object does not yet have a stringify method, give it one.
+        // If the JSON object does not yet have a stringify method, give it one.
 
         if (typeof JSON.stringify !== "function") {
             meta = {    // table of character substitutions
@@ -394,32 +394,32 @@
             };
             JSON.stringify = function (value, replacer, space) {
 
-// The stringify method takes a value and an optional replacer, and an optional
-// space parameter, and returns a JSON text. The replacer can be a function
-// that can replace values, or an array of strings that will select the keys.
-// A default replacer method can be provided. Use of the space parameter can
-// produce text that is more easily readable.
+                // The stringify method takes a value and an optional replacer, and an optional
+                // space parameter, and returns a JSON text. The replacer can be a function
+                // that can replace values, or an array of strings that will select the keys.
+                // A default replacer method can be provided. Use of the space parameter can
+                // produce text that is more easily readable.
 
                 var i;
                 gap = "";
                 indent = "";
 
-// If the space parameter is a number, make an indent string containing that
-// many spaces.
+                // If the space parameter is a number, make an indent string containing that
+                // many spaces.
 
                 if (typeof space === "number") {
                     for (i = 0; i < space; i += 1) {
                         indent += " ";
                     }
 
-// If the space parameter is a string, it will be used as the indent string.
+                    // If the space parameter is a string, it will be used as the indent string.
 
                 } else if (typeof space === "string") {
                     indent = space;
                 }
 
-// If there is a replacer, it must be a function or an array.
-// Otherwise, throw an error.
+                // If there is a replacer, it must be a function or an array.
+                // Otherwise, throw an error.
 
                 rep = replacer;
                 if (replacer && typeof replacer !== "function" && (
@@ -429,28 +429,28 @@
                     throw new Error("JSON.stringify");
                 }
 
-// Make a fake root object containing our value under the key of "".
-// Return the result of stringifying the value.
+                // Make a fake root object containing our value under the key of "".
+                // Return the result of stringifying the value.
 
-                return str("", {"": value});
+                return str("", { "": value });
             };
         }
 
 
-// If the JSON object does not yet have a parse method, give it one.
+        // If the JSON object does not yet have a parse method, give it one.
 
         if (typeof JSON.parse !== "function") {
             JSON.parse = function (text, reviver) {
 
-// The parse method takes a text and an optional reviver function, and returns
-// a JavaScript value if the text is a valid JSON text.
+                // The parse method takes a text and an optional reviver function, and returns
+                // a JavaScript value if the text is a valid JSON text.
 
                 var j;
 
                 function walk(holder, key) {
 
-// The walk method is used to recursively walk the resulting structure so
-// that modifications can be made.
+                    // The walk method is used to recursively walk the resulting structure so
+                    // that modifications can be made.
 
                     var k;
                     var v;
@@ -471,9 +471,9 @@
                 }
 
 
-// Parsing happens in four stages. In the first stage, we replace certain
-// Unicode characters with escape sequences. JavaScript handles many characters
-// incorrectly, either silently deleting them, or treating them as line endings.
+                // Parsing happens in four stages. In the first stage, we replace certain
+                // Unicode characters with escape sequences. JavaScript handles many characters
+                // incorrectly, either silently deleting them, or treating them as line endings.
 
                 text = String(text);
                 rx_dangerous.lastIndex = 0;
@@ -486,18 +486,18 @@
                     });
                 }
 
-// In the second stage, we run the text against regular expressions that look
-// for non-JSON patterns. We are especially concerned with "()" and "new"
-// because they can cause invocation, and "=" because it can cause mutation.
-// But just to be safe, we want to reject all unexpected forms.
+                // In the second stage, we run the text against regular expressions that look
+                // for non-JSON patterns. We are especially concerned with "()" and "new"
+                // because they can cause invocation, and "=" because it can cause mutation.
+                // But just to be safe, we want to reject all unexpected forms.
 
-// We split the second stage into 4 regexp operations in order to work around
-// crippling inefficiencies in IE's and Safari's regexp engines. First we
-// replace the JSON backslash pairs with "@" (a non-JSON character). Second, we
-// replace all simple value tokens with "]" characters. Third, we delete all
-// open brackets that follow a colon or comma or that begin the text. Finally,
-// we look to see that the remaining characters are only whitespace or "]" or
-// "," or ":" or "{" or "}". If that is so, then the text is safe for eval.
+                // We split the second stage into 4 regexp operations in order to work around
+                // crippling inefficiencies in IE's and Safari's regexp engines. First we
+                // replace the JSON backslash pairs with "@" (a non-JSON character). Second, we
+                // replace all simple value tokens with "]" characters. Third, we delete all
+                // open brackets that follow a colon or comma or that begin the text. Finally,
+                // we look to see that the remaining characters are only whitespace or "]" or
+                // "," or ":" or "{" or "}". If that is so, then the text is safe for eval.
 
                 if (
                     rx_one.test(
@@ -508,22 +508,22 @@
                     )
                 ) {
 
-// In the third stage we use the eval function to compile the text into a
-// JavaScript structure. The "{" operator is subject to a syntactic ambiguity
-// in JavaScript: it can begin a block or an object literal. We wrap the text
-// in parens to eliminate the ambiguity.
+                    // In the third stage we use the eval function to compile the text into a
+                    // JavaScript structure. The "{" operator is subject to a syntactic ambiguity
+                    // in JavaScript: it can begin a block or an object literal. We wrap the text
+                    // in parens to eliminate the ambiguity.
 
                     j = eval("(" + text + ")");
 
-// In the optional fourth stage, we recursively walk the new structure, passing
-// each name/value pair to a reviver function for possible transformation.
+                    // In the optional fourth stage, we recursively walk the new structure, passing
+                    // each name/value pair to a reviver function for possible transformation.
 
                     return (typeof reviver === "function")
-                        ? walk({"": j}, "")
+                        ? walk({ "": j }, "")
                         : j;
                 }
 
-// If the text is not JSON parseable, then a SyntaxError is thrown.
+                // If the text is not JSON parseable, then a SyntaxError is thrown.
 
                 throw new SyntaxError("JSON.parse");
             };
@@ -604,11 +604,11 @@ function getMainDirectories(myPath) {
         for (var i = 0; i < textsubFolder.length; i++) {
             if (textsubFolder[i] instanceof Folder) {
                 var subMenus = getSubMenuItems(textsubFolder[i].fullName, textPath + '/' + textsubFolder[i].name);
-                 files.push({
-                     menuName: textsubFolder[i].name.replace(/%20/g, " "),
-                     mainPath: textsubFolder[i].fullName,
-                     subMenuNames: subMenus,
-                     demo: './' + textPath + '/' + textsubFolder[i].name + '/demo.gif',
+                files.push({
+                    menuName: textsubFolder[i].name.replace(/%20/g, " "),
+                    mainPath: textsubFolder[i].fullName,
+                    subMenuNames: subMenus,
+                    demo: './' + textPath + '/' + textsubFolder[i].name + '/demo.gif',
                 });
             }
         }
@@ -650,9 +650,9 @@ function ImportFile(filePath) {
         var item = new ImportOptions();
         item.file = new File(filePath);
         var Item = app.project.importFile(item);
-        return JSON.stringify({result: true});
+        return JSON.stringify({ result: true });
     } catch (e) {
-        return JSON.stringify({result: false});
+        return JSON.stringify({ result: false });
     }
 }
 
@@ -665,7 +665,7 @@ function getAllComps() {
     var numitems = proj.numItems
     for (var i = 1; i < numitems; i++) {
         if (proj.item(i).typeName === "Composition") {
-            comps.push({compName: proj.item(i).parentFolder.name + ' > ' + proj.item(i).name, compItemIndex: i});
+            comps.push({ compName: proj.item(i).parentFolder.name + ' > ' + proj.item(i).name, compItemIndex: i });
         }
     }
     var js = JSON.stringify(comps);
@@ -688,7 +688,7 @@ function getAllNullPointsInComp(compIndex) {
     for (var i = 1; i <= numLayers; i++) {
         var layer = curentComp.layer(i);
         if (curentComp.layer(i).nullLayer)
-            nullLayers.push({layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i});
+            nullLayers.push({ layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i });
     }
     var js = JSON.stringify(nullLayers);
     return js;
@@ -708,47 +708,65 @@ function getAllLayersInComp(compIndex) {
     }
     var numLayers = curentComp.numLayers;
     for (var i = 1; i <= numLayers; i++) {
-        allLayers.push({layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i});
+        allLayers.push({ layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i });
     }
     var js = JSON.stringify(allLayers);
     return js;
 
 }
 
-//importStickyTextWithBeamEffect("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/simple-text-lists/tooltip/tooltip-with-beam/tooltip-with-beam.aep",2,2,3,"",false,1);
+//importStickyTextWithBeamEffect("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Text Tips/1. One Handle/slide - bottom to up/slide%20-%20bottom%20to%20up.aep",
+//'{"comp":"1","sticker":"5","layers":[{"start":"2","end":"5"}],"cti":{"fromCti":false,"startTime":"0.2","endTime":"0"},"mainText":"one handle"}');
 
-function importStickyTextWithBeamEffect(projPath, parentCompIndex, firstLayerIndex, secondLayerIndex, myText, fromCti, specificTime , endTime) {
+function importStickyTextWithBeamEffect(projPath, params) {
 
+    var obj_params = JSON.parse(params);
     var comps = [];
     var _startTime = 0;
     var _endTime = 0;
 
     var proj = app.project;
     var parent = undefined;
-    if (parentCompIndex === 0) {
+    if (parseInt(obj_params.comp) === 0) {
         parent = proj.activeItem;
     } else {
-        parent = proj.item(parentCompIndex);
+        parent = proj.item(parseInt(obj_params.comp));
     }
 
-    if (fromCti) {
+    if (obj_params.cti.fromCti) {
         _startTime = parent.time;
-    } else if (specificTime !== 0) {
-        _startTime = specificTime;
+    } else {
+        if ( parseFloat(obj_params.cti.startTime) !== 0) {
+            _startTime = parseFloat(obj_params.cti.startTime);
+        } else {
+            _startTime = parent.time;
+        }
+        if ( parseFloat(obj_params.cti.endTime) !== 0) {
+            _endTime = parseFloat(obj_params.cti.endTime);
+        }
     }
 
-    if(_startTime >= endTime)
-    {
-        return "{'error' :'end time is not correct!'}"
+
+    if (_endTime !== 0) {
+        if (_startTime >= _endTime) {
+            return "{'error' :'end time is not correct!'}"
+        }
+
+        if (_endTime > parent.workAreaDuration) {
+            return "{'error' :'wrong time range!'}"
+        }
     }
 
-    if((_startTime + endTime) >  parent.workAreaDuration)
-    {
-        return "{'error' :'wrong time range!'}"
-    }
 
-    var startLayer = parent.layer(firstLayerIndex);
-    var endLayer = parent.layer(secondLayerIndex);
+
+    //var startLayer = []; parent.layer(firstLayerIndex);
+    var textStickerLayer = parent.layer(parseInt(obj_params.sticker));
+
+    var nodeLayers = [];
+
+    for (var i = 0; i < obj_params.layers.length; i++) {
+        nodeLayers.push({ start: parent.layer(parseInt(obj_params.layers[i].start)), end: parent.layer(parseInt(obj_params.layers[i].end)) });
+    }
 
     var item = new ImportOptions();
     item.file = new File(projPath);
@@ -770,17 +788,25 @@ function importStickyTextWithBeamEffect(projPath, parentCompIndex, firstLayerInd
         }
     }
 
-    if (myText.length > 0) {
-        TextComp.layers.byName("Sample Text").property("Source Text").setValue(myText);
+    if (obj_params.mainText.length > 0) {
+        TextComp.layers.byName("Sample Text").property("Source Text").setValue(obj_params.mainText);
     }
+
+    //if (obj_params.subText.length > 0) {
+    //    TextComp.layers.byName("Sample Text").property("Source Text").setValue(obj_params.subText);
+    //}
+
     var solidItem = RootComp.layers.byName("MyBeam")
 
     var textCompInParent = parent.layers.add(TextComp);
     textCompInParent.moveToEnd();
     textCompInParent.transform.anchorPoint.setValue([110.5, 192.5]);
-    textCompInParent.transform.position.setValue(endLayer.transform.position.value);
-    textCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(endLayer.index);
+    textCompInParent.transform.position.setValue(textStickerLayer.transform.position.value);
+    textCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(textStickerLayer.index);
     textCompInParent.startTime = _startTime;
+    if (_endTime !== 0) {
+        textCompInParent.outPoint = _endTime;
+    }
     textCompInParent.selected = false;
 
     if (textCompInParent.transform.position.canSetExpression) {
@@ -799,20 +825,117 @@ function importStickyTextWithBeamEffect(projPath, parentCompIndex, firstLayerInd
         selectedLayers.selected = false;
     }
 
-    solidItem.copyToComp(parent);
-    var parentSolidItem = parent.layer(1);
+    var solids = [];
 
-    if (MyBeamCounter !== 0) {
-        parentSolidItem.name = "MyBeam " + String(MyBeamCounter + 1)
-    } else {
-        parentSolidItem.name = "MyBeam " + 1
+    var y = nodeLayers.length;
+    for (var i = 0; i < y; i++) {
+        solidItem.copyToComp(parent);
+
+        solids.push(parent.layer(1));
+        var parentSolidItem = parent.layer(1);
+
+        if (MyBeamCounter !== 0) {
+            parentSolidItem.name = "MyBeam " + String(MyBeamCounter + 1)
+
+        } else {
+            parentSolidItem.name = "MyBeam " + 1
+        }
+        MyBeamCounter++;
+
+        //parentSolidItem.moveToEnd();
+
+        parentSolidItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
+        parentSolidItem.Effects("EndPoint").property("Layer").setValue(textStickerLayer.index);
+        parentSolidItem.startTime = _startTime;
+        if (_endTime !== 0) {
+            parentSolidItem.outPoint = _endTime;
+        }
     }
 
-    parentSolidItem.moveToEnd();
-
-    parentSolidItem.Effects("StartPoint").property("Layer").setValue(startLayer.index);
-    parentSolidItem.Effects("EndPoint").property("Layer").setValue(endLayer.index);
-    parentSolidItem.startTime = _startTime;
-
 }
+//importHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-2/circle-2.aep",
+//'{"comp":"4","sticker":"3","cti":{"fromCti":true,"startTime":"1","endTime":"0"},"thd":true}','')
+function importHud(projPath, params, projectName) {
 
+try{
+    var obj_params = JSON.parse(params);
+    var comps = [];
+    var _startTime = 0;
+    var _endTime = 0;
+
+    var proj = app.project;
+    var parent = undefined;
+    if (parseInt(obj_params.comp) === 0) {
+        parent = proj.activeItem;
+    } else {
+        parent = proj.item(parseInt(obj_params.comp));
+    }
+
+    if (obj_params.cti.fromCti) {
+        _startTime = parent.time;
+    } else {
+        if (parseFloat(obj_params.cti.startTime) !== 0) {
+            _startTime = parseFloat(obj_params.cti.startTime);
+        } else {
+            _startTime = parent.time;
+        }
+        if (parseFloat(obj_params.cti.endTime) !== 0) {
+            _endTime = parseFloat(obj_params.cti.endTime);
+        }
+    }
+
+
+    if (_endTime !== 0) {
+        if (_startTime >= _endTime) {
+            return "{'error' :'end time is not correct!'}"
+        }
+
+        if (_endTime > parent.workAreaDuration) {
+            return "{'error' :'wrong time range!'}"
+        }
+    }
+
+    //var startLayer = []; parent.layer(firstLayerIndex);
+    var hudStickerLayer = parent.layer(parseInt(obj_params.sticker));
+
+    var item = new ImportOptions();
+    item.file = new File(projPath);
+    var hudFolder = proj.importFile(item);
+    //var textLayer = parent.layers.add(TextIFolder.item(1));
+    var RootComp = undefined;
+
+    var hudFolder_numitems = hudFolder.numItems
+    for (var i = 1; i <= hudFolder_numitems; i++) {
+       
+        if (hudFolder.item(i).typeName === "Composition" && hudFolder.item(i).name === "R-"+projectName) {
+            RootComp = hudFolder.item(i);
+            continue;
+        }
+    }
+
+    var x = RootComp.layer(1);
+    x.copyToComp(parent)
+    var hudCompInParent = parent.layer(1);
+
+    if (obj_params.thd) {
+        hudCompInParent.threeDLayer = true;
+    }
+
+    hudCompInParent.moveToEnd();
+    hudCompInParent.transform.position.setValue(hudStickerLayer.transform.position.value);
+    hudCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(hudStickerLayer.index);
+    hudCompInParent.startTime = _startTime;
+
+    if (_endTime !== 0) {
+        hudCompInParent.outPoint = _endTime;
+    }
+
+    hudCompInParent.selected = false;
+
+    if (hudCompInParent.transform.position.canSetExpression) {
+        hudCompInParent.transform.position.expression = 'if(transform.position.value.length === 2){effect("Layer Control")("Layer").toComp([0,0,0])}else{effect("Layer Control")("Layer").transform.position}';
+    }
+return JSON.stringify({res : 'ok'})
+}
+catch(e){return JSON.stringify({error : e})}
+}

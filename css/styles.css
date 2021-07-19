@@ -198,10 +198,7 @@ li {
     background-repeat: no-repeat;
 }
 
-.small-card{
-    max-height: 200px;  min-width: 100%;
-    min-height: 100%;  max-width: 100%;
-}
+
 
 .small-card-image-container{
     margin: auto;width: 100%;max-width: 160px;
@@ -261,7 +258,12 @@ li {
         max-width: 30%;
 
     }
-
+    .small-card {
+        max-height: 150px;
+        max-width: 200px;
+        min-width: 150px;
+        padding: 1px;
+    }
 }
 
 /* Tablet Portrait size to standard 960 (devices and browsers) */
@@ -292,6 +294,12 @@ li {
     .first-triple-home{
         max-height: 230px;
     }
+    .small-card {
+        max-height: 150px;
+        max-width: 200px;
+        min-width: 150px;
+        padding: 1px;
+    }
 }
 
 
@@ -321,7 +329,12 @@ li {
     .large-card{
         max-height: 250px;  width: 50%;
     }
-
+    .small-card {
+        max-height: 150px;
+       
+        min-width: 150px;
+        padding: 1px;
+    }
 }
 
 /* Mobile Landscape Size to Tablet Portrait (devices and browsers) */
@@ -357,6 +370,12 @@ li {
 
     .d-none-xxs {
         display: block;
+    }
+
+    .small-card {
+        max-height: 150px;
+        min-width: 150px;
+        padding: 1px;
     }
 }
 
@@ -397,7 +416,10 @@ li {
         max-height: 200px;  min-width: 150px;
     }
 
-
+    .small-card {
+        max-height: 170px;
+        padding: 1px;
+    }
 
 }
 
@@ -436,6 +458,13 @@ li {
 
     .first-triple-home{
         max-height: 200px;  min-width: 150px;
+    }
+
+    .small-card {
+        max-height: 200px;
+        max-width: 100%;
+        min-width: 150px;
+        padding: 1px;
     }
 
 }

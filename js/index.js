@@ -1,5 +1,7 @@
 var contentTree = {};
 var importProjPath = '';
+var importProjName = '';
+var setingNeede = null;
 var textPath = 'assets/packages';
 
 (function () {
@@ -65,9 +67,8 @@ function generateContentView(menuIndex, subMenIndex) {
     $('#gridSystem').empty();
 
     contentTree[menuIndex].subMenuNames[subMenIndex].subFiles.map((val, indx, arr) => {
-        $('#gridSystem').append('<div class="border-dark border-5 card col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 m-0 p-0" ' +
-            '                       onclick="importFile(' + menuIndex + ',' + subMenIndex + ',' + indx + ')" ' +
-            '                       style="max-height: 150px; max-width: 200px; min-width: 150px;">\n' +
+        $('#gridSystem').append('<div class="border-dark border-5 card col-4 col-xxsm-12 col-xsm-6 col-sm-4 col-md-4 col-lg-3 col-xl-2 m-0 small-card" ' +
+            '                       onclick="importFile(' + menuIndex + ',' + subMenIndex + ',' + indx + ')">\n' +
             '      <div class="card-body  h-100 m-0 p-0">\n' +
             '           <div class="card-img-top h-75">\n' +
             '               <img id="img' + indx + '" src="' + val.demoGifFilePath + '" class="card-img-top w-100 h-100" >' +
@@ -93,6 +94,7 @@ function generateContentView(menuIndex, subMenIndex) {
 function importFile(menuIndex, subMenuIndex, fileIndex) {
     var selected_file = contentTree[menuIndex].subMenuNames[subMenuIndex].subFiles[fileIndex];
     importProjPath = selected_file.projectPath;
+    importProjName = selected_file.fileName
     var settingPath = selected_file.settingPath;
     const csInterface = new CSInterface();
     if (settingPath === '') {
@@ -117,51 +119,181 @@ function importFile(menuIndex, subMenuIndex, fileIndex) {
     } else {
         csInterface.evalScript('getAllComps()', function (res) {
             if (res !== "") {
-                comPositionTree = JSON.parse(res);
+                var allComps = JSON.parse(res);
 
-                if (comPositionTree.error) {
+                if (allComps.error) {
                     return;
                 }
-                $('#compSelect').empty();
-                $('#compSelect').append('<option value="0" selected>Active Comp</option>');
-                comPositionTree.map((val, indx, arr) => {
-                    $('#compSelect').append('<option value="' + val.compItemIndex + '">' + val.compName + '</option>');
-                });
 
-                compSelected(0);
+                opneSetting(settingPath, allComps);
 
-                $('#stickySettingModal').modal('show');
             }
         });
     }
 }
 
-function importSticky() {
-    var startlayerSelectvalue = $('#startlayerSelect').find("option:selected").val();
-    var endlayerSelectvalue = $('#endlayerSelect').find("option:selected").val();
-    var compSelectvalue = $('#compSelect').find("option:selected").val();
-    var fromCti = (!$('#startTimeSwitch')[0].checked);
-    var specificTime = $('#startTimeSpecificValue')[0].value;
-    var stickyText = $('#stickyTextSourceInput').val();
-    if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
-        const csInterface = new CSInterface();
-        const strEval = 'importStickyTextWithBeamEffect("' + importProjPath + '",'
-            + compSelectvalue + ','
-            + startlayerSelectvalue + ','
-            + endlayerSelectvalue + ',"'
-            + stickyText + '",'
-            + fromCti + ','
-            + specificTime + ')';
-        csInterface.evalScript(strEval
-            , function (res) {
-                if (res !== "") {
-                    $('#stickySettingModal').modal('hide');
-                }
-            });
-    } else {
+async function opneSetting(settingPath, comps) {
 
+    var settingResult = await $.ajax({
+        cache: false,
+        url: settingPath
+    });
+
+    setingNeede = JSON.parse(settingResult);
+    rawModal();
+    var items = '<option value="0" selected>Active Comp</option>\n';
+    $('#compSelect').empty();
+    $('#compSelect_hud').empty();
+
+    comps.map((val, indx, arr) => {
+        items += '<option value="' + val.compItemIndex + '">' + val.compName + '</option> \n';
+
+    });
+
+    $('#compSelect').append(items);
+    $('#compSelect_hud').append(items);
+
+    compSelected(0);
+    
+    var _setting = setingNeede.setting;
+    if (setingNeede.type === "BeamText") {
+
+        var lineCount = _setting.beam;
+
+        $("#div_compSelect").show();
+
+        $('#div_textSticker').show();
+
+        for (var i = 1; i <= lineCount; i++) {
+            $("#div_startlayerSelect_line" + i).show();
+        }
+
+        if (_setting.time) {
+            $("div .cti").show();
+        }
+
+        if (_setting.text.includes("main")) {
+            $("#div_mainText").show();
+        }
+
+        if (_setting.text.includes("sub")) {
+            $("#div_subText").show();
+        }
+        $('#stickySettingModal').modal('show');
+
+    } else if (setingNeede.type === "hud") {
+
+        $('#hudSettingModal').modal('show');
     }
+}
 
+function rawModal() {
+    $("#stickyImportFomr>div.position-relative").hide();
+
+    $('#compSelect').empty();
+    $('#compSelect_hud').empty();
+
+    $("#div_mainText").val('');
+    $("#div_subText").val('');
+
+    startTimeChangestickyImportFomr(false);
+    $('#startTimeSwitch')[0].checked = false;
+    $('#startTimeSwitch_hud')[0].checked = false;
+    $('#select_3D_hud')[0].checked = false;
+    
+    $('#layerTextSticker').empty();
+    $('#startlayerSelect_line1').empty();
+    $('#startlayerSelect_line2').empty();
+    $('#startlayerSelect_line3').empty();
+}
+
+function generateJsonSetting() {
+    if (setingNeede !== null) {
+        if (setingNeede.type === "BeamText") {
+
+            let _setting = setingNeede.setting;
+            let lineCount = _setting.beam;
+            let json_result = {};
+            json_result.comp = $('#compSelect').find("option:selected").val();
+            json_result.sticker = $('#layerTextSticker').find("option:selected").val();
+            let layers_selected = [];
+
+            for (var i = 1; i <= lineCount; i++) {
+                layers_selected.push({
+                    start: $('#startlayerSelect_line' + i).find("option:selected").val(),
+                    end: json_result.sticker
+                });
+            }
+            json_result.layers = layers_selected;
+            if (_setting.time) {
+                json_result.cti = {
+                    fromCti: (!$('#startTimeSwitch')[0].checked),
+                    startTime: $('#startTimeSpecificValue')[0].value,
+                    endTime: $('#endTimeSpecificValue')[0].value,
+                };
+            }
+
+            if (_setting.text.includes("main")) {
+                json_result.mainText = $('#stickyTextSourceInput_MainText').val();
+            }
+
+            if (_setting.text.includes("sub")) {
+                json_result.subText = $('#stickyTextSourceInput_SubText').val();
+            }
+
+            importBeamText(json_result);
+        }
+        else if (setingNeede.type === "hud") {
+            let json_result = {};
+            let _setting = setingNeede.setting;
+            json_result.comp = $('#compSelect_hud').find("option:selected").val();
+            json_result.sticker = $('#layerSticker_hud').find("option:selected").val();
+
+            if (_setting.time) {
+                json_result.cti = {
+                    fromCti: (!$('#startTimeSwitch_hud')[0].checked),
+                    startTime: $('#startTimeSpecificValue_hud')[0].value,
+                    endTime: $('#endTimeSpecificValue_hud')[0].value,
+                };
+            }
+
+            if (_setting.thd) {
+                json_result.thd = $('#select_3D_hud')[0].checked
+            }
+
+            importHud(json_result);
+        }
+    }
+}
+
+function importBeamText(jsonInput) {
+    var str_input = JSON.stringify(jsonInput);
+    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
+    const csInterface = new CSInterface();
+    const strEval = 'importStickyTextWithBeamEffect("' + importProjPath + '",\'' + str_input + '\')'; 
+    csInterface.evalScript(strEval
+        , function (res) {
+            if (res !== "") {
+                $('#stickySettingModal').modal('hide');
+            }
+        });
+    //} else {
+
+    //}
+}
+
+function importHud(jsonInput) {
+    var str_input = JSON.stringify(jsonInput);
+    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
+    const csInterface = new CSInterface();
+    const strEval = 'importHud("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')'; 
+    csInterface.evalScript(strEval
+        , function (res) {
+                $('#hudSettingModal').modal('hide');
+        });
+    //} else {
+
+    //}
 }
 
 function startTimeChangestickyImportFomr(value) {
@@ -169,12 +301,22 @@ function startTimeChangestickyImportFomr(value) {
         $("#startTimeSwitchLabel").text("specific Seconds (accept decimal)");
         $("#startTimeSpecificValue").prop("disabled", false).parent().css("opacity", "1");
         $("#endTimeSpecificValue").prop("disabled", false).parent().css("opacity", "1");
+
+        $("#startTimeSwitchlabel_hud").text("specific Seconds (accept decimal)");
+        $("#startTimeSpecificValue_hud").prop("disabled", false).parent().css("opacity", "1");
+        $("#endTimeSpecificValue_hud").prop("disabled", false).parent().css("opacity", "1");
     } else {
         $("#startTimeSwitchLabel").text("start from current CTI");
         $("#startTimeSpecificValue")[0].value = 0;
         $("#endTimeSpecificValue")[0].value = 0;
         $("#endTimeSpecificValue").prop("disabled", true).parent().css("opacity", "0.2");
         $("#startTimeSpecificValue").prop("disabled", true).parent().css("opacity", "0.2");
+
+        $("#startTimeSwitchlabel_hud").text("start from current CTI");
+        $("#startTimeSpecificValue_hud")[0].value = 0;
+        $("#endTimeSpecificValue_hud")[0].value = 0;
+        $("#endTimeSpecificValue_hud").prop("disabled", true).parent().css("opacity", "0.2");
+        $("#startTimeSpecificValue_hud").prop("disabled", true).parent().css("opacity", "0.2");
     }
 }
 
@@ -183,21 +325,29 @@ function compSelected(this_val) {
     csInterface.evalScript('getAllLayersInComp(' + this_val + ')', function (res) {
         if (res !== "") {
             var layers = JSON.parse(res);
-
+            var _layers = '<option value="0" selected>----</option> \n';
             if (layers.error) {
                 return;
             }
-            $('#startlayerSelect').empty();
-            $('#startlayerSelect').append('<option value="0" selected>Select "Start point" layer</option>');
+
             layers.map((val, indx, arr) => {
-                $('#startlayerSelect').append('<option value="' + val.layerIndex + '">' + val.layerName + '</option>');
+                _layers += '<option value="' + val.layerIndex + '">' + val.layerName + '</option> \n'
             });
 
-            $('#endlayerSelect').empty();
-            $('#endlayerSelect').append('<option value="0" selected>Select "End point" layer</option>');
-            layers.map((val, indx, arr) => {
-                $('#endlayerSelect').append('<option value="' + val.layerIndex + '">' + val.layerName + '</option>');
-            });
+            $('#layerTextSticker').empty();
+            $('#layerTextSticker').append(_layers);
+
+            $('#startlayerSelect_line1').empty();
+            $('#startlayerSelect_line1').append(_layers);
+
+            $('#startlayerSelect_line2').empty();
+            $('#startlayerSelect_line2').append(_layers);
+
+            $('#startlayerSelect_line3').empty();
+            $('#startlayerSelect_line3').append(_layers);
+
+            $('#layerSticker_hud').empty();
+            $('#layerSticker_hud').append(_layers);
         }
     });
 }
