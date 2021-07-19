@@ -853,8 +853,8 @@ function importStickyTextWithBeamEffect(projPath, params) {
     }
 
 }
-//importHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-2/circle-2.aep",
-//'{"comp":"4","sticker":"3","cti":{"fromCti":true,"startTime":"1","endTime":"0"},"thd":true}','')
+importHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-1/circle-1.aep",
+'{"comp":"1","sticker":"1","cti":{"fromCti":true,"startTime":"1","endTime":"0"},"thd":true}','circle-1')
 function importHud(projPath, params, projectName) {
 
 try{
@@ -906,17 +906,18 @@ try{
 
     var hudFolder_numitems = hudFolder.numItems
     for (var i = 1; i <= hudFolder_numitems; i++) {
-       
         if (hudFolder.item(i).typeName === "Composition" && hudFolder.item(i).name === "R-"+projectName) {
             RootComp = hudFolder.item(i);
             continue;
         }
     }
-
+    
     var x = RootComp.layer(1);
-    x.copyToComp(parent)
+    x.copyToComp(parent);
+    
     var hudCompInParent = parent.layer(1);
-
+    var z = hudCompInParent.source
+    hudCompInParent.replaceSource(parent,true)
     if (obj_params.thd) {
         hudCompInParent.threeDLayer = true;
     }
@@ -935,7 +936,10 @@ try{
     if (hudCompInParent.transform.position.canSetExpression) {
         hudCompInParent.transform.position.expression = 'if(transform.position.value.length === 2){effect("Layer Control")("Layer").toComp([0,0,0])}else{effect("Layer Control")("Layer").transform.position}';
     }
+//proj.autoFixExpressions("fixme",RootComp.name);
 return JSON.stringify({res : 'ok'})
 }
-catch(e){return JSON.stringify({error : e})}
+catch(e){
+    var err  = e
+    }
 }
