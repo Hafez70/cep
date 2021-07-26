@@ -20,6 +20,8 @@ var textPath = 'assets/packages';
     getFilesTree(path);
 }());
 
+
+
 function getFilesTree(myPath) {
     const csInterface = new CSInterface();
     csInterface.evalScript('getMainDirectories("' + myPath + '")', function (res) {
@@ -211,14 +213,27 @@ function generateJsonSetting() {
     if (setingNeede !== null) {
         if (setingNeede.type === "BeamText") {
 
+            $('#stickyImportFomr').addClass('was-validated');
+
             let _setting = setingNeede.setting;
             let lineCount = _setting.beam;
             let json_result = {};
-            json_result.comp = $('#compSelect').find("option:selected").val();
-            json_result.sticker = $('#layerTextSticker').find("option:selected").val();
+            if (!$('#compSelect').find("option:selected").val()) {
+                json_result.comp = $('#compSelect').find("option:selected").val();
+                return;
+            }
+            if (!$('#layerTextSticker').find("option:selected").val() || $('#layerTextSticker').find("option:selected").val() ==0) {
+                json_result.sticker = $('#layerTextSticker').find("option:selected").val();
+                return;
+            }
+            
             let layers_selected = [];
 
             for (var i = 1; i <= lineCount; i++) {
+                if (!$('#startlayerSelect_line' + i).find("option:selected").val()
+                    || $('#startlayerSelect_line' + i).find("option:selected").val() == 0) {
+                    return;
+                }
                 layers_selected.push({
                     start: $('#startlayerSelect_line' + i).find("option:selected").val(),
                     end: json_result.sticker
@@ -228,32 +243,49 @@ function generateJsonSetting() {
             if (_setting.time) {
                 json_result.cti = {
                     fromCti: (!$('#startTimeSwitch')[0].checked),
-                    startTime: $('#startTimeSpecificValue')[0].value,
-                    endTime: $('#endTimeSpecificValue')[0].value,
+                    startTime: (!$('#startTimeSpecificValue')[0].value ? 0 : $('#startTimeSpecificValue')[0].value ),
+                    endTime: (!$('#endTimeSpecificValue')[0].value ? 0 : $('#endTimeSpecificValue')[0].value),
                 };
             }
 
             if (_setting.text.includes("main")) {
-                json_result.mainText = $('#stickyTextSourceInput_MainText').val();
+                if ($('#stickyTextSourceInput_MainText').val() !== "") {
+                    json_result.mainText = $('#stickyTextSourceInput_MainText').val();
+                }
             }
 
             if (_setting.text.includes("sub")) {
-                json_result.subText = $('#stickyTextSourceInput_SubText').val();
+             
+                if ($('#stickyTextSourceInput_SubText').val() !== "") {
+                    json_result.subText = $('#stickyTextSourceInput_SubText').val();
+                }
             }
 
             importBeamText(json_result);
         }
         else if (setingNeede.type === "hud") {
             let json_result = {};
+
+            $('#stickyImportFomr').addClass('hudImportForm');
+
             let _setting = setingNeede.setting;
-            json_result.comp = $('#compSelect_hud').find("option:selected").val();
-            json_result.sticker = $('#layerSticker_hud').find("option:selected").val();
+            if (!$('#compSelect_hud').find("option:selected").val()) {
+                json_result.comp = $('#compSelect_hud').find("option:selected").val();
+                return;
+            }
+
+            if (!$('#layerSticker_hud').find("option:selected").val() || $('#layerSticker_hud').find("option:selected").val() == 0) {
+                json_result.sticker = $('#layerSticker_hud').find("option:selected").val();
+                return;
+            }
+
 
             if (_setting.time) {
+                
                 json_result.cti = {
                     fromCti: (!$('#startTimeSwitch_hud')[0].checked),
-                    startTime: $('#startTimeSpecificValue_hud')[0].value,
-                    endTime: $('#endTimeSpecificValue_hud')[0].value,
+                    startTime: (!$('#startTimeSpecificValue_hud')[0].value ? 0 : $('#startTimeSpecificValue_hud')[0].value),
+                    endTime: (!$('#endTimeSpecificValue_hud')[0].value ? 0 : $('#endTimeSpecificValue_hud')[0].value),
                 };
             }
 
@@ -275,6 +307,7 @@ function importBeamText(jsonInput) {
         , function (res) {
             if (res !== "") {
                 $('#stickySettingModal').modal('hide');
+                $('#stickyImportFomr').removeClass('was-validated');
             }
         });
     //} else {
@@ -286,10 +319,11 @@ function importHud(jsonInput) {
     var str_input = JSON.stringify(jsonInput);
     // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
     const csInterface = new CSInterface();
-    const strEval = 'importHud("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')'; 
+    const strEval = 'importBasicHud("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')'; 
     csInterface.evalScript(strEval
         , function (res) {
-                $('#hudSettingModal').modal('hide');
+            $('#hudSettingModal').modal('hide');
+            $('#hudImportForm').removeClass('was-validated');
         });
     //} else {
 
@@ -325,7 +359,7 @@ function compSelected(this_val) {
     csInterface.evalScript('getAllLayersInComp(' + this_val + ')', function (res) {
         if (res !== "") {
             var layers = JSON.parse(res);
-            var _layers = '<option value="0" selected>----</option> \n';
+            var _layers = '<option value="" selected>----</option> \n';
             if (layers.error) {
                 return;
             }

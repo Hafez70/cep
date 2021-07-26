@@ -715,8 +715,8 @@ function getAllLayersInComp(compIndex) {
 
 }
 
-//importStickyTextWithBeamEffect("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Text Tips/1. One Handle/slide - bottom to up/slide%20-%20bottom%20to%20up.aep",
-//'{"comp":"1","sticker":"5","layers":[{"start":"2","end":"5"}],"cti":{"fromCti":false,"startTime":"0.2","endTime":"0"},"mainText":"one handle"}');
+//importStickyTextWithBeamEffect("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Text Tips/4. ToolTips Title/title-1/title-1.aep",
+//'{"comp":"1","sticker":"4","layers":[],"cti":{"fromCti":false,"startTime":"0","endTime":"0"},"mainText":"first"}');
 
 function importStickyTextWithBeamEffect(projPath, params) {
 
@@ -733,18 +733,18 @@ function importStickyTextWithBeamEffect(projPath, params) {
         parent = proj.item(parseInt(obj_params.comp));
     }
 
-    if (obj_params.cti.fromCti) {
+     if (obj_params.cti.fromCti) {
         _startTime = parent.time;
     } else {
-        if ( parseFloat(obj_params.cti.startTime) !== 0) {
+        if (parseFloat(obj_params.cti.startTime) !== 0) {
             _startTime = parseFloat(obj_params.cti.startTime);
         } else {
             _startTime = parent.time;
         }
-        if ( parseFloat(obj_params.cti.endTime) !== 0) {
-            _endTime = parseFloat(obj_params.cti.endTime);
-        }
     }
+     if (parseFloat(obj_params.cti.endTime) !== 0) {
+            _endTime = parseFloat(obj_params.cti.endTime);
+     }
 
 
     if (_endTime !== 0) {
@@ -782,80 +782,87 @@ function importStickyTextWithBeamEffect(projPath, params) {
             RootComp = TextIFolder.item(i);
             continue;
         }
-        if (TextIFolder.item(i).typeName === "Composition" && TextIFolder.item(i).name === "MyTextComp") {
+        if (TextIFolder.item(i).typeName === "Composition" && TextIFolder.item(i).name === "MyText") {
             TextComp = TextIFolder.item(i);
             continue;
         }
     }
 
-    if (obj_params.mainText.length > 0) {
-        TextComp.layers.byName("Sample Text").property("Source Text").setValue(obj_params.mainText);
+    if (obj_params.mainText && obj_params.mainText.length > 0) {
+        TextComp.layers.byName("SampleText").property("Source Text").setValue(obj_params.mainText);
     }
-
-    //if (obj_params.subText.length > 0) {
-    //    TextComp.layers.byName("Sample Text").property("Source Text").setValue(obj_params.subText);
-    //}
-
-    var solidItem = RootComp.layers.byName("MyBeam")
-
+    if (obj_params.subText && obj_params.subText.length > 0) {
+        TextComp.layers.byName("Subtitle").property("Source Text").setValue(obj_params.subText);
+    }
+    var controlItem = RootComp.layers.byName("Control")
+    
     var textCompInParent = parent.layers.add(TextComp);
-    textCompInParent.moveToEnd();
-    textCompInParent.transform.anchorPoint.setValue([110.5, 192.5]);
+    var y = RootComp.layers.byName("MyText").transform.anchorPoint;
+    //textCompInParent.moveToEnd();
+    textCompInParent.transform.anchorPoint.setValue(y.value);
     textCompInParent.transform.position.setValue(textStickerLayer.transform.position.value);
     textCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(textStickerLayer.index);
+    textCompInParent.Effects.addProperty("Slider Control").property("Slider").setValue(45);
+    textCompInParent.effect("Slider Control").name = "Text-Size"
     textCompInParent.startTime = _startTime;
+
     if (_endTime !== 0) {
         textCompInParent.outPoint = _endTime;
     }
+
     textCompInParent.selected = false;
 
     if (textCompInParent.transform.position.canSetExpression) {
         textCompInParent.transform.position.expression = 'effect("Layer Control")("Layer").toComp([0,0,0])';
+        textCompInParent.transform.scale.expression = 'temp=effect("Text-Size")("Slider");[temp, temp]';
     }
 
-    var MyBeamCounter = 0;
+    var ControlCounter = 0;
     for (var i = 1; i <= parent.numLayers; i++) {
-        if (String(parent.layer(i).name).indexOf('MyBeam') >= 0) {
-            MyBeamCounter++;
+        if (String(parent.layer(i).name).indexOf('MyText') >= 0) {
+            ControlCounter++;
         }
     }
 
-    var selectedLayers = parent.selectedLayers;
-    for (var i = 0; i < selectedLayers.lenght; i++) {
-        selectedLayers.selected = false;
+      var selectedLayers = parent.selectedLayers;
+    for (var i = 0; i < selectedLayers.length; i++) {
+        selectedLayers[i].selected = false;
     }
 
     var solids = [];
 
     var y = nodeLayers.length;
     for (var i = 0; i < y; i++) {
-        solidItem.copyToComp(parent);
+        controlItem.copyToComp(parent);
 
         solids.push(parent.layer(1));
-        var parentSolidItem = parent.layer(1);
+        var parentcontrolItem = parent.layer(1);
 
-        if (MyBeamCounter !== 0) {
-            parentSolidItem.name = "MyBeam " + String(MyBeamCounter + 1)
+        if (ControlCounter !== 0) {
+            parentcontrolItem.name = "Control-" + String(ControlCounter + 1) + "-" + i
 
         } else {
-            parentSolidItem.name = "MyBeam " + 1
+            parentcontrolItem.name = "Control-" + 1 + "-" + i
         }
-        MyBeamCounter++;
+        ControlCounter++;
 
         //parentSolidItem.moveToEnd();
 
-        parentSolidItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
-        parentSolidItem.Effects("EndPoint").property("Layer").setValue(textStickerLayer.index);
-        parentSolidItem.startTime = _startTime;
+        parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
+        parentcontrolItem.Effects("EndPoint").property("Layer").setValue(textStickerLayer.index);
+        parentcontrolItem.startTime = _startTime;
         if (_endTime !== 0) {
-            parentSolidItem.outPoint = _endTime;
+            parentcontrolItem.outPoint = _endTime;
         }
     }
 
 }
-importHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-1/circle-1.aep",
-'{"comp":"1","sticker":"1","cti":{"fromCti":true,"startTime":"1","endTime":"0"},"thd":true}','circle-1')
-function importHud(projPath, params, projectName) {
+
+
+//importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-1/circle-1.aep",
+//'{"comp":"1","sticker":"4","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":true}','circle-1')
+
+function importBasicHud(projPath, params, projectName) {
 
 try{
     var obj_params = JSON.parse(params);
@@ -879,11 +886,10 @@ try{
         } else {
             _startTime = parent.time;
         }
-        if (parseFloat(obj_params.cti.endTime) !== 0) {
-            _endTime = parseFloat(obj_params.cti.endTime);
-        }
     }
-
+     if (parseFloat(obj_params.cti.endTime) !== 0) {
+            _endTime = parseFloat(obj_params.cti.endTime);
+     }
 
     if (_endTime !== 0) {
         if (_startTime >= _endTime) {
@@ -906,36 +912,43 @@ try{
 
     var hudFolder_numitems = hudFolder.numItems
     for (var i = 1; i <= hudFolder_numitems; i++) {
-        if (hudFolder.item(i).typeName === "Composition" && hudFolder.item(i).name === "R-"+projectName) {
+        if (hudFolder.item(i).typeName === "Composition" && hudFolder.item(i).name === projectName) {
             RootComp = hudFolder.item(i);
             continue;
         }
     }
     
-    var x = RootComp.layer(1);
-    x.copyToComp(parent);
-    
-    var hudCompInParent = parent.layer(1);
-    var z = hudCompInParent.source
-    hudCompInParent.replaceSource(parent,true)
-    if (obj_params.thd) {
-        hudCompInParent.threeDLayer = true;
+     var selectedLayers = parent.selectedLayers;
+    for (var i = 0; i < selectedLayers.length; i++) {
+        selectedLayers[i].selected = false;
     }
 
-    hudCompInParent.moveToEnd();
+    var x = RootComp.layer(1);
+    x.copyToComp(parent);
+   
+    var hudCompInParent = parent.layer(1);
+    hudCompInParent.name = hudCompInParent.name + "-" +  parent.layers.length
+    if (obj_params.thd) {
+        hudCompInParent.threeDLayer = true;
+        hudCompInParent.transform.orientation.expression = 'effect("Layer Control")("Layer").transform.orientation';
+    }
+
+    //hudCompInParent.moveToEnd();
     hudCompInParent.transform.position.setValue(hudStickerLayer.transform.position.value);
     hudCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(hudStickerLayer.index);
     hudCompInParent.startTime = _startTime;
 
-    if (_endTime !== 0) {
-        hudCompInParent.outPoint = _endTime;
+   if (_endTime !== 0) {
+       hudCompInParent.outPoint = _endTime;
     }
 
     hudCompInParent.selected = false;
 
-    if (hudCompInParent.transform.position.canSetExpression) {
+   if (hudCompInParent.transform.position.canSetExpression) {
         hudCompInParent.transform.position.expression = 'if(transform.position.value.length === 2){effect("Layer Control")("Layer").toComp([0,0,0])}else{effect("Layer Control")("Layer").transform.position}';
+        
     }
+   hudFolder.remove();
 //proj.autoFixExpressions("fixme",RootComp.name);
 return JSON.stringify({res : 'ok'})
 }
