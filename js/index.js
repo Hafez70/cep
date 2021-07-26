@@ -219,13 +219,15 @@ function generateJsonSetting() {
             let lineCount = _setting.beam;
             let json_result = {};
             if (!$('#compSelect').find("option:selected").val()) {
-                json_result.comp = $('#compSelect').find("option:selected").val();
+                
                 return;
             }
-            if (!$('#layerTextSticker').find("option:selected").val() || $('#layerTextSticker').find("option:selected").val() ==0) {
-                json_result.sticker = $('#layerTextSticker').find("option:selected").val();
+            json_result.comp = $('#compSelect').find("option:selected").val();
+            if (!$('#layerTextSticker').find("option:selected").val() || $('#layerTextSticker').find("option:selected").val() === 0) {
+                
                 return;
             }
+            json_result.sticker = $('#layerTextSticker').find("option:selected").val();
             
             let layers_selected = [];
 
@@ -270,15 +272,13 @@ function generateJsonSetting() {
 
             let _setting = setingNeede.setting;
             if (!$('#compSelect_hud').find("option:selected").val()) {
-                json_result.comp = $('#compSelect_hud').find("option:selected").val();
+               
                 return;
             }
 
-            if (!$('#layerSticker_hud').find("option:selected").val() || $('#layerSticker_hud').find("option:selected").val() == 0) {
-                json_result.sticker = $('#layerSticker_hud').find("option:selected").val();
-                return;
-            }
-
+            json_result.comp = (!$('#compSelect_hud').find("option:selected").val() ? 0 : $('#compSelect_hud').find("option:selected").val());
+           
+            json_result.sticker = $('#layerSticker_hud').find("option:selected").val();
 
             if (_setting.time) {
                 
@@ -337,7 +337,7 @@ function startTimeChangestickyImportFomr(value) {
         $("#endTimeSpecificValue").prop("disabled", false).parent().css("opacity", "1");
 
         $("#startTimeSwitchlabel_hud").text("specific Seconds (accept decimal)");
-        $("#startTimeSpecificValue_hud").prop("disabled", false).parent().css("opacity", "1");
+        $("#startTimeSpecificValue_hud").prop("disabled", false).parent().parent().css("opacity", "1");
         $("#endTimeSpecificValue_hud").prop("disabled", false).parent().css("opacity", "1");
     } else {
         $("#startTimeSwitchLabel").text("start from current CTI");
@@ -350,7 +350,7 @@ function startTimeChangestickyImportFomr(value) {
         $("#startTimeSpecificValue_hud")[0].value = 0;
         $("#endTimeSpecificValue_hud")[0].value = 0;
         $("#endTimeSpecificValue_hud").prop("disabled", true).parent().css("opacity", "0.2");
-        $("#startTimeSpecificValue_hud").prop("disabled", true).parent().css("opacity", "0.2");
+        $("#startTimeSpecificValue_hud").prop("disabled", true).parent().parent().css("opacity", "0.2");
     }
 }
 
@@ -359,7 +359,7 @@ function compSelected(this_val) {
     csInterface.evalScript('getAllLayersInComp(' + this_val + ')', function (res) {
         if (res !== "") {
             var layers = JSON.parse(res);
-            var _layers = '<option value="" selected>----</option> \n';
+            var _layers = '<option value="0" selected>Do not Stick</option> \n';
             if (layers.error) {
                 return;
             }

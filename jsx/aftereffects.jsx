@@ -733,7 +733,7 @@ function importStickyTextWithBeamEffect(projPath, params) {
         parent = proj.item(parseInt(obj_params.comp));
     }
 
-     if (obj_params.cti.fromCti) {
+    if (obj_params.cti.fromCti) {
         _startTime = parent.time;
     } else {
         if (parseFloat(obj_params.cti.startTime) !== 0) {
@@ -742,9 +742,9 @@ function importStickyTextWithBeamEffect(projPath, params) {
             _startTime = parent.time;
         }
     }
-     if (parseFloat(obj_params.cti.endTime) !== 0) {
-            _endTime = parseFloat(obj_params.cti.endTime);
-     }
+    if (parseFloat(obj_params.cti.endTime) !== 0) {
+        _endTime = parseFloat(obj_params.cti.endTime);
+    }
 
 
     if (_endTime !== 0) {
@@ -795,7 +795,7 @@ function importStickyTextWithBeamEffect(projPath, params) {
         TextComp.layers.byName("Subtitle").property("Source Text").setValue(obj_params.subText);
     }
     var controlItem = RootComp.layers.byName("Control")
-    
+
     var textCompInParent = parent.layers.add(TextComp);
     var y = RootComp.layers.byName("MyText").transform.anchorPoint;
     //textCompInParent.moveToEnd();
@@ -824,7 +824,7 @@ function importStickyTextWithBeamEffect(projPath, params) {
         }
     }
 
-      var selectedLayers = parent.selectedLayers;
+    var selectedLayers = parent.selectedLayers;
     for (var i = 0; i < selectedLayers.length; i++) {
         selectedLayers[i].selected = false;
     }
@@ -859,100 +859,132 @@ function importStickyTextWithBeamEffect(projPath, params) {
 }
 
 
-//importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-1/circle-1.aep",
-//'{"comp":"1","sticker":"4","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":true}','circle-1')
+///importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-1/circle-1.aep",
+//'{"comp":"1","sticker":"0","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":false}','circle-1')
 
 function importBasicHud(projPath, params, projectName) {
 
-try{
-    var obj_params = JSON.parse(params);
-    var comps = [];
-    var _startTime = 0;
-    var _endTime = 0;
+    try {
+        var obj_params = JSON.parse(params);
+        var comps = [];
+        var _startTime = 0;
+        var _endTime = 0;
 
-    var proj = app.project;
-    var parent = undefined;
-    if (parseInt(obj_params.comp) === 0) {
-        parent = proj.activeItem;
-    } else {
-        parent = proj.item(parseInt(obj_params.comp));
-    }
-
-    if (obj_params.cti.fromCti) {
-        _startTime = parent.time;
-    } else {
-        if (parseFloat(obj_params.cti.startTime) !== 0) {
-            _startTime = parseFloat(obj_params.cti.startTime);
+        var proj = app.project;
+        var parent = undefined;
+        if (parseInt(obj_params.comp) === 0) {
+            parent = proj.activeItem;
         } else {
+            parent = proj.item(parseInt(obj_params.comp));
+        }
+
+        if (obj_params.cti.fromCti) {
             _startTime = parent.time;
+        } else {
+            if (parseFloat(obj_params.cti.startTime) !== 0) {
+                _startTime = parseFloat(obj_params.cti.startTime);
+            } else {
+                _startTime = parent.time;
+            }
         }
-    }
-     if (parseFloat(obj_params.cti.endTime) !== 0) {
+        if (parseFloat(obj_params.cti.endTime) !== 0) {
             _endTime = parseFloat(obj_params.cti.endTime);
-     }
-
-    if (_endTime !== 0) {
-        if (_startTime >= _endTime) {
-            return "{'error' :'end time is not correct!'}"
         }
 
-        if (_endTime > parent.workAreaDuration) {
-            return "{'error' :'wrong time range!'}"
+        if (_endTime !== 0) {
+            if (_startTime >= _endTime) {
+                return "{'error' :'end time is not correct!'}"
+            }
+
+            if (_endTime > parent.workAreaDuration) {
+                return "{'error' :'wrong time range!'}"
+            }
         }
-    }
-
-    //var startLayer = []; parent.layer(firstLayerIndex);
-    var hudStickerLayer = parent.layer(parseInt(obj_params.sticker));
-
-    var item = new ImportOptions();
-    item.file = new File(projPath);
-    var hudFolder = proj.importFile(item);
-    //var textLayer = parent.layers.add(TextIFolder.item(1));
-    var RootComp = undefined;
-
-    var hudFolder_numitems = hudFolder.numItems
-    for (var i = 1; i <= hudFolder_numitems; i++) {
-        if (hudFolder.item(i).typeName === "Composition" && hudFolder.item(i).name === projectName) {
-            RootComp = hudFolder.item(i);
-            continue;
+        var hudStickerLayer = undefined;
+        if (obj_params.sticker != 0) {
+            //var startLayer = []; parent.layer(firstLayerIndex);
+            hudStickerLayer = parent.layer(parseInt(obj_params.sticker));
         }
-    }
-    
-     var selectedLayers = parent.selectedLayers;
-    for (var i = 0; i < selectedLayers.length; i++) {
-        selectedLayers[i].selected = false;
-    }
+        var item = new ImportOptions();
+        item.file = new File(projPath);
+        var hudFolder = proj.importFile(item);
+        //var textLayer = parent.layers.add(TextIFolder.item(1));
+        var RootComp = undefined;
 
-    var x = RootComp.layer(1);
-    x.copyToComp(parent);
-   
-    var hudCompInParent = parent.layer(1);
-    hudCompInParent.name = hudCompInParent.name + "-" +  parent.layers.length
-    if (obj_params.thd) {
-        hudCompInParent.threeDLayer = true;
-        hudCompInParent.transform.orientation.expression = 'effect("Layer Control")("Layer").transform.orientation';
+        var hudFolder_numitems = hudFolder.numItems
+        for (var i = 1; i <= hudFolder_numitems; i++) {
+            if (hudFolder.item(i).typeName === "Composition" && hudFolder.item(i).name === projectName) {
+                RootComp = hudFolder.item(i);
+                continue;
+            }
+        }
+
+        var selectedLayers = parent.selectedLayers;
+        for (var i = 0; i < selectedLayers.length; i++) {
+            selectedLayers[i].selected = false;
+        }
+
+        var x = RootComp.layer(1);
+        x.copyToComp(parent);
+
+        var hudCompInParent = parent.layer(1);
+        hudCompInParent.name = hudCompInParent.name + "-" + parent.layers.length
+
+        if (hudStickerLayer !== undefined) {
+            hudCompInParent.transform.position.setValue(hudStickerLayer.transform.position.value);
+            hudCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(hudStickerLayer.index);
+
+            if (obj_params.thd) {
+                hudCompInParent.threeDLayer = true;
+                hudCompInParent.transform.orientation.expression = 'if(transform.position.value.length === 3){' +
+                    'x = effect("Layer Control")("Layer").orientation[0];' +
+                    'y = effect("Layer Control")("Layer").orientation[1];' +
+                    'z = effect("Layer Control")("Layer").orientation[2];' +
+                    '[x,y,z]}';
+            }
+            else {
+                hudCompInParent.threeDLayer = false;
+                hudCompInParent.transform.rotation.expression = 'if(transform.position.value.length === 2){effect("Layer Control")("Layer").transform.rotation}';
+            }
+
+            hudCompInParent.startTime = _startTime;
+
+            if (_endTime !== 0) {
+                hudCompInParent.outPoint = _endTime;
+            }
+
+            hudCompInParent.selected = false;
+
+            if (hudCompInParent.transform.position.canSetExpression) {
+                hudCompInParent.transform.position.expression = 'if(transform.position.value.length === 2)' +
+                    '{effect("Layer Control")("Layer").toComp([0,0,0])}' +
+                    'else{' +
+                    'x = effect("Layer Control")("Layer").position[0];' +
+                    'y = effect("Layer Control")("Layer").position[1];' +
+                    'z = effect("Layer Control")("Layer").position[2];' +
+                    'zp = effect("z-position")("Slider");' +
+                    '[x,y,z+zp]}';
+            }
+        }
+        else {
+            if (obj_params.thd) {
+                hudCompInParent.threeDLayer = true;
+            }
+            else {
+                hudCompInParent.threeDLayer = false;
+            }
+            hudCompInParent.startTime = _startTime;
+
+            if (_endTime !== 0) {
+                hudCompInParent.outPoint = _endTime;
+            }
+            hudCompInParent.selected = false;
+        }
+        hudFolder.remove();
+        //proj.autoFixExpressions("fixme",RootComp.name);
+        return JSON.stringify({ res: 'ok' })
     }
-
-    //hudCompInParent.moveToEnd();
-    hudCompInParent.transform.position.setValue(hudStickerLayer.transform.position.value);
-    hudCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(hudStickerLayer.index);
-    hudCompInParent.startTime = _startTime;
-
-   if (_endTime !== 0) {
-       hudCompInParent.outPoint = _endTime;
-    }
-
-    hudCompInParent.selected = false;
-
-   if (hudCompInParent.transform.position.canSetExpression) {
-        hudCompInParent.transform.position.expression = 'if(transform.position.value.length === 2){effect("Layer Control")("Layer").toComp([0,0,0])}else{effect("Layer Control")("Layer").transform.position}';
-        
-    }
-   hudFolder.remove();
-//proj.autoFixExpressions("fixme",RootComp.name);
-return JSON.stringify({res : 'ok'})
-}
-catch(e){
-    var err  = e
+    catch (e) {
+        var err = e
     }
 }

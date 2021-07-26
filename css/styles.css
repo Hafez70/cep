@@ -204,6 +204,14 @@ li {
     margin: auto;width: 100%;max-width: 160px;
 }
 
+.modal-icon-controls{
+    max-height: 30px;
+    max-width: 30px;
+}
+.modal-icon-controls-container{
+    height: 100%;
+    max-width: 30px;
+}
 @media screen and (max-width: 250px) {
     .d-block-xxs {
         display: block;
@@ -421,6 +429,9 @@ li {
         padding: 1px;
     }
 
+    .d-none-xs {
+        display: none;
+    }
 }
 
 /* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
@@ -454,6 +465,10 @@ li {
     .col-xxsm-6 {
         flex: 0 0 auto;
         width: 50%;
+    }
+
+    .d-none-xxs {
+        display: none;
     }
 
     .first-triple-home{
