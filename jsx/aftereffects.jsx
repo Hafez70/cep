@@ -900,6 +900,8 @@ function importBasicHud(projPath, params, projectName) {
                 return "{'error' :'wrong time range!'}"
             }
         }
+
+
         var hudStickerLayer = undefined;
         if (obj_params.sticker != 0) {
             //var startLayer = []; parent.layer(firstLayerIndex);
@@ -944,7 +946,7 @@ function importBasicHud(projPath, params, projectName) {
             }
             else {
                 hudCompInParent.threeDLayer = false;
-                hudCompInParent.transform.rotation.expression = 'if(transform.position.value.length === 2){effect("Layer Control")("Layer").transform.rotation}';
+                //hudCompInParent.transform.rotation.expression = 'if(transform.position.value.length === 2){effect("Layer Control")("Layer").transform.rotation}';
             }
 
             hudCompInParent.startTime = _startTime;
@@ -987,4 +989,138 @@ function importBasicHud(projPath, params, projectName) {
     catch (e) {
         var err = e
     }
+}
+
+///importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-1/circle-1.aep",
+//'{"comp":"1","sticker":"0","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":false}','circle-1')
+function importCallOut(projPath, params, projectName) {
+
+    var obj_params = JSON.parse(params);
+    var comps = [];
+    var _startTime = 0;
+    var _endTime = 0;
+
+    var proj = app.project;
+    var parent = undefined;
+    if (parseInt(obj_params.comp) === 0) {
+        parent = proj.activeItem;
+    } else {
+        parent = proj.item(parseInt(obj_params.comp));
+    }
+
+    if (obj_params.cti.fromCti) {
+        _startTime = parent.time;
+    } else {
+        if (parseFloat(obj_params.cti.startTime) !== 0) {
+            _startTime = parseFloat(obj_params.cti.startTime);
+        } else {
+            _startTime = parent.time;
+        }
+    }
+    if (parseFloat(obj_params.cti.endTime) !== 0) {
+        _endTime = parseFloat(obj_params.cti.endTime);
+    }
+
+
+    if (_endTime !== 0) {
+        if (_startTime >= _endTime) {
+            return "{'error' :'end time is not correct!'}"
+        }
+
+        if (_endTime > parent.workAreaDuration) {
+            return "{'error' :'wrong time range!'}"
+        }
+    }
+
+    var callOutStickerLayer = parent.layer(parseInt(obj_params.sticker));
+
+    var nodeLayers = [];
+
+    for (var i = 0; i < obj_params.layers.length; i++) {
+        nodeLayers.push({ start: parent.layer(parseInt(obj_params.layers[i].start)), end: parent.layer(parseInt(obj_params.layers[i].end)) });
+    }
+
+    var item = new ImportOptions();
+    item.file = new File(projPath);
+    var TextIFolder = proj.importFile(item);
+
+    var RootComp = undefined;
+    var TextComp = undefined;
+
+    var TextIFolder_numitems = TextIFolder.numItems
+    for (var i = 1; i <= TextIFolder_numitems; i++) {
+        if (TextIFolder.item(i).typeName === "Composition" && TextIFolder.item(i).name === "RootComp") {
+            RootComp = TextIFolder.item(i);
+            continue;
+        }
+        if (TextIFolder.item(i).typeName === "Composition" && TextIFolder.item(i).name === projectName) {
+            TextComp = TextIFolder.item(i);
+            continue;
+        }
+    }
+
+    if (obj_params.mainText && obj_params.mainText.length > 0) {
+        TextComp.layers.byName("main-text").property("Source Text").setValue(obj_params.mainText);
+    }
+    if (obj_params.subText && obj_params.subText.length > 0) {
+        TextComp.layers.byName("sub-text").property("Source Text").setValue(obj_params.subText);
+    }
+    if (obj_params.descText && obj_params.descText.length > 0) {
+        TextComp.layers.byName("desc-text").property("Source Text").setValue(obj_params.descText);
+    }
+    var controlItem = RootComp.layers.byName("line-control")
+
+    var textCompInParent = parent.layers.add(TextComp);
+    var y = RootComp.layers.byName(projectName).transform.anchorPoint;
+
+    textCompInParent.transform.anchorPoint.setValue(y.value);
+    textCompInParent.transform.position.setValue(callOutStickerLayer.transform.position.value);
+    textCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(callOutStickerLayer.index);
+    textCompInParent.Effects.addProperty("Slider Control").property("Slider").setValue(45);
+    textCompInParent.effect("Slider Control").name = "Text-Size"
+    textCompInParent.startTime = _startTime;
+
+    if (_endTime !== 0) {
+        textCompInParent.outPoint = _endTime;
+    }
+
+    textCompInParent.selected = false;
+
+    if (textCompInParent.transform.position.canSetExpression) {
+        textCompInParent.transform.position.expression = 'effect("Layer Control")("Layer").toComp([0,0,0])';
+        textCompInParent.transform.scale.expression = 'temp=effect("Text-Size")("Slider");[temp, temp]';
+    }
+
+    textCompInParent.name = textCompInParent.name + "-" + parent.layers.length;
+
+    //var ControlCounter = 0;
+    //for (var i = 1; i <= parent.numLayers; i++) {
+    //    if (String(parent.layer(i).name).indexOf(projectName) >= 0) {
+    //        ControlCounter++;
+    //    }
+    //}
+
+    var selectedLayers = parent.selectedLayers;
+    for (var i = 0; i < selectedLayers.length; i++) {
+        selectedLayers[i].selected = false;
+    }
+
+    var solids = [];
+
+    var y = nodeLayers.length;
+    for (var i = 0; i < y; i++) {
+        controlItem.copyToComp(parent);
+
+        solids.push(parent.layer(1));
+        var parentcontrolItem = parent.layer(1);
+
+        parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
+        parentcontrolItem.Effects("EndPoint").property("Layer").setValue(callOutStickerLayer.index);
+        parentcontrolItem.startTime = _startTime;
+        if (_endTime !== 0) {
+            parentcontrolItem.outPoint = _endTime;
+        }
+        parentcontrolItem.name = "line-control-" + parent.layers.length + "-" + i
+    }
+
 }

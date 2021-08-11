@@ -20,8 +20,7 @@ var textPath = 'assets/packages';
     getFilesTree(path);
 }());
 
-
-
+///-----------------create menu part ----
 function getFilesTree(myPath) {
     const csInterface = new CSInterface();
     csInterface.evalScript('getMainDirectories("' + myPath + '")', function (res) {
@@ -57,7 +56,6 @@ function generateSideBar() {
     });
 
 }
-
 
 function generateContentView(menuIndex, subMenIndex) {
 
@@ -158,15 +156,16 @@ async function opneSetting(settingPath, comps) {
     compSelected(0);
     
     var _setting = setingNeede.setting;
+
     if (setingNeede.type === "BeamText") {
 
-        var lineCount = _setting.beam;
+        let lineCount = _setting.beam;
 
         $("#div_compSelect").show();
 
         $('#div_textSticker').show();
 
-        for (var i = 1; i <= lineCount; i++) {
+        for (let i = 1; i <= lineCount; i++) {
             $("#div_startlayerSelect_line" + i).show();
         }
 
@@ -183,11 +182,43 @@ async function opneSetting(settingPath, comps) {
         }
         $('#stickySettingModal').modal('show');
 
-    } else if (setingNeede.type === "hud") {
+    }
+    else if (setingNeede.type === "hud") {
 
         $('#hudSettingModal').modal('show');
     }
-}
+    else if (setingNeede.type === "CallOut") {
+
+        let lineCount = _setting.beam;
+
+        $("#div_compSelect_callout").show();
+
+        $('#div_textSticker_callout').show();
+
+        for (let i = 1; i <= lineCount; i++) {
+            $("#div_startlayerSelect_callout_line" + i).show();
+        }
+
+        if (_setting.time) {
+            $("div .cti").show();
+        }
+
+        if (_setting.text.includes("main")) {
+            $("#div_mainText_callout").show();
+        }
+
+        if (_setting.text.includes("sub")) {
+            $("#div_subText_callout").show();
+        }
+
+        if (_setting.text.includes("desc")) {
+            $("#div_descText_callout").show();
+        }
+
+
+        $('#calloutSettingModal').modal('show');
+    }
+}"startTimeChange
 
 function rawModal() {
     $("#stickyImportFomr>div.position-relative").hide();
@@ -231,7 +262,7 @@ function generateJsonSetting() {
             
             let layers_selected = [];
 
-            for (var i = 1; i <= lineCount; i++) {
+            for (let i = 1; i <= lineCount; i++) {
                 if (!$('#startlayerSelect_line' + i).find("option:selected").val()
                     || $('#startlayerSelect_line' + i).find("option:selected").val() == 0) {
                     return;
@@ -295,6 +326,69 @@ function generateJsonSetting() {
 
             importHud(json_result);
         }
+        else if (setingNeede.type === "CallOut") {
+
+            $('#calloutImportFomr').addClass('was-validated');
+
+            let _setting = setingNeede.setting;
+            let lineCount = _setting.beam;
+            let json_result = {};
+            if (!$('#compSelect_callout').find("option:selected").val()) {
+
+                return;
+            }
+            json_result.comp = $('#compSelect_callout').find("option:selected").val();
+            if (!$('#layerTextSticker_callout').find("option:selected").val() || $('#layerTextSticker_callout').find("option:selected").val() === 0) {
+
+                return;
+            }
+            json_result.sticker = $('#layerTextSticker_callout').find("option:selected").val();
+
+            let layers_selected = [];
+
+            for (let i = 1; i <= lineCount; i++) {
+                if (!$('#startlayerSelect_callout_line' + i).find("option:selected").val()
+                    || $('#startlayerSelect_callout_line' + i).find("option:selected").val() == 0) {
+                    return;
+                }
+                layers_selected.push({
+                    start: $('#startlayerSelect_callout_line' + i).find("option:selected").val(),
+                    end: json_result.sticker
+                });
+            }
+
+            json_result.layers = layers_selected;
+
+            if (_setting.time) {
+                json_result.cti = {
+                    fromCti: (!$('#startTimeSwitch_callout')[0].checked),
+                    startTime: (!$('#startTimeSpecificValue_callout')[0].value ? 0 : $('#startTimeSpecificValue_callout')[0].value),
+                    endTime: (!$('#endTimeSpecificValue_callout')[0].value ? 0 : $('#endTimeSpecificValue_callout')[0].value),
+                };
+            }
+
+            if (_setting.text.includes("main")) {
+                if ($('#TextSourceInput_MainText_callout').val() !== "") {
+                    json_result.mainText = $('#TextSourceInput_MainText_callout').val();
+                }
+            }
+
+            if (_setting.text.includes("sub")) {
+
+                if ($('#TextSourceInput_SubText_callout').val() !== "") {
+                    json_result.subText = $('#TextSourceInput_SubText_callout').val();
+                }
+            }
+
+            if (_setting.text.includes("desc")) {
+
+                if ($('#TextSourceInput_DescText_callout').val() !== "") {
+                    json_result.descText = $('#TextSourceInput_DescText_callout').val();
+                }
+            }
+
+            importCallOut(json_result);
+        }
     }
 }
 
@@ -330,6 +424,23 @@ function importHud(jsonInput) {
     //}
 }
 
+function importCallOut(jsonInput) {
+    var str_input = JSON.stringify(jsonInput);
+    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
+    const csInterface = new CSInterface();
+    const strEval = 'importCallOut("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')'; 
+    csInterface.evalScript(strEval
+        , function (res) {
+            if (res !== "") {
+                $('#calloutSettingModal').modal('hide');
+                $('#calloutImportFomr').removeClass('was-validated');
+            }
+        });
+    //} else {
+
+    //}
+}
+
 function startTimeChangestickyImportFomr(value) {
     if (value === true) {
         $("#startTimeSwitchLabel").text("specific Seconds (accept decimal)");
@@ -339,6 +450,10 @@ function startTimeChangestickyImportFomr(value) {
         $("#startTimeSwitchlabel_hud").text("specific Seconds (accept decimal)");
         $("#startTimeSpecificValue_hud").prop("disabled", false).parent().parent().css("opacity", "1");
         $("#endTimeSpecificValue_hud").prop("disabled", false).parent().css("opacity", "1");
+
+        $("#startTimeSwitchlabel_callout").text("specific Seconds (accept decimal)");
+        $("#startTimeSpecificValue_callout").prop("disabled", false).parent().parent().css("opacity", "1");
+        $("#endTimeSpecificValue_callout").prop("disabled", false).parent().css("opacity", "1");
     } else {
         $("#startTimeSwitchLabel").text("start from current CTI");
         $("#startTimeSpecificValue")[0].value = 0;
@@ -351,6 +466,12 @@ function startTimeChangestickyImportFomr(value) {
         $("#endTimeSpecificValue_hud")[0].value = 0;
         $("#endTimeSpecificValue_hud").prop("disabled", true).parent().css("opacity", "0.2");
         $("#startTimeSpecificValue_hud").prop("disabled", true).parent().parent().css("opacity", "0.2");
+
+        $("#startTimeSwitchlabel_callout").text("start from current CTI");
+        $("#startTimeSpecificValue_callout")[0].value = 0;
+        $("#endTimeSpecificValue_callout")[0].value = 0;
+        $("#endTimeSpecificValue_callout").prop("disabled", true).parent().css("opacity", "0.2");
+        $("#startTimeSpecificValue_callout").prop("disabled", true).parent().parent().css("opacity", "0.2");
     }
 }
 
@@ -371,14 +492,29 @@ function compSelected(this_val) {
             $('#layerTextSticker').empty();
             $('#layerTextSticker').append(_layers);
 
+            $('#layerTextSticker_callout').empty();
+            $('#layerTextSticker_callout').append(_layers);
+
             $('#startlayerSelect_line1').empty();
             $('#startlayerSelect_line1').append(_layers);
-
+            
             $('#startlayerSelect_line2').empty();
             $('#startlayerSelect_line2').append(_layers);
 
             $('#startlayerSelect_line3').empty();
             $('#startlayerSelect_line3').append(_layers);
+
+            $('#layerTextSticker_callout').empty();
+            $('#layerTextSticker_callout').append(_layers);
+
+            $('#startlayerSelect_callout_line1').empty();
+            $('#startlayerSelect_callout_line1').append(_layers);
+
+            $('#startlayerSelect_callout_line2').empty();
+            $('#startlayerSelect_callout_line2').append(_layers);
+
+            $('#startlayerSelect_callout_line3').empty();
+            $('#startlayerSelect_callout_line3').append(_layers);
 
             $('#layerSticker_hud').empty();
             $('#layerSticker_hud').append(_layers);
