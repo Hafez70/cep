@@ -3,20 +3,23 @@ var importProjPath = '';
 var importProjName = '';
 var setingNeede = null;
 var textPath = 'assets/packages';
+var packagesPath = '';
 
 (function () {
     'use strict';
     var path, slash;
     path = location.href;
+    var x = path.indexOf("index.html");
+    if (x == -1) {
+        x = path.indexOf("packageImport.html");
+    }
     if (getOS() == "MAC") {
-        var x = path.indexOf("index.html");
         path = path.substring(0, x) + textPath;
     }
     if (getOS() == "WIN") {
-        var x = path.indexOf("index.html");
         path = path.substring(8, x) + textPath;
     }
-
+    packagesPath = path;
     getFilesTree(path);
 }());
 
@@ -39,7 +42,7 @@ function generateSideBar() {
 
         val.subMenuNames.map((ch_val, ch_indx, ch_arr) => {
             child_li += '<li class="w-100" onclick="generateContentView(' + indx + ',' + ch_indx + ')">\n' +
-                '           <a href="#" class="px-0 align-self-end text-light"> <spanclass="d-inline">' + ch_val.subMenuName + '</span>\n' +
+                '           <a href="#" class="px-0 align-self-end text-light pkg"> <spanclass="d-inline">' + ch_val.subMenuName + '</span>\n' +
                 '           </a>\n' +
                 '       </li>\n';
         });
@@ -54,6 +57,10 @@ function generateSideBar() {
             '</li>'
         )
     });
+
+    $('#sidebarMenu').append('<hr/> <a href="./packageImport.html" class="pt-2 align-self-end text-light">\n' +
+        '       <p >Import Package</p>\n' +
+        ' </a>\n');
 
 }
 
@@ -144,6 +151,7 @@ async function opneSetting(settingPath, comps) {
     var items = '<option value="0" selected>Active Comp</option>\n';
     $('#compSelect').empty();
     $('#compSelect_hud').empty();
+    $('#compSelect_callout').empty();
 
     comps.map((val, indx, arr) => {
         items += '<option value="' + val.compItemIndex + '">' + val.compName + '</option> \n';
@@ -152,9 +160,10 @@ async function opneSetting(settingPath, comps) {
 
     $('#compSelect').append(items);
     $('#compSelect_hud').append(items);
+    $('#compSelect_callout').append(items);
 
     compSelected(0);
-    
+
     var _setting = setingNeede.setting;
 
     if (setingNeede.type === "BeamText") {
@@ -218,26 +227,37 @@ async function opneSetting(settingPath, comps) {
 
         $('#calloutSettingModal').modal('show');
     }
-}"startTimeChange
+}
 
 function rawModal() {
     $("#stickyImportFomr>div.position-relative").hide();
+    $("#calloutImportFomr>div.position-relative").hide();
 
     $('#compSelect').empty();
     $('#compSelect_hud').empty();
+    $('#compSelect_callout').empty();
 
-    $("#div_mainText").val('');
-    $("#div_subText").val('');
+    $("#stickyTextSourceInput_MainText").val('');
+    $("#stickyTextSourceInput_SubText").val('');
+
+    $("#TextSourceInput_MainText_callout").val('');
+    $("#TextSourceInput_SubText_callout").val('');
+    $("#TextSourceInput_DescText_callout").val('');
 
     startTimeChangestickyImportFomr(false);
     $('#startTimeSwitch')[0].checked = false;
     $('#startTimeSwitch_hud')[0].checked = false;
     $('#select_3D_hud')[0].checked = false;
-    
+
     $('#layerTextSticker').empty();
     $('#startlayerSelect_line1').empty();
     $('#startlayerSelect_line2').empty();
     $('#startlayerSelect_line3').empty();
+
+    $('#layerTextSticker_callout').empty();
+    $('#startlayerSelect_callout_line1').empty();
+    $('#startlayerSelect_callout_line2').empty();
+    $('#startlayerSelect_callout_line3').empty();
 }
 
 function generateJsonSetting() {
@@ -250,16 +270,16 @@ function generateJsonSetting() {
             let lineCount = _setting.beam;
             let json_result = {};
             if (!$('#compSelect').find("option:selected").val()) {
-                
+
                 return;
             }
             json_result.comp = $('#compSelect').find("option:selected").val();
             if (!$('#layerTextSticker').find("option:selected").val() || $('#layerTextSticker').find("option:selected").val() === 0) {
-                
+
                 return;
             }
             json_result.sticker = $('#layerTextSticker').find("option:selected").val();
-            
+
             let layers_selected = [];
 
             for (let i = 1; i <= lineCount; i++) {
@@ -276,7 +296,7 @@ function generateJsonSetting() {
             if (_setting.time) {
                 json_result.cti = {
                     fromCti: (!$('#startTimeSwitch')[0].checked),
-                    startTime: (!$('#startTimeSpecificValue')[0].value ? 0 : $('#startTimeSpecificValue')[0].value ),
+                    startTime: (!$('#startTimeSpecificValue')[0].value ? 0 : $('#startTimeSpecificValue')[0].value),
                     endTime: (!$('#endTimeSpecificValue')[0].value ? 0 : $('#endTimeSpecificValue')[0].value),
                 };
             }
@@ -288,7 +308,7 @@ function generateJsonSetting() {
             }
 
             if (_setting.text.includes("sub")) {
-             
+
                 if ($('#stickyTextSourceInput_SubText').val() !== "") {
                     json_result.subText = $('#stickyTextSourceInput_SubText').val();
                 }
@@ -303,16 +323,16 @@ function generateJsonSetting() {
 
             let _setting = setingNeede.setting;
             if (!$('#compSelect_hud').find("option:selected").val()) {
-               
+
                 return;
             }
 
             json_result.comp = (!$('#compSelect_hud').find("option:selected").val() ? 0 : $('#compSelect_hud').find("option:selected").val());
-           
+
             json_result.sticker = $('#layerSticker_hud').find("option:selected").val();
 
             if (_setting.time) {
-                
+
                 json_result.cti = {
                     fromCti: (!$('#startTimeSwitch_hud')[0].checked),
                     startTime: (!$('#startTimeSpecificValue_hud')[0].value ? 0 : $('#startTimeSpecificValue_hud')[0].value),
@@ -396,7 +416,7 @@ function importBeamText(jsonInput) {
     var str_input = JSON.stringify(jsonInput);
     // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
     const csInterface = new CSInterface();
-    const strEval = 'importStickyTextWithBeamEffect("' + importProjPath + '",\'' + str_input + '\')'; 
+    const strEval = 'importStickyTextWithBeamEffect("' + importProjPath + '",\'' + str_input + '\')';
     csInterface.evalScript(strEval
         , function (res) {
             if (res !== "") {
@@ -413,7 +433,7 @@ function importHud(jsonInput) {
     var str_input = JSON.stringify(jsonInput);
     // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
     const csInterface = new CSInterface();
-    const strEval = 'importBasicHud("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')'; 
+    const strEval = 'importBasicHud("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
     csInterface.evalScript(strEval
         , function (res) {
             $('#hudSettingModal').modal('hide');
@@ -428,7 +448,7 @@ function importCallOut(jsonInput) {
     var str_input = JSON.stringify(jsonInput);
     // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
     const csInterface = new CSInterface();
-    const strEval = 'importCallOut("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')'; 
+    const strEval = 'importCallOut("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
     csInterface.evalScript(strEval
         , function (res) {
             if (res !== "") {
@@ -497,7 +517,7 @@ function compSelected(this_val) {
 
             $('#startlayerSelect_line1').empty();
             $('#startlayerSelect_line1').append(_layers);
-            
+
             $('#startlayerSelect_line2').empty();
             $('#startlayerSelect_line2').append(_layers);
 
@@ -535,4 +555,15 @@ function getOS() {
         os = "WIN";
     }
     return os;
+}
+
+function importPackage() {
+    const csInterface = new CSInterface();
+    const strEval = 'importNewPackage("'+ packagesPath + '")';
+    csInterface.evalScript(strEval
+        , function (res) {
+            if (res !== "") {
+                $('#backtoHome')[0].click();
+            }
+        });
 }

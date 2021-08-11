@@ -214,21 +214,21 @@
 </head>
 <body class="bg-dark h-100 position-relative" style="max-height: 100%">
 
-    <header class="topbar d-none-xxs" id="myHeader">
+    <!--<header class="topbar d-none-xxs" id="myHeader">
         <div class="container">
-            <div class="row">
+            <div class="row">-->
                 <!-- social icon-->
-                <div class="col-sm-12">
+                <!--<div class="col-sm-12">
                     <ul class="social-network">
                         <li>
-                            <a class="waves-effect waves-dark" href="https://wa.me/989303899989"><i class="fa fa-phone"></i></a>
+                            <a class="waves-effect waves-dark" href=""><i class="fa fa-phone"></i></a>
                         </li>
                     </ul>
                 </div>
 
             </div>
         </div>
-    </header>
+    </header>-->
 
     <div class=" d-flex flex-column" id="mainContainer">
         <div id="mySlider" class="carousel slide homeSlider" data-bs-ride="carousel">
@@ -561,32 +561,37 @@
 
                         <!--//mainText-->
                         <div class="col-12 position-relative" id="div_mainText_callout">
-                            <label for="TextSourceInput_MainText_callout" class="form-label ">Your Text</label>
+                            <label for="TextSourceInput_DescText_callout" class="form-label ">Edit Text</label>
                             <div class="input-group">
                                 <img class="modal-icon-controls pe-1" src="./assets/images/icons/Text-Title.png" />
                                 <input type="text"
                                        class="form-control text-light bg-dark border-0 border-bottom border-light "
-                                       id="TextSourceInput_MainText_callout" placeholder="..."
+                                       id="TextSourceInput_MainText_callout" placeholder="Main Text"
                                        maxlength="50">
                             </div>
                         </div>
                         <!--//mainText-->
                         <!--//subText-->
                         <div class="col-12 position-relative" id="div_subText_callout">
-                            <label for="TextSourceInput_SubText_callout" class="form-label ">sub Text</label>
-                            <input type="text"
-                                   class="form-control text-light bg-dark border-top-0 border-end-0 border-light"
-                                   id="TextSourceInput_SubText_callout" placeholder="..."
-                                   maxlength="50">
+                            <div class="input-group">
+                                <img class="modal-icon-controls pe-1" src="./assets/images/icons/Sub-Title.png" />
+                                <input type="text"
+                                       class="form-control text-light bg-dark border-0 border-bottom border-light "
+                                       id="TextSourceInput_SubText_callout" placeholder="sub text"
+                                       maxlength="50">
+                            </div>
                         </div>
                         <!--//subText-->
                         <!--//desc Text-->
                         <div class="col-12 position-relative" id="div_descText_callout">
-                            <label for="TextSourceInput_DescText_callout" class="form-label ">description Text</label>
-                            <input type="text"
-                                   class="form-control text-light bg-dark border-top-0 border-end-0 border-light"
-                                   id="TextSourceInput_DescText_callout" placeholder="..."
-                                   maxlength="50">
+                           
+                            <div class="input-group">
+                                <img class="modal-icon-controls pe-1" src="./assets/images/icons/Desc-Title.png" />
+                                <input type="text"
+                                       class="form-control text-light bg-dark border-0 border-bottom border-light "
+                                       id="TextSourceInput_DescText_callout" placeholder="Description text"
+                                       maxlength="50">
+                            </div>
                         </div>
                         <!--//desc Text-->
                         <!--//CompSelector-->
@@ -608,7 +613,7 @@
                             <label for="layerTextSticker_callout" class="form-label">select a layer for Text to Stick</label>
                             <div class="input-group">
                                 <div class="modal-icon-controls-container">
-                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/Shape.png" />
+                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/EndPoint.png" />
                                 </div>
                                 <select class="form-select form-select-sm mt-2 text-light bg-dark border-0 border-bottom border-light"
                                         aria-label=".form-select-sm"
@@ -626,7 +631,7 @@
                             <label for="startlayerSelect_callout_line1" class="form-label">line 1 Start Point</label>
                             <div class="input-group">
                                 <div class="modal-icon-controls-container">
-                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/Shape.png" />
+                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/startPoint-1.png" />
                                 </div>
                                 <select class="form-select form-select-sm mt-2 text-light bg-dark border-0 border-bottom border-light"
                                         aria-label=".form-select-sm"
@@ -644,7 +649,7 @@
                             <label for="startlayerSelect_callout_line2" class="form-label">line 2 Start Point</label>
                             <div class="input-group">
                                 <div class="modal-icon-controls-container">
-                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/Shape.png" />
+                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/startPoint-2.png" />
                                 </div>
                                 <select class="form-select form-select-sm mt-2 text-light bg-dark border-0 border-bottom border-light"
                                         aria-label=".form-select-sm"
@@ -662,7 +667,7 @@
                             <label for="startlayerSelect_callout_line3" class="form-label">line 3 Start Point</label>
                             <div class="input-group">
                                 <div class="modal-icon-controls-container">
-                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/Shape.png" />
+                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/startPoint-3.png" />
                                 </div>
                                 <select class="form-select form-select-sm mt-2 text-light bg-dark border-0 border-bottom border-light"
                                         aria-label=".form-select-sm"

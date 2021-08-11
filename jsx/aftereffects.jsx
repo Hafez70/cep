@@ -991,8 +991,9 @@ function importBasicHud(projPath, params, projectName) {
     }
 }
 
-///importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-1/circle-1.aep",
-//'{"comp":"1","sticker":"0","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":false}','circle-1')
+//importCallOut("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Call Out/3.RoundyCall/roundycall-left-3-line/roundycall-left-3-line.aep",
+//'{"comp":"1","sticker":"4","layers":[{"start":"1","end":"4"},{"start":"2","end":"4"},{"start":"3","end":"4"}],"cti":{"fromCti":true,"startTime":"0","endTime":"0"},"mainText":"محصول اول","subText":"پیشنهاد ویژه","descText":"توضیحات بیشتر , خیلی خوبه ..."}',
+//'roundycall-left-3-line')
 function importCallOut(projPath, params, projectName) {
 
     var obj_params = JSON.parse(params);
@@ -1123,4 +1124,67 @@ function importCallOut(projPath, params, projectName) {
         parentcontrolItem.name = "line-control-" + parent.layers.length + "-" + i
     }
 
+}
+//importNewPackage("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/packages");
+function importNewPackage(appPackagePath) {
+    var locFolder = new Folder();
+    var newPkgFolder = locFolder.selectDlg("Folder");
+
+    if (newPkgFolder != null) {
+
+        var newPkgFolder_files = newPkgFolder.getFiles();
+
+        if (newPkgFolder_files.length > 1) {
+            return { error: "you need to import each package seperatly!!" }
+        }
+
+        /// check if pkg exists remove!!!
+        var pkg_NewFolder = new Folder(appPackagePath + "/" + newPkgFolder_files[0].name.replace(/%20/, " "));
+        if (pkg_NewFolder.exists) {
+            removePackage(pkg_NewFolder);
+       
+        }
+       
+            copyNewPackage(newPkgFolder_files[0], appPackagePath)
+       
+    }
+    return {error:""}
+}
+
+function copyNewPackage(new_pkg_folder, pathToCopy) {
+    var files = new_pkg_folder.getFiles();
+    var newFolder = new Folder(pathToCopy + "/" + new_pkg_folder.name);
+    newFolder.create();
+    for (var i = 0; i < files.length; i++) {
+
+        if (files[i] instanceof Folder) {
+            copyNewPackage(files[i], newFolder.fullName)
+        }
+        else {
+            try {
+                var x =  files[i].name ;
+                files[i].copy(newFolder.absoluteURI+ '/' + files[i].name );
+                
+            }
+            catch (e) {
+                var err = e;
+            }
+        }
+    }
+}
+
+function removePackage(pkg_folder) {
+
+    var files = pkg_folder.getFiles();
+
+    for (var i = 0; i < files.length; i++) {
+
+        if (files[i] instanceof Folder) {
+            removePackage(files[i]);
+        }
+        else {
+            files[i].remove();
+        }
+    }
+    pkg_folder.remove();
 }
