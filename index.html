@@ -733,5 +733,82 @@
         </div>
     </div>
 
+    <div class="modal fade" id="witchEffectSettingModal" tabindex="-1" role="dialog" aria-labelledby="witchEffectTextSetting"
+         aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content text-light bg-dark">
+                <div class="modal-header">
+                    <h5 class="modal-title text-light" id="witchEffectSettingModalTitle">Pre Setting</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body position-relative">
+                    <form class="row g-3 needs-validation" id="witchEffectImportForm" novalidate>
+
+                        <!--//CompSelector-->
+                        <div class="col-12 position-relative" id="div_compSelect_witchEffect">
+                            <label for="compSelect_witchEffect" class="form-label">Select Comp.</label>
+                            <div class="input-group">
+                                <div class="modal-icon-controls-container">
+                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/Comp.png" />
+                                </div>
+                                <select class="form-select form-select-sm text-light bg-dark border-0 border-bottom border-light"
+                                        aria-label=".form-select-sm"
+                                        onchange="compSelected(this.value)" id="compSelect_witchEffect">
+                                </select>
+                            </div>
+                        </div>
+                        <!--//CompSelector-->
+                        <!--//Cti-->
+                        <div class="col-12 has-validation position-relative cti">
+                            <div class="col-12 form-switch p-0">
+                                <div class="input-group">
+                                    <div class="modal-icon-controls-container">
+                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/Indicator.png" />
+                                    </div>
+                                    <input type="checkbox" class="form-check-input border-light ms-2"
+                                           id="startTimeSwitch_witchEffect"
+                                           onchange="startTimeChangestickyImportFomr(this.checked)">
+                                    <label id="startTimeSwitchlabel_witchEffect" class="ps-2 form-check-label"
+                                           for="startTimeSwitch_witchEffect">
+                                        start from current CTI
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 has-validation position-relative disabled cti" style="opacity:0.2;">
+                            <label for="startTimeSpecificValue_witchEffect" class="form-label">Start Time</label>
+                            <div class="input-group">
+                                <div class="modal-icon-controls-container">
+                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/Time.png" />
+                                </div>
+                                <input type="number" value="0" disabled
+                                       class="form-control text-light bg-dark  border-top-0 border-end-0 border-light"
+                                       id="startTimeSpecificValue_witchEffect"
+                                       placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
+                                <div class="invalid-tooltip">
+                                    Please choose a Layer
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 has-validation position-relative disabled cti" style="opacity:0.2;">
+                            <label for="endTimeSpecificValue_witchEffect" class="form-label">End Time</label>
+                            <input type="number" value="0" disabled
+                                   class="form-control text-light bg-dark  border-top-0 border-end-0 border-light"
+                                   id="endTimeSpecificValue_witchEffect"
+                                   placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
+                        </div>
+                        <!--//Cti-->
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="rawModal()" data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button class="btn btn-primary" onclick="generateJsonSetting()" type="submit">Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

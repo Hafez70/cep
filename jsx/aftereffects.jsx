@@ -223,11 +223,11 @@
             rx_escapable.lastIndex = 0;
             return rx_escapable.test(string)
                 ? "\"" + string.replace(rx_escapable, function (a) {
-                    var c = meta[a];
-                    return typeof c === "string"
-                        ? c
-                        : "\\u" + ("0000" + a.charCodeAt(0).toString(16)).slice(-4);
-                }) + "\""
+                var c = meta[a];
+                return typeof c === "string"
+                    ? c
+                    : "\\u" + ("0000" + a.charCodeAt(0).toString(16)).slice(-4);
+            }) + "\""
                 : "\"" + string + "\"";
         }
 
@@ -432,7 +432,7 @@
                 // Make a fake root object containing our value under the key of "".
                 // Return the result of stringifying the value.
 
-                return str("", { "": value });
+                return str("", {"": value});
             };
         }
 
@@ -519,7 +519,7 @@
                     // each name/value pair to a reviver function for possible transformation.
 
                     return (typeof reviver === "function")
-                        ? walk({ "": j }, "")
+                        ? walk({"": j}, "")
                         : j;
                 }
 
@@ -650,9 +650,9 @@ function ImportFile(filePath) {
         var item = new ImportOptions();
         item.file = new File(filePath);
         var Item = app.project.importFile(item);
-        return JSON.stringify({ result: true });
+        return JSON.stringify({result: true});
     } catch (e) {
-        return JSON.stringify({ result: false });
+        return JSON.stringify({result: false});
     }
 }
 
@@ -665,7 +665,7 @@ function getAllComps() {
     var numitems = proj.numItems
     for (var i = 1; i < numitems; i++) {
         if (proj.item(i).typeName === "Composition") {
-            comps.push({ compName: proj.item(i).parentFolder.name + ' > ' + proj.item(i).name, compItemIndex: i });
+            comps.push({compName: proj.item(i).parentFolder.name + ' > ' + proj.item(i).name, compItemIndex: i});
         }
     }
     var js = JSON.stringify(comps);
@@ -688,7 +688,7 @@ function getAllNullPointsInComp(compIndex) {
     for (var i = 1; i <= numLayers; i++) {
         var layer = curentComp.layer(i);
         if (curentComp.layer(i).nullLayer)
-            nullLayers.push({ layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i });
+            nullLayers.push({layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i});
     }
     var js = JSON.stringify(nullLayers);
     return js;
@@ -708,7 +708,7 @@ function getAllLayersInComp(compIndex) {
     }
     var numLayers = curentComp.numLayers;
     for (var i = 1; i <= numLayers; i++) {
-        allLayers.push({ layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i });
+        allLayers.push({layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i});
     }
     var js = JSON.stringify(allLayers);
     return js;
@@ -758,14 +758,16 @@ function importStickyTextWithBeamEffect(projPath, params) {
     }
 
 
-
     //var startLayer = []; parent.layer(firstLayerIndex);
     var textStickerLayer = parent.layer(parseInt(obj_params.sticker));
 
     var nodeLayers = [];
 
     for (var i = 0; i < obj_params.layers.length; i++) {
-        nodeLayers.push({ start: parent.layer(parseInt(obj_params.layers[i].start)), end: parent.layer(parseInt(obj_params.layers[i].end)) });
+        nodeLayers.push({
+            start: parent.layer(parseInt(obj_params.layers[i].start)),
+            end: parent.layer(parseInt(obj_params.layers[i].end))
+        });
     }
 
     var item = new ImportOptions();
@@ -937,14 +939,14 @@ function importBasicHud(projPath, params, projectName) {
             hudCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(hudStickerLayer.index);
 
             if (obj_params.thd) {
+                hudStickerLayer.threeDLayer = true;
                 hudCompInParent.threeDLayer = true;
                 hudCompInParent.transform.orientation.expression = 'if(transform.position.value.length === 3){' +
                     'x = effect("Layer Control")("Layer").orientation[0];' +
                     'y = effect("Layer Control")("Layer").orientation[1];' +
                     'z = effect("Layer Control")("Layer").orientation[2];' +
                     '[x,y,z]}';
-            }
-            else {
+            } else {
                 hudCompInParent.threeDLayer = false;
                 //hudCompInParent.transform.rotation.expression = 'if(transform.position.value.length === 2){effect("Layer Control")("Layer").transform.rotation}';
             }
@@ -967,12 +969,10 @@ function importBasicHud(projPath, params, projectName) {
                     'zp = effect("z-position")("Slider");' +
                     '[x,y,z+zp]}';
             }
-        }
-        else {
+        } else {
             if (obj_params.thd) {
                 hudCompInParent.threeDLayer = true;
-            }
-            else {
+            } else {
                 hudCompInParent.threeDLayer = false;
             }
             hudCompInParent.startTime = _startTime;
@@ -984,9 +984,8 @@ function importBasicHud(projPath, params, projectName) {
         }
         hudFolder.remove();
         //proj.autoFixExpressions("fixme",RootComp.name);
-        return JSON.stringify({ res: 'ok' })
-    }
-    catch (e) {
+        return JSON.stringify({res: 'ok'})
+    } catch (e) {
         var err = e
     }
 }
@@ -1038,7 +1037,10 @@ function importCallOut(projPath, params, projectName) {
     var nodeLayers = [];
 
     for (var i = 0; i < obj_params.layers.length; i++) {
-        nodeLayers.push({ start: parent.layer(parseInt(obj_params.layers[i].start)), end: parent.layer(parseInt(obj_params.layers[i].end)) });
+        nodeLayers.push({
+            start: parent.layer(parseInt(obj_params.layers[i].start)),
+            end: parent.layer(parseInt(obj_params.layers[i].end))
+        });
     }
 
     var item = new ImportOptions();
@@ -1125,48 +1127,142 @@ function importCallOut(projPath, params, projectName) {
     }
 
 }
+
+function importWithEffect(projPath, params, projectName) {
+
+    try {
+        var obj_params = JSON.parse(params);
+        var comps = [];
+        var _startTime = 0;
+        var _endTime = 0;
+
+        var proj = app.project;
+        var parent = undefined;
+        if (parseInt(obj_params.comp) === 0) {
+            parent = proj.activeItem;
+        } else {
+            parent = proj.item(parseInt(obj_params.comp));
+        }
+
+        if (obj_params.cti.fromCti) {
+            _startTime = parent.time;
+        } else {
+            if (parseFloat(obj_params.cti.startTime) !== 0) {
+                _startTime = parseFloat(obj_params.cti.startTime);
+            } else {
+                _startTime = parent.time;
+            }
+        }
+        if (parseFloat(obj_params.cti.endTime) !== 0) {
+            _endTime = parseFloat(obj_params.cti.endTime);
+        }
+
+        if (_endTime !== 0) {
+            if (_startTime >= _endTime) {
+                return "{'error' :'end time is not correct!'}"
+            }
+
+            if (_endTime > parent.workAreaDuration) {
+                return "{'error' :'wrong time range!'}"
+            }
+        }
+
+        var item = new ImportOptions();
+        item.file = new File(projPath);
+        var witchEffect_Folder = proj.importFile(item);
+        var RootComp = undefined;
+
+        var witchEffect_Folder_numitems = witchEffect_Folder.numItems
+        for (var i = 1; i <= witchEffect_Folder_numitems; i++) {
+            if (witchEffect_Folder.item(i).typeName === "Composition" && witchEffect_Folder.item(i).name === projectName) {
+                RootComp = witchEffect_Folder.item(i);
+                continue;
+            }
+        }
+
+        var selectedLayers = parent.selectedLayers;
+        for (var i = 0; i < selectedLayers.length; i++) {
+            selectedLayers[i].selected = false;
+        }
+
+        var x = RootComp.layer(1);
+        x.copyToComp(parent);
+
+        var witchEffect_CompInParent = parent.layer(1);
+        witchEffect_CompInParent.name = witchEffect_CompInParent.name + "-" + parent.layers.length
+        witchEffect_CompInParent.startTime = _startTime;
+
+        witchEffect_CompInParent.startTime = _startTime;
+
+        if (_endTime !== 0) {
+            witchEffect_CompInParent.outPoint = _endTime;
+        }
+        witchEffect_CompInParent.selected = false;
+        witchEffect_Folder.remove();
+        //proj.autoFixExpressions("fixme",RootComp.name);
+        return JSON.stringify({res: 'ok'})
+    } catch (e) {
+        var err = e
+    }
+}
+
+
 //importNewPackage("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/packages");
 function importNewPackage(appPackagePath) {
     var locFolder = new Folder();
     var newPkgFolder = locFolder.selectDlg("Folder");
-
+    var error = "";
     if (newPkgFolder != null) {
 
         var newPkgFolder_files = newPkgFolder.getFiles();
 
         if (newPkgFolder_files.length > 1) {
-            return { error: "you need to import each package seperatly!!" }
+            return {error: "you need to import each package seperatly!!"}
         }
 
         /// check if pkg exists remove!!!
         var pkg_NewFolder = new Folder(appPackagePath + "/" + newPkgFolder_files[0].name.replace(/%20/, " "));
         if (pkg_NewFolder.exists) {
-            removePackage(pkg_NewFolder);
-       
+            error = removePackage(pkg_NewFolder);
+
         }
-       
-            copyNewPackage(newPkgFolder_files[0], appPackagePath)
-       
+
+        error = copyNewPackage(newPkgFolder_files[0], appPackagePath)
     }
-    return {error:""}
+    return {error: error}
 }
 
 function copyNewPackage(new_pkg_folder, pathToCopy) {
     var files = new_pkg_folder.getFiles();
-    var newFolder = new Folder(pathToCopy + "/" + new_pkg_folder.name);
-    newFolder.create();
+    var newFolder = null;
+
+    try {
+        newFolder = new Folder(pathToCopy + "/" + new_pkg_folder.name);
+        newFolder.create();
+
+        if (newFolder.error != "") {
+            return newFolder.error;
+        }
+    } catch (e) {
+        var err = e;
+    }
+
     for (var i = 0; i < files.length; i++) {
 
         if (files[i] instanceof Folder) {
-            copyNewPackage(files[i], newFolder.fullName)
-        }
-        else {
-            try {
-                var x =  files[i].name ;
-                files[i].copy(newFolder.absoluteURI+ '/' + files[i].name );
-                
+            var error = copyNewPackage(files[i], newFolder.fullName)
+            if (error != "") {
+                return error;
             }
-            catch (e) {
+        } else {
+            try {
+                var x = files[i].name;
+                files[i].copy(newFolder.absoluteURI + '/' + files[i].name);
+
+                if (files[i].error != "") {
+                    return files[i].error;
+                }
+            } catch (e) {
                 var err = e;
             }
         }
@@ -1180,11 +1276,28 @@ function removePackage(pkg_folder) {
     for (var i = 0; i < files.length; i++) {
 
         if (files[i] instanceof Folder) {
-            removePackage(files[i]);
-        }
-        else {
-            files[i].remove();
+            var error = removePackage(files[i]);
+
+            if (error != "") {
+                return error;
+            }
+        } else {
+            try {
+                files[i].remove();
+
+                if (files[i].error != "") {
+                    return files[i].error;
+                }
+            } catch (e) {
+                var err = e;
+            }
         }
     }
     pkg_folder.remove();
+
+    if (pkg_folder.error != "") {
+        return pkg_folder.error;
+    }
+
+    return "";
 }
