@@ -176,6 +176,9 @@ li {
     background-color: #222 !important;
 }
 
+.sideMenu-selected{
+    color: #EE4B6A;
+}
 .mx-background-top-linear {
     background: -webkit-linear-gradient(45deg, #54d400 48%, #1b1e21 48%);
     background: -webkit-linear-gradient(left, #54d400 48%, #1b1e21 48%);
@@ -268,7 +271,7 @@ li {
     }
     .small-card {
         max-height: 150px;
-        max-width: 200px;
+        max-width: 150px;
         min-width: 150px;
         padding: 1px;
     }
@@ -304,7 +307,7 @@ li {
     }
     .small-card {
         max-height: 150px;
-        max-width: 200px;
+        max-width: 150px;
         min-width: 150px;
         padding: 1px;
     }
@@ -339,7 +342,7 @@ li {
     }
     .small-card {
         max-height: 150px;
-       
+        max-width: 150px;
         min-width: 150px;
         padding: 1px;
     }

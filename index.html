@@ -214,24 +214,17 @@
 </head>
 <body class="bg-dark h-100 position-relative" style="max-height: 100%">
 
-    <!--<header class="topbar d-none-xxs" id="myHeader">
-        <div class="container">
-            <div class="row">-->
-                <!-- social icon-->
-                <!--<div class="col-sm-12">
-                    <ul class="social-network">
-                        <li>
-                            <a class="waves-effect waves-dark" href=""><i class="fa fa-phone"></i></a>
-                        </li>
-                    </ul>
-                </div>
+    <header class="topbar d-none-xxs" id="myHeader">
+        <div class="row p-4 m-2" style="background-image: url(./assets/images/logo.png);
+            background-repeat: no-repeat;
+            background-position: left;
+            background-size: contain;">
 
-            </div>
         </div>
-    </header>-->
+    </header>
 
     <div class=" d-flex flex-column" id="mainContainer">
-        <div id="mySlider" class="carousel slide homeSlider" data-bs-ride="carousel">
+        <div id="mySlider" class="carousel slide homeSlider d-none" data-bs-ride="carousel">
             <div class="carousel-indicators mb-0 pb-0">
                 <button type="button" data-bs-target="#mySlider" data-bs-slide-to="0" class="active"
                         aria-current="true" aria-label="Slide 1"></button>
@@ -280,7 +273,6 @@
                 <div class="col-md-3 col-lg-2 pr-3 d-flex flex-column m-2 border-start-0 border-bottom-0 border-light "
                      style=" background-color: #2f2e2e !important;" id="mySidebar">
                     <div class="d-flex flex-column align-items-start p-0 text-white ">
-                        <span class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none fs-5">Tools</span>
                         <ul class="nav flex-sm-row flex-column mb-sm-auto mb-0 align-items-start list-group list-group-flush"
                             id="sidebarMenu">
                         </ul>
@@ -308,107 +300,145 @@
 
                         <!--//mainText-->
                         <div class="col-12 position-relative" id="div_mainText">
-                            <label for="stickyTextSourceInput_MainText" class="form-label ">Your Text</label>
+                            <label for="stickyTextSourceInput_MainText" class="form-label ">Edit Text</label>
                             <div class="input-group">
                                 <img class="modal-icon-controls pe-1" src="./assets/images/icons/Text-Title.png" />
                                 <input type="text"
                                        class="form-control text-light bg-dark border-0 border-bottom border-light "
-                                       id="stickyTextSourceInput_MainText" placeholder="..."
+                                       id="stickyTextSourceInput_MainText" placeholder="Main Text"
                                        maxlength="50">
                             </div>
                         </div>
                         <!--//mainText-->
                         <!--//subText-->
                         <div class="col-12 position-relative" id="div_subText">
-                            <label for="stickyTextSourceInput_SubText" class="form-label ">sub Text</label>
-                            <input type="text"
-                                   class="form-control text-light bg-dark border-top-0 border-end-0 border-light"
-                                   id="stickyTextSourceInput_SubText" placeholder="..."
-                                   maxlength="50">
+                            <div class="input-group">
+                                <img class="modal-icon-controls pe-1" src="./assets/images/icons/Sub-Title.png" />
+                                <input type="text"
+                                       class="form-control text-light bg-dark border-0 border-bottom border-light "
+                                       id="stickyTextSourceInput_SubText" placeholder="sub Text"
+                                       maxlength="50">
+                            </div>
                         </div>
                         <!--//subText-->
                         <!--//CompSelector-->
                         <div class="col-12 position-relative" id="div_compSelect">
                             <label for="compSelect" class="form-label">Select Comp.</label>
-                            <select class="form-select form-select-sm text-light bg-dark border-top-0 border-end-0 border-light"
-                                    aria-label=".form-select-sm"
-                                    onchange="compSelected(this.value)" id="compSelect">
-                            </select>
+                            <div class="input-group">
+                                <div class="modal-icon-controls-container">
+                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/Comp.png" />
+                                </div>
+                                <select class="form-select form-select-sm text-light bg-dark border-0 border-bottom border-light "
+                                        aria-label=".form-select-sm"
+                                        onchange="compSelected(this.value)" id="compSelect">
+                                </select>
+                                <div class="modal-icon-controls-container">
+                                    <i class="fa fa-refresh"></i>
+                                </div>
+                            </div>
                         </div>
                         <!--//CompSelector-->
                         <!--//text stick-->
                         <div class="col-12 has-validation position-relative" id="div_textSticker">
                             <label for="layerTextSticker" class="form-label">select a layer for Text to Stick</label>
-                            <select class="form-select form-select-sm mt-2 text-light bg-dark border-top-0 border-end-0 border-light"
-                                    aria-label=".form-select-sm"
-                                    id="layerTextSticker"
-                                    required>
-                            </select>
-                            <div class="invalid-tooltip">
-                                Please choose a Layer
+                            <div class="input-group">
+                                <div class="modal-icon-controls-container">
+                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/EndPoint.png" />
+                                </div>
+                                <select class="form-select form-select-sm mt-2 text-light bg-dark border-0 border-bottom border-light "
+                                        aria-label=".form-select-sm"
+                                        id="layerTextSticker"
+                                        required>
+                                </select>
+                                <div class="invalid-tooltip">
+                                    Please choose a Layer
+                                </div>
                             </div>
                         </div>
                         <!--//text stick-->
                         <!--//line1-->
                         <div class="col-6 has-validation position-relative" id="div_startlayerSelect_line1">
                             <label for="startlayerSelect_line1" class="form-label">line 1 Start Point</label>
-                            <select class="form-select form-select-sm mt-2 text-light bg-dark border-top-0 border-end-0 border-light"
-                                    aria-label=".form-select-sm"
-                                    id="startlayerSelect_line1"
-                                    required>
-                            </select>
-                            <div class="invalid-tooltip">
-                                Please choose a Layer
+                            <div class="input-group">
+                                <div class="modal-icon-controls-container">
+                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/startPoint-1.png" />
+                                </div>
+                                <select class="form-select form-select-sm mt-2 text-light bg-dark border-0 border-bottom border-light "
+                                        aria-label=".form-select-sm"
+                                        id="startlayerSelect_line1"
+                                        required>
+                                </select>
+                                <div class="invalid-tooltip">
+                                    Please choose a Layer
+                                </div>
                             </div>
                         </div>
                         <!--//line1-->
                         <!--//line2-->
                         <div class="col-6 has-validation position-relative" id="div_startlayerSelect_line2">
                             <label for="startlayerSelect_line2" class="form-label">line 2 Start Point</label>
-                            <select class="form-select form-select-sm mt-2 text-light bg-dark border-top-0 border-end-0 border-light"
-                                    aria-label=".form-select-sm"
-                                    id="startlayerSelect_line2"
-                                    required>
-                            </select>
-                            <div class="invalid-tooltip">
-                                Please choose a Layer
+                            <div class="input-group">
+                                <div class="modal-icon-controls-container">
+                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/startPoint-1.png" />
+                                </div>
+                                <select class="form-select form-select-sm mt-2 text-light bg-dark border-0 border-bottom border-light "
+                                        aria-label=".form-select-sm"
+                                        id="startlayerSelect_line2"
+                                        required>
+                                </select>
+                                <div class="invalid-tooltip">
+                                    Please choose a Layer
+                                </div>
                             </div>
                         </div>
                         <!--//line2-->
                         <!--//line3-->
                         <div class="col-6 has-validation position-relative" id="div_startlayerSelect_line3">
                             <label for="startlayerSelect_line3" class="form-label">line 3 Start Point</label>
-                            <select class="form-select form-select-sm mt-2 text-light bg-dark border-top-0 border-end-0 border-light"
-                                    aria-label=".form-select-sm"
-                                    id="startlayerSelect_line3"
-                                    required>
-                            </select>
-                            <div class="invalid-tooltip">
-                                Please choose a Layer
+                            <div class="input-group">
+                                <div class="modal-icon-controls-container">
+                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/startPoint-1.png" />
+                                </div>
+                                <select class="form-select form-select-sm mt-2 text-light bg-dark border-0 border-bottom border-light "
+                                        aria-label=".form-select-sm"
+                                        id="startlayerSelect_line3"
+                                        required>
+                                </select>
+                                <div class="invalid-tooltip">
+                                    Please choose a Layer
+                                </div>
                             </div>
                         </div>
                         <!--//line3-->
                         <!--//Cti-->
                         <div class="col-12 has-validation position-relative cti">
-                            <div class="form-check form-switch">
-                                <label id="startTimeSwitchLabel" class="form-check-label" for="startTimeSwitch">
-                                    start from
-                                    current CTI
-                                </label>
-                                <input type="checkbox" class="form-check-input border-light" id="startTimeSwitch"
-                                       onchange="startTimeChangestickyImportFomr(this.checked)">
+                            <div class="col-12 form-switch p-0">
+                                <div class="input-group">
+                                    <div class="modal-icon-controls-container">
+                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/Indicator.png" />
+                                    </div>
+                                    <input type="checkbox" class="form-check-input border-light" id="startTimeSwitch"
+                                           onchange="startTimeChangestickyImportFomr(this.checked)">
+                                    <label id="startTimeSwitchLabel" class="ps-2 form-check-label" for="startTimeSwitch">
+                                        start from current CTI
+                                    </label>
 
+                                </div>
                             </div>
-
                         </div>
                         <div class="col-6 has-validation position-relative disabled cti" style="opacity:0.2;">
                             <label for="startTimeSpecificValue" class="form-label">Start Time</label>
-                            <input type="number" value="0" disabled
-                                   class="form-control text-light bg-dark  border-top-0 border-end-0 border-light"
-                                   id="startTimeSpecificValue"
-                                   placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
-                            <div class="invalid-tooltip">
-                                Please choose a Layer
+                            <div class="input-group">
+                                <div class="modal-icon-controls-container">
+                                    <img class="modal-icon-controls pe-1" src="./assets/images/icons/Time.png" />
+                                </div>
+                                <input type="number" value="0" disabled
+                                       class="form-control text-light bg-dark  border-top-0 border-end-0 border-light"
+                                       id="startTimeSpecificValue"
+                                       placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
+                                <div class="invalid-tooltip">
+                                    Please choose a Layer
+                                </div>
                             </div>
                         </div>
                         <div class="col-6 has-validation position-relative disabled cti" style="opacity:0.2;">
@@ -482,8 +512,7 @@
                                         <img class="modal-icon-controls pe-1" src="./assets/images/icons/Three-D.png" />
                                     </div>
                                     <label class="d-none-xxs col-3 col-sm-5 text-center" for="select_3D_hud">
-                                        Import
-                                        2D
+                                        Import 2D
                                     </label>
                                     <input type="checkbox" class="col-2 border-light form-check-input p-0 m-0 mt-1"
                                            id="select_3D_hud">
@@ -584,7 +613,7 @@
                         <!--//subText-->
                         <!--//desc Text-->
                         <div class="col-12 position-relative" id="div_descText_callout">
-                           
+
                             <div class="input-group">
                                 <img class="modal-icon-controls pe-1" src="./assets/images/icons/Desc-Title.png" />
                                 <input type="text"
