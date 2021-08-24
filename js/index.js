@@ -3,25 +3,30 @@ var importProjPath = '';
 var importProjName = '';
 var setingNeede = null;
 var textPath = 'assets/packages';
+var linePath = 'assets/basicRequiers/line/line.aep';
+var lineFullPath = '';
 var packagesPath = '';
 var ads = {};
 
 
 (function () {
     'use strict';
-    var path, slash;
+    var path;
     path = location.href;
     var x = path.indexOf("index.html");
     if (x == -1) {
         x = path.indexOf("packageImport.html");
     }
     if (getOS() == "MAC") {
+        linePath = path.substring(0, x) + linePath;
         path = path.substring(0, x) + textPath;
     }
     if (getOS() == "WIN") {
+        linePath = path.substring(8, x) + linePath;
         path = path.substring(8, x) + textPath;
     }
     packagesPath = path;
+    lineFullPath = linePath;
     getFilesTree(path);
 }());
 
@@ -56,7 +61,7 @@ function generateSideBar() {
             'data-bs-target="#submenu' + indx + '" aria-expanded="false" class="px-0 align-middle text-light collapsed">\n' +
             '       <span class="ms-1 d-inline">' + val.menuName + '</span>\n' +
             ' </a>\n' +
-            ' <ul class="ps-5 ps-sm-3 collapse fade nav flex-column ms-1 list-group list-group-flush" id="submenu' + indx + '" data-bs-parent="#sidebarMenu">\n' +
+            ' <ul class="ps-sm-3 collapse fade nav flex-column ms-1 list-group list-group-flush" id="submenu' + indx + '" data-bs-parent="#sidebarMenu">\n' +
             child_li + '\n' +
             ' </ul>\n' +
             '</li>'
@@ -74,7 +79,7 @@ function generateContentView(menuIndex, subMenIndex,element) {
     $(".sideMenu-selected").removeClass("sideMenu-selected");
     $(element).find("span").addClass("sideMenu-selected");
     contentTree[menuIndex].subMenuNames[subMenIndex].subFiles.map((val, indx, arr) => {
-        $('#gridSystem').append('<div class="border-dark border-5 card col-4 col-xxsm-12 col-xsm-6 col-sm-4 col-md-4 col-lg-3 col-xl-2 m-0 small-card" ' +
+        $('#gridSystem').append('<div class="border-dark border-5 card col-4 col-xxsm-12 col-xsm-12 col-sm-4 col-md-4 col-lg-3 col-xl-2 m-0 small-card" ' +
             '                       onclick="importFile(' + menuIndex + ',' + subMenIndex + ',' + indx + ')">\n' +
             '      <div class="card-body  h-100 m-0 p-0">\n' +
             '           <div class="card-img-top h-75">\n' +
@@ -485,7 +490,7 @@ function importCallOut(jsonInput) {
     var str_input = JSON.stringify(jsonInput);
     // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
     const csInterface = new CSInterface();
-    const strEval = 'importCallOut("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
+    const strEval = 'importCallOut("' + importProjPath + '","' + lineFullPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
     csInterface.evalScript(strEval
         , function (res) {
             if (res !== "") {
@@ -501,44 +506,44 @@ function importCallOut(jsonInput) {
 function startTimeChangestickyImportFomr(value) {
     if (value === true) {
         $("#startTimeSwitchLabel").text("specific Seconds (accept decimal)");
-        $("#startTimeSpecificValue").prop("disabled", false).parent().parent().css("opacity", "1");
-        $("#endTimeSpecificValue").prop("disabled", false).parent().css("opacity", "1");
+        $("#startTimeSpecificValue").prop("disabled", false).parent().css("opacity", "1");
+        $("#endTimeSpecificValue").prop("disabled", false).parent().parent().css("opacity", "1");
 
         $("#startTimeSwitchlabel_hud").text("specific Seconds (accept decimal)");
-        $("#startTimeSpecificValue_hud").prop("disabled", false).parent().parent().css("opacity", "1");
-        $("#endTimeSpecificValue_hud").prop("disabled", false).parent().css("opacity", "1");
+        $("#startTimeSpecificValue_hud").prop("disabled", false).parent().css("opacity", "1");
+        $("#endTimeSpecificValue_hud").prop("disabled", false).parent().parent().css("opacity", "1");
 
         $("#startTimeSwitchlabel_callout").text("specific Seconds (accept decimal)");
-        $("#startTimeSpecificValue_callout").prop("disabled", false).parent().parent().css("opacity", "1");
-        $("#endTimeSpecificValue_callout").prop("disabled", false).parent().css("opacity", "1");
+        $("#startTimeSpecificValue_callout").prop("disabled", false).parent().css("opacity", "1");
+        $("#endTimeSpecificValue_callout").prop("disabled", false).parent().parent().css("opacity", "1");
 
         $("#startTimeSwitchlabel_witchEffect").text("specific Seconds (accept decimal)");
-        $("#startTimeSpecificValue_witchEffect").prop("disabled", false).parent().parent().css("opacity", "1");
-        $("#endTimeSpecificValue_witchEffect").prop("disabled", false).parent().css("opacity", "1");
+        $("#startTimeSpecificValue_witchEffect").prop("disabled", false).parent().css("opacity", "1");
+        $("#endTimeSpecificValue_witchEffect").prop("disabled", false).parent().parent().css("opacity", "1");
     } else {
         $("#startTimeSwitchLabel").text("start from current CTI");
         $("#startTimeSpecificValue")[0].value = 0;
         $("#endTimeSpecificValue")[0].value = 0;
-        $("#endTimeSpecificValue").prop("disabled", true).parent().css("opacity", "0.2");
-        $("#startTimeSpecificValue").prop("disabled", true).parent().parent().css("opacity", "0.2");
+        $("#endTimeSpecificValue").prop("disabled", true).parent().parent().css("opacity", "0.2");
+        $("#startTimeSpecificValue").prop("disabled", true).parent().css("opacity", "0.2");
 
         $("#startTimeSwitchlabel_hud").text("start from current CTI");
         $("#startTimeSpecificValue_hud")[0].value = 0;
         $("#endTimeSpecificValue_hud")[0].value = 0;
-        $("#endTimeSpecificValue_hud").prop("disabled", true).parent().css("opacity", "0.2");
-        $("#startTimeSpecificValue_hud").prop("disabled", true).parent().parent().css("opacity", "0.2");
+        $("#endTimeSpecificValue_hud").prop("disabled", true).parent().parent().css("opacity", "0.2");
+        $("#startTimeSpecificValue_hud").prop("disabled", true).parent().css("opacity", "0.2");
 
         $("#startTimeSwitchlabel_callout").text("start from current CTI");
         $("#startTimeSpecificValue_callout")[0].value = 0;
         $("#endTimeSpecificValue_callout")[0].value = 0;
-        $("#endTimeSpecificValue_callout").prop("disabled", true).parent().css("opacity", "0.2");
-        $("#startTimeSpecificValue_callout").prop("disabled", true).parent().parent().css("opacity", "0.2");
+        $("#endTimeSpecificValue_callout").prop("disabled", true).parent().parent().css("opacity", "0.2");
+        $("#startTimeSpecificValue_callout").prop("disabled", true).parent().css("opacity", "0.2");
 
         $("#startTimeSwitchlabel_witchEffect").text("start from current CTI");
         $("#startTimeSpecificValue_witchEffect")[0].value = 0;
         $("#endTimeSpecificValue_witchEffect")[0].value = 0;
-        $("#endTimeSpecificValue_witchEffect").prop("disabled", true).parent().css("opacity", "0.2");
-        $("#startTimeSpecificValue_witchEffect").prop("disabled", true).parent().parent().css("opacity", "0.2");
+        $("#endTimeSpecificValue_witchEffect").prop("disabled", true).parent().parent().css("opacity", "0.2");
+        $("#startTimeSpecificValue_witchEffect").prop("disabled", true).parent().css("opacity", "0.2");
     }
 }
 

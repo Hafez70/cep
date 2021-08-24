@@ -776,7 +776,6 @@ function importStickyTextWithBeamEffect(projPath, params) {
     //var textLayer = parent.layers.add(TextIFolder.item(1));
     var RootComp = undefined;
     var TextComp = undefined;
-    var solidsFolder = undefined;
 
     var TextIFolder_numitems = TextIFolder.numItems
     for (var i = 1; i <= TextIFolder_numitems; i++) {
@@ -803,7 +802,7 @@ function importStickyTextWithBeamEffect(projPath, params) {
     //textCompInParent.moveToEnd();
     textCompInParent.transform.anchorPoint.setValue(y.value);
     textCompInParent.transform.position.setValue(textStickerLayer.transform.position.value);
-    textCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(textStickerLayer.index);
+    //textCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(textStickerLayer.index);
     textCompInParent.Effects.addProperty("Slider Control").property("Slider").setValue(45);
     textCompInParent.effect("Slider Control").name = "Text-Size"
     textCompInParent.startTime = _startTime;
@@ -815,7 +814,7 @@ function importStickyTextWithBeamEffect(projPath, params) {
     textCompInParent.selected = false;
 
     if (textCompInParent.transform.position.canSetExpression) {
-        textCompInParent.transform.position.expression = 'effect("Layer Control")("Layer").toComp([0,0,0])';
+        //textCompInParent.transform.position.expression = 'effect("Layer Control")("Layer").toComp([0,0,0])';
         textCompInParent.transform.scale.expression = 'temp=effect("Text-Size")("Slider");[temp, temp]';
     }
 
@@ -851,7 +850,7 @@ function importStickyTextWithBeamEffect(projPath, params) {
         //parentSolidItem.moveToEnd();
 
         parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
-        parentcontrolItem.Effects("EndPoint").property("Layer").setValue(textStickerLayer.index);
+        parentcontrolItem.Effects("EndPoint").property("Layer").setValue(textCompInParent.index);
         parentcontrolItem.startTime = _startTime;
         if (_endTime !== 0) {
             parentcontrolItem.outPoint = _endTime;
@@ -861,9 +860,8 @@ function importStickyTextWithBeamEffect(projPath, params) {
 }
 
 
-///importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-1/circle-1.aep",
-//'{"comp":"1","sticker":"0","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":false}','circle-1')
-
+//importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-1/circle-1.aep",
+//'{"comp":"0","sticker":"1","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":true}','circle-1');
 function importBasicHud(projPath, params, projectName) {
 
     try {
@@ -935,17 +933,26 @@ function importBasicHud(projPath, params, projectName) {
         hudCompInParent.name = hudCompInParent.name + "-" + parent.layers.length
 
         if (hudStickerLayer !== undefined) {
+           
             hudCompInParent.transform.position.setValue(hudStickerLayer.transform.position.value);
-            hudCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(hudStickerLayer.index);
+            
+            //hudCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(hudStickerLayer.index);
 
             if (obj_params.thd) {
-                hudStickerLayer.threeDLayer = true;
+                if(hudStickerLayer.threeDLayer.threeDLayer == false){
+                    hudStickerLayer.threeDLayer = true;
+                }
                 hudCompInParent.threeDLayer = true;
-                hudCompInParent.transform.orientation.expression = 'if(transform.position.value.length === 3){' +
-                    'x = effect("Layer Control")("Layer").orientation[0];' +
-                    'y = effect("Layer Control")("Layer").orientation[1];' +
-                    'z = effect("Layer Control")("Layer").orientation[2];' +
-                    '[x,y,z]}';
+                                
+                hudCompInParent.transform.orientation.setValue(hudStickerLayer.transform.orientation.value);
+                hudCompInParent.transform.xRotation.setValue(hudStickerLayer.transform.xRotation.value);
+                hudCompInParent.transform.yRotation.setValue(hudStickerLayer.transform.yRotation.value);
+                hudCompInParent.transform.zRotation.setValue(hudStickerLayer.transform.zRotation.value);
+                //hudCompInParent.transform.orientation.expression = 'if(transform.position.value.length === 3){' +
+                //    'x = effect("Layer Control")("Layer").orientation[0];' +
+                //    'y = effect("Layer Control")("Layer").orientation[1];' +
+                //    'z = effect("Layer Control")("Layer").orientation[2];' +
+                //    '[x,y,z]}';
             } else {
                 hudCompInParent.threeDLayer = false;
                 //hudCompInParent.transform.rotation.expression = 'if(transform.position.value.length === 2){effect("Layer Control")("Layer").transform.rotation}';
@@ -959,16 +966,16 @@ function importBasicHud(projPath, params, projectName) {
 
             hudCompInParent.selected = false;
 
-            if (hudCompInParent.transform.position.canSetExpression) {
-                hudCompInParent.transform.position.expression = 'if(transform.position.value.length === 2)' +
-                    '{effect("Layer Control")("Layer").toComp([0,0,0])}' +
-                    'else{' +
-                    'x = effect("Layer Control")("Layer").position[0];' +
-                    'y = effect("Layer Control")("Layer").position[1];' +
-                    'z = effect("Layer Control")("Layer").position[2];' +
-                    'zp = effect("z-position")("Slider");' +
-                    '[x,y,z+zp]}';
-            }
+            //if (hudCompInParent.transform.position.canSetExpression) {
+            //    hudCompInParent.transform.position.expression = 'if(transform.position.value.length === 2)' +
+            //        '{effect("Layer Control")("Layer").toComp([0,0,0])}' +
+            //        'else{' +
+            //        'x = effect("Layer Control")("Layer").position[0];' +
+            //        'y = effect("Layer Control")("Layer").position[1];' +
+            //        'z = effect("Layer Control")("Layer").position[2];' +
+            //        'zp = effect("z-position")("Slider");' +
+            //        '[x,y,z+zp]}';
+            //}
         } else {
             if (obj_params.thd) {
                 hudCompInParent.threeDLayer = true;
@@ -990,11 +997,51 @@ function importBasicHud(projPath, params, projectName) {
     }
 }
 
-//importCallOut("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Call Out/3.RoundyCall/roundycall-left-3-line/roundycall-left-3-line.aep",
-//'{"comp":"1","sticker":"4","layers":[{"start":"1","end":"4"},{"start":"2","end":"4"},{"start":"3","end":"4"}],"cti":{"fromCti":true,"startTime":"0","endTime":"0"},"mainText":"محصول اول","subText":"پیشنهاد ویژه","descText":"توضیحات بیشتر , خیلی خوبه ..."}',
-//'roundycall-left-3-line')
-function importCallOut(projPath, params, projectName) {
+//importCallOut("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Call Out/2.PopCall/popcall-center-1-line/popcall-center-1-line.aep",
+                     //"/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/basicRequiers/line/line.aep",
+//'{"comp":"1","sticker":"2","layers":[{"start":"1","end":"2"}],"cti":{"fromCti":true,"startTime":"0","endTime":"0"},"mainText":"محصول اول","subText":"پیشنهاد ویژه","descText":"توضیحات بیشتر , خیلی خوبه ..."}',
+//'popcall-center-1-line')
 
+function importLine(linePath,nodeLayers,parentComp,endPointLayer,startTime,endTime){
+    var proj = app.project;
+    var myfile = new ImportOptions();
+    myfile.file = new File(linePath);
+    var lineFolder = proj.importFile(myfile);
+
+    var RootComp = undefined;
+    var lineFolder_numitems = lineFolder.numItems
+    
+    for (var i = 1; i <= lineFolder_numitems; i++) {
+        if (lineFolder.item(i).typeName === "Composition" && lineFolder.item(i).name === "RootComp") {
+            RootComp = lineFolder.item(i);
+            break;
+        }
+    }
+
+    var controlItem = RootComp.layers.byName("line-control")
+    var solids = [];
+
+    var y = nodeLayers.length;
+    for (var i = 0; i < y; i++) {
+        controlItem.copyToComp(parentComp);
+
+        solids.push(parentComp.layer(1));
+        var parentcontrolItem = parentComp.layer(1);
+
+        parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
+        parentcontrolItem.Effects("EndPoint").property("Layer").setValue(endPointLayer.index);
+        parentcontrolItem.startTime = startTime;
+        if (endTime !== 0) {
+            parentcontrolItem.outPoint = endTime;
+        }
+        parentcontrolItem.name = "line-control-" + parentComp.layers.length + "-" + i
+    }
+
+    lineFolder.remove();
+}
+
+function importCallOut(projPath,linePath, params, projectName) {
+    
     var obj_params = JSON.parse(params);
     var comps = [];
     var _startTime = 0;
@@ -1034,15 +1081,6 @@ function importCallOut(projPath, params, projectName) {
 
     var callOutStickerLayer = parent.layer(parseInt(obj_params.sticker));
 
-    var nodeLayers = [];
-
-    for (var i = 0; i < obj_params.layers.length; i++) {
-        nodeLayers.push({
-            start: parent.layer(parseInt(obj_params.layers[i].start)),
-            end: parent.layer(parseInt(obj_params.layers[i].end))
-        });
-    }
-
     var item = new ImportOptions();
     item.file = new File(projPath);
     var TextIFolder = proj.importFile(item);
@@ -1071,14 +1109,26 @@ function importCallOut(projPath, params, projectName) {
     if (obj_params.descText && obj_params.descText.length > 0) {
         TextComp.layers.byName("desc-text").property("Source Text").setValue(obj_params.descText);
     }
-    var controlItem = RootComp.layers.byName("line-control")
+
+
+    //var controlItem = RootComp.layers.byName("line-control")
+
+
+    var nodeLayers = [];
+
+    for (var i = 0; i < obj_params.layers.length; i++) {
+        nodeLayers.push({
+            start: parent.layer(parseInt(obj_params.layers[i].start)),
+            end: parent.layer(parseInt(obj_params.layers[i].end))
+        });
+    }
 
     var textCompInParent = parent.layers.add(TextComp);
     var y = RootComp.layers.byName(projectName).transform.anchorPoint;
 
     textCompInParent.transform.anchorPoint.setValue(y.value);
     textCompInParent.transform.position.setValue(callOutStickerLayer.transform.position.value);
-    textCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(callOutStickerLayer.index);
+    //textCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(callOutStickerLayer.index);
     textCompInParent.Effects.addProperty("Slider Control").property("Slider").setValue(45);
     textCompInParent.effect("Slider Control").name = "Text-Size"
     textCompInParent.startTime = _startTime;
@@ -1090,7 +1140,7 @@ function importCallOut(projPath, params, projectName) {
     textCompInParent.selected = false;
 
     if (textCompInParent.transform.position.canSetExpression) {
-        textCompInParent.transform.position.expression = 'effect("Layer Control")("Layer").toComp([0,0,0])';
+        //textCompInParent.transform.position.expression = 'effect("Layer Control")("Layer").toComp([0,0,0])';
         textCompInParent.transform.scale.expression = 'temp=effect("Text-Size")("Slider");[temp, temp]';
     }
 
@@ -1108,25 +1158,27 @@ function importCallOut(projPath, params, projectName) {
         selectedLayers[i].selected = false;
     }
 
-    var solids = [];
 
-    var y = nodeLayers.length;
-    for (var i = 0; i < y; i++) {
-        controlItem.copyToComp(parent);
+    importLine(linePath, nodeLayers, parent, textCompInParent,_startTime,_endTime);
+   // var solids = [];
 
-        solids.push(parent.layer(1));
-        var parentcontrolItem = parent.layer(1);
+   // var y = nodeLayers.length;
+    //for (var i = 0; i < y; i++) {
+     //   controlItem.copyToComp(parent);
 
-        parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
-        parentcontrolItem.Effects("EndPoint").property("Layer").setValue(callOutStickerLayer.index);
-        parentcontrolItem.startTime = _startTime;
-        if (_endTime !== 0) {
-            parentcontrolItem.outPoint = _endTime;
-        }
-        parentcontrolItem.name = "line-control-" + parent.layers.length + "-" + i
-    }
+       // solids.push(parent.layer(1));
+        //var parentcontrolItem = parent.layer(1);
 
+       // parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
+       // parentcontrolItem.Effects("EndPoint").property("Layer").setValue(textCompInParent.index);
+       // parentcontrolItem.startTime = _startTime;
+       // if (_endTime !== 0) {
+        //    parentcontrolItem.outPoint = _endTime;
+       // }
+       // parentcontrolItem.name = "line-control-" + parent.layers.length + "-" + i
 }
+
+
 
 function importWithEffect(projPath, params, projectName) {
 
