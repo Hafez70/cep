@@ -859,9 +859,8 @@ function importStickyTextWithBeamEffect(projPath, params) {
 
 }
 
-
 //importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-1/circle-1.aep",
-//'{"comp":"0","sticker":"1","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":true}','circle-1');
+//'{"comp":"0","sticker":"3","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":true}','circle-1');
 function importBasicHud(projPath, params, projectName) {
 
     try {
@@ -933,8 +932,6 @@ function importBasicHud(projPath, params, projectName) {
         hudCompInParent.name = hudCompInParent.name + "-" + parent.layers.length
 
         if (hudStickerLayer !== undefined) {
-           
-            hudCompInParent.transform.position.setValue(hudStickerLayer.transform.position.value);
             
             //hudCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(hudStickerLayer.index);
 
@@ -943,7 +940,7 @@ function importBasicHud(projPath, params, projectName) {
                     hudStickerLayer.threeDLayer = true;
                 }
                 hudCompInParent.threeDLayer = true;
-                                
+                hudCompInParent.transform.position.setValue(hudStickerLayer.transform.position.value);                
                 hudCompInParent.transform.orientation.setValue(hudStickerLayer.transform.orientation.value);
                 hudCompInParent.transform.xRotation.setValue(hudStickerLayer.transform.xRotation.value);
                 hudCompInParent.transform.yRotation.setValue(hudStickerLayer.transform.yRotation.value);
@@ -955,6 +952,7 @@ function importBasicHud(projPath, params, projectName) {
                 //    '[x,y,z]}';
             } else {
                 hudCompInParent.threeDLayer = false;
+                hudCompInParent.transform.position.setValue(hudStickerLayer.transform.position.value);
                 //hudCompInParent.transform.rotation.expression = 'if(transform.position.value.length === 2){effect("Layer Control")("Layer").transform.rotation}';
             }
 
@@ -1258,7 +1256,21 @@ function importWithEffect(projPath, params, projectName) {
     }
 }
 
+//importSamples("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Call Out/samples/sample-callout/sample-callout.aep");
 
+function importSamples(projPath) {
+
+    try {
+        var proj = app.project;
+        var item = new ImportOptions();
+        item.file = new File(projPath);
+        proj.importFile(item);
+
+        return JSON.stringify({res: 'ok'})
+    } catch (e) {
+        var err = e
+    }
+}
 //importNewPackage("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/packages");
 function importNewPackage(appPackagePath) {
     var locFolder = new Folder();

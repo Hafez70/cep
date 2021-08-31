@@ -49,7 +49,7 @@ function generateSideBar() {
         var child_li = '';
 
         val.subMenuNames.map((ch_val, ch_indx, ch_arr) => {
-            child_li += '<li class="w-100" onclick="generateContentView(' + indx + ',' + ch_indx + ',this)">\n' +
+            child_li += '<li class="w-100 ps-2 mt-1" onclick="generateContentView(' + indx + ',' + ch_indx + ',this)">\n' +
                 '           <a href="#" class="px-0 align-self-end text-light pkg"> ' +
                 '<span class="d-inline">' + ch_val.subMenuName + '</span>\n' +
                 '           </a>\n' +
@@ -76,8 +76,11 @@ function generateSideBar() {
 
 function generateContentView(menuIndex, subMenIndex,element) {
     $('#gridSystem').empty();
+    $(".sideMenu-selected").parent().parent().removeClass(" border rounded-pill border-light ");
     $(".sideMenu-selected").removeClass("sideMenu-selected");
     $(element).find("span").addClass("sideMenu-selected");
+    $(element).addClass(" border rounded-pill border-light ");
+
     contentTree[menuIndex].subMenuNames[subMenIndex].subFiles.map((val, indx, arr) => {
         $('#gridSystem').append('<div class="border-dark border-5 card col-4 col-xxsm-12 col-xsm-12 col-sm-4 col-md-4 col-lg-3 col-xl-2 m-0 small-card" ' +
             '                       onclick="importFile(' + menuIndex + ',' + subMenIndex + ',' + indx + ')">\n' +
@@ -196,6 +199,10 @@ async function opneSetting(settingPath, comps) {
     else if (setingNeede.type === "WitchEffect") {
 
         $('#witchEffectSettingModal').modal('show');
+    }
+    else if (setingNeede.type === "Sample") {
+
+        $('#SampleSettingModal').modal('show');
     }
     else if (setingNeede.type === "CallOut") {
 
@@ -435,6 +442,9 @@ function generateJsonSetting() {
 
             importCallOut(json_result);
         }
+        else if (setingNeede.type === "Sample") {
+            importSample();
+        }
     }
 }
 
@@ -485,6 +495,17 @@ function importWitchEffect(jsonInput) {
     //}
 }
 
+function importSample() {
+    const csInterface = new CSInterface();
+    const strEval = 'importSamples("' + importProjPath + '")';
+    csInterface.evalScript(strEval
+        , function (res) {
+            $('#SampleSettingModal').modal('hide');
+        });
+    //} else {
+
+    //}
+}
 
 function importCallOut(jsonInput) {
     var str_input = JSON.stringify(jsonInput);
