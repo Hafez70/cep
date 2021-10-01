@@ -223,11 +223,11 @@
             rx_escapable.lastIndex = 0;
             return rx_escapable.test(string)
                 ? "\"" + string.replace(rx_escapable, function (a) {
-                var c = meta[a];
-                return typeof c === "string"
-                    ? c
-                    : "\\u" + ("0000" + a.charCodeAt(0).toString(16)).slice(-4);
-            }) + "\""
+                    var c = meta[a];
+                    return typeof c === "string"
+                        ? c
+                        : "\\u" + ("0000" + a.charCodeAt(0).toString(16)).slice(-4);
+                }) + "\""
                 : "\"" + string + "\"";
         }
 
@@ -432,7 +432,7 @@
                 // Make a fake root object containing our value under the key of "".
                 // Return the result of stringifying the value.
 
-                return str("", {"": value});
+                return str("", { "": value });
             };
         }
 
@@ -519,7 +519,7 @@
                     // each name/value pair to a reviver function for possible transformation.
 
                     return (typeof reviver === "function")
-                        ? walk({"": j}, "")
+                        ? walk({ "": j }, "")
                         : j;
                 }
 
@@ -650,9 +650,9 @@ function ImportFile(filePath) {
         var item = new ImportOptions();
         item.file = new File(filePath);
         var Item = app.project.importFile(item);
-        return JSON.stringify({result: true});
+        return JSON.stringify({ result: true });
     } catch (e) {
-        return JSON.stringify({result: false});
+        return JSON.stringify({ result: false });
     }
 }
 
@@ -665,7 +665,7 @@ function getAllComps() {
     var numitems = proj.numItems
     for (var i = 1; i < numitems; i++) {
         if (proj.item(i).typeName === "Composition") {
-            comps.push({compName: proj.item(i).parentFolder.name + ' > ' + proj.item(i).name, compItemIndex: i});
+            comps.push({ compName: proj.item(i).parentFolder.name + ' > ' + proj.item(i).name, compItemIndex: i });
         }
     }
     var js = JSON.stringify(comps);
@@ -688,7 +688,7 @@ function getAllNullPointsInComp(compIndex) {
     for (var i = 1; i <= numLayers; i++) {
         var layer = curentComp.layer(i);
         if (curentComp.layer(i).nullLayer)
-            nullLayers.push({layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i});
+            nullLayers.push({ layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i });
     }
     var js = JSON.stringify(nullLayers);
     return js;
@@ -708,7 +708,7 @@ function getAllLayersInComp(compIndex) {
     }
     var numLayers = curentComp.numLayers;
     for (var i = 1; i <= numLayers; i++) {
-        allLayers.push({layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i});
+        allLayers.push({ layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i });
     }
     var js = JSON.stringify(allLayers);
     return js;
@@ -932,15 +932,15 @@ function importBasicHud(projPath, params, projectName) {
         hudCompInParent.name = hudCompInParent.name + "-" + parent.layers.length
 
         if (hudStickerLayer !== undefined) {
-            
+
             //hudCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(hudStickerLayer.index);
 
             if (obj_params.thd) {
-                if(hudStickerLayer.threeDLayer.threeDLayer == false){
+                if (hudStickerLayer.threeDLayer.threeDLayer == false) {
                     hudStickerLayer.threeDLayer = true;
                 }
                 hudCompInParent.threeDLayer = true;
-                hudCompInParent.transform.position.setValue(hudStickerLayer.transform.position.value);                
+                hudCompInParent.transform.position.setValue(hudStickerLayer.transform.position.value);
                 hudCompInParent.transform.orientation.setValue(hudStickerLayer.transform.orientation.value);
                 hudCompInParent.transform.xRotation.setValue(hudStickerLayer.transform.xRotation.value);
                 hudCompInParent.transform.yRotation.setValue(hudStickerLayer.transform.yRotation.value);
@@ -989,18 +989,129 @@ function importBasicHud(projPath, params, projectName) {
         }
         hudFolder.remove();
         //proj.autoFixExpressions("fixme",RootComp.name);
-        return JSON.stringify({res: 'ok'})
+        return JSON.stringify({ res: 'ok' })
     } catch (e) {
         var err = e
     }
 }
 
-//importCallOut("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Call Out/2.PopCall/popcall-center-1-line/popcall-center-1-line.aep",
-                     //"/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/basicRequiers/line/line.aep",
-//'{"comp":"1","sticker":"2","layers":[{"start":"1","end":"2"}],"cti":{"fromCti":true,"startTime":"0","endTime":"0"},"mainText":"محصول اول","subText":"پیشنهاد ویژه","descText":"توضیحات بیشتر , خیلی خوبه ..."}',
-//'popcall-center-1-line')
+//importBasicSizeline("/c/Program Files/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/Size Lines/sizeline-1/sizeline-1.aep",
+//'{"comp":"0","start":"1","end":"2","cti":{"fromCti":true,"startTime":"0","endTime":"0"}}','sizeline-1');
+function importBasicSizeline(projPath, params, projectName) {
 
-function importLine(linePath,nodeLayers,parentComp,endPointLayer,startTime,endTime){
+    try {
+        var obj_params = JSON.parse(params);
+        var comps = [];
+        var _startTime = 0;
+        var _endTime = 0;
+
+        var proj = app.project;
+        var parent = undefined;
+        if (parseInt(obj_params.comp) === 0) {
+            parent = proj.activeItem;
+        } else {
+            parent = proj.item(parseInt(obj_params.comp));
+        }
+
+        if (obj_params.cti.fromCti) {
+            _startTime = parent.time;
+        } else {
+            if (parseFloat(obj_params.cti.startTime) !== 0) {
+                _startTime = parseFloat(obj_params.cti.startTime);
+            } else {
+                _startTime = parent.time;
+            }
+        }
+        if (parseFloat(obj_params.cti.endTime) !== 0) {
+            _endTime = parseFloat(obj_params.cti.endTime);
+        }
+
+        if (_endTime !== 0) {
+            if (_startTime >= _endTime) {
+                return "{'error' :'end time is not correct!'}"
+            }
+
+            if (_endTime > parent.workAreaDuration) {
+                return "{'error' :'wrong time range!'}"
+            }
+        }
+
+
+        var hudStartLayer = undefined;
+        var hudEndLayer = undefined;
+        if (obj_params.start != 0) {
+            //var startLayer = []; parent.layer(firstLayerIndex);
+            hudStartLayer = parent.layer(parseInt(obj_params.start));
+        }
+
+        if (obj_params.end != 0) {
+            //var startLayer = []; parent.layer(firstLayerIndex);
+            hudEndLayer = parent.layer(parseInt(obj_params.end));
+        }
+
+        var item = new ImportOptions();
+        item.file = new File(projPath);
+        var hudFolder = proj.importFile(item);
+        //var textLayer = parent.layers.add(TextIFolder.item(1));
+        var RootComp = undefined;
+
+        var hudFolder_numitems = hudFolder.numItems
+        for (var i = 1; i <= hudFolder_numitems; i++) {
+            if (hudFolder.item(i).typeName === "Composition" && hudFolder.item(i).name === projectName) {
+                RootComp = hudFolder.item(i);
+                continue;
+            }
+        }
+
+        var selectedLayers = parent.selectedLayers;
+        for (var i = 0; i < selectedLayers.length; i++) {
+            selectedLayers[i].selected = false;
+        }
+
+        var x = RootComp.layer(1);
+        x.copyToComp(parent);
+
+        var hudCompInParent = parent.layer(1);
+        hudCompInParent.name = hudCompInParent.name + "-" + parent.layers.length
+
+        if (hudStartLayer !== undefined && hudEndLayer !== undefined) {
+            hudCompInParent.Effects("StartPoint").property("Layer").setValue(hudStartLayer.index);
+            hudCompInParent.Effects("EndPoint").property("Layer").setValue(hudEndLayer.index);
+            hudCompInParent.startTime = _startTime;
+
+            if (_endTime !== 0) {
+                hudCompInParent.outPoint = _endTime;
+            }
+
+            hudCompInParent.selected = false;
+
+        } else {
+            if (obj_params.thd) {
+                hudCompInParent.threeDLayer = true;
+            } else {
+                hudCompInParent.threeDLayer = false;
+            }
+            hudCompInParent.startTime = _startTime;
+
+            if (_endTime !== 0) {
+                hudCompInParent.outPoint = _endTime;
+            }
+            hudCompInParent.selected = false;
+        }
+        hudFolder.remove();
+        //proj.autoFixExpressions("fixme",RootComp.name);
+        return JSON.stringify({ res: 'ok' })
+    } catch (e) {
+        var err = e
+    }
+}
+
+//importCallOut("/c/Program Files/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Call Out/5.journal/journal-L-1/journal-L-1.aep",
+//"C:/Program%20Files/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/basicRequiers/line/line.aep",
+//'{"comp":"1","sticker":"1","layers":[{"start":"2","end":"1"}],"cti":{"fromCti":true,"startTime":"0","endTime":"0"}}',
+//'journal-L-1')
+
+function importLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, endTime) {
     var proj = app.project;
     var myfile = new ImportOptions();
     myfile.file = new File(linePath);
@@ -1008,7 +1119,7 @@ function importLine(linePath,nodeLayers,parentComp,endPointLayer,startTime,endTi
 
     var RootComp = undefined;
     var lineFolder_numitems = lineFolder.numItems
-    
+
     for (var i = 1; i <= lineFolder_numitems; i++) {
         if (lineFolder.item(i).typeName === "Composition" && lineFolder.item(i).name === "RootComp") {
             RootComp = lineFolder.item(i);
@@ -1038,8 +1149,8 @@ function importLine(linePath,nodeLayers,parentComp,endPointLayer,startTime,endTi
     lineFolder.remove();
 }
 
-function importCallOut(projPath,linePath, params, projectName) {
-    
+function importCallOut(projPath, linePath, params, projectName) {
+
     var obj_params = JSON.parse(params);
     var comps = [];
     var _startTime = 0;
@@ -1053,17 +1164,20 @@ function importCallOut(projPath,linePath, params, projectName) {
         parent = proj.item(parseInt(obj_params.comp));
     }
 
+    if (parent === undefined || parent === null) {
+        return "{ 'error' : 'no comp selected or active!' }";
+    }
+
     if (obj_params.cti.fromCti) {
         _startTime = parent.time;
+        _endTime = parent.duration
     } else {
-        if (parseFloat(obj_params.cti.startTime) !== 0) {
-            _startTime = parseFloat(obj_params.cti.startTime);
-        } else {
-            _startTime = parent.time;
-        }
-    }
-    if (parseFloat(obj_params.cti.endTime) !== 0) {
+        _startTime = parseFloat(obj_params.cti.startTime);
         _endTime = parseFloat(obj_params.cti.endTime);
+    }
+
+    if (_endTime === 0) {
+        _endTime = parent.duration;
     }
 
 
@@ -1081,6 +1195,7 @@ function importCallOut(projPath,linePath, params, projectName) {
 
     var item = new ImportOptions();
     item.file = new File(projPath);
+    item.importAs = ImportAsType.PROJECT;
     var TextIFolder = proj.importFile(item);
 
     var RootComp = undefined;
@@ -1107,10 +1222,7 @@ function importCallOut(projPath,linePath, params, projectName) {
     if (obj_params.descText && obj_params.descText.length > 0) {
         TextComp.layers.byName("desc-text").property("Source Text").setValue(obj_params.descText);
     }
-
-
     //var controlItem = RootComp.layers.byName("line-control")
-
 
     var nodeLayers = [];
 
@@ -1121,21 +1233,34 @@ function importCallOut(projPath,linePath, params, projectName) {
         });
     }
 
+
     var textCompInParent = parent.layers.add(TextComp);
+
     var y = RootComp.layers.byName(projectName).transform.anchorPoint;
 
     textCompInParent.transform.anchorPoint.setValue(y.value);
     textCompInParent.transform.position.setValue(callOutStickerLayer.transform.position.value);
-    //textCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(callOutStickerLayer.index);
+
     textCompInParent.Effects.addProperty("Slider Control").property("Slider").setValue(45);
     textCompInParent.effect("Slider Control").name = "Text-Size"
-    textCompInParent.startTime = _startTime;
 
+
+
+    var base_Duration = TextComp.duration;
+    var new_duration = _endTime - _startTime;
+    textCompInParent.stretch = (new_duration * 100) / base_Duration;
+
+    textCompInParent.startTime = _startTime;
     if (_endTime !== 0) {
         textCompInParent.outPoint = _endTime;
     }
 
+    textCompInParent.selected = true;
+    textCompInParent.openInViewer();
+    app.executeCommand(app.findMenuCommandId("Update Markers From Source"));
     textCompInParent.selected = false;
+    parent.openInViewer();
+
 
     if (textCompInParent.transform.position.canSetExpression) {
         //textCompInParent.transform.position.expression = 'effect("Layer Control")("Layer").toComp([0,0,0])';
@@ -1157,23 +1282,25 @@ function importCallOut(projPath,linePath, params, projectName) {
     }
 
 
-    importLine(linePath, nodeLayers, parent, textCompInParent,_startTime,_endTime);
-   // var solids = [];
+    if (nodeLayers.length > 0) {
+        importLine(linePath, nodeLayers, parent, textCompInParent, _startTime, _endTime);
+    }
+    // var solids = [];
 
-   // var y = nodeLayers.length;
+    // var y = nodeLayers.length;
     //for (var i = 0; i < y; i++) {
-     //   controlItem.copyToComp(parent);
+    //   controlItem.copyToComp(parent);
 
-       // solids.push(parent.layer(1));
-        //var parentcontrolItem = parent.layer(1);
+    // solids.push(parent.layer(1));
+    //var parentcontrolItem = parent.layer(1);
 
-       // parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
-       // parentcontrolItem.Effects("EndPoint").property("Layer").setValue(textCompInParent.index);
-       // parentcontrolItem.startTime = _startTime;
-       // if (_endTime !== 0) {
-        //    parentcontrolItem.outPoint = _endTime;
-       // }
-       // parentcontrolItem.name = "line-control-" + parent.layers.length + "-" + i
+    // parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
+    // parentcontrolItem.Effects("EndPoint").property("Layer").setValue(textCompInParent.index);
+    // parentcontrolItem.startTime = _startTime;
+    // if (_endTime !== 0) {
+    //    parentcontrolItem.outPoint = _endTime;
+    // }
+    // parentcontrolItem.name = "line-control-" + parent.layers.length + "-" + i
 }
 
 
@@ -1250,7 +1377,7 @@ function importWithEffect(projPath, params, projectName) {
         witchEffect_CompInParent.selected = false;
         witchEffect_Folder.remove();
         //proj.autoFixExpressions("fixme",RootComp.name);
-        return JSON.stringify({res: 'ok'})
+        return JSON.stringify({ res: 'ok' })
     } catch (e) {
         var err = e
     }
@@ -1266,7 +1393,7 @@ function importSamples(projPath) {
         item.file = new File(projPath);
         proj.importFile(item);
 
-        return JSON.stringify({res: 'ok'})
+        return JSON.stringify({ res: 'ok' })
     } catch (e) {
         var err = e
     }
@@ -1281,7 +1408,7 @@ function importNewPackage(appPackagePath) {
         var newPkgFolder_files = newPkgFolder.getFiles();
 
         if (newPkgFolder_files.length > 1) {
-            return {error: "you need to import each package seperatly!!"}
+            return { error: "you need to import each package seperatly!!" }
         }
 
         /// check if pkg exists remove!!!
@@ -1293,7 +1420,7 @@ function importNewPackage(appPackagePath) {
 
         error = copyNewPackage(newPkgFolder_files[0], appPackagePath)
     }
-    return {error: error}
+    return { error: error }
 }
 
 function copyNewPackage(new_pkg_folder, pathToCopy) {
@@ -1364,4 +1491,14 @@ function removePackage(pkg_folder) {
     }
 
     return "";
+}
+//openURL("https://www.google.com")
+function openURL(url) {
+    var os = system.osName;
+    if (!os.length) {
+        // I never remember which one is available, but I think $.os always is, you'll have to check
+        os = $.os;
+    }
+    var app_os = (os.indexOf("Win") != -1) ? system.callSystem('explorer ' + url) : system.callSystem('open ' + url);
+
 }
