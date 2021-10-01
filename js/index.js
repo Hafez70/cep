@@ -80,9 +80,9 @@ function generateContentView(menuIndex, subMenIndex, element) {
     $(".sideMenu-selected").removeClass("sideMenu-selected");
     $(element).find("span").addClass("sideMenu-selected");
     $(element).addClass(" border rounded-pill border-light ");
-
+    var newelements = [];
     contentTree[menuIndex].subMenuNames[subMenIndex].subFiles.map((val, indx, arr) => {
-        $('#gridSystem').append('<div class="shadow-fancy card bg-dark  m-2 small-card" ' +
+        newelements.push($('<div class="shadow-fancy card bg-dark small-card" ' +
             '                       onclick="importFile(' + menuIndex + ',' + subMenIndex + ',' + indx + ')">\n' +
             '      <div class="card-body  h-100 m-0 p-0">\n' +
             '           <div class="card-img-top h-75">\n' +
@@ -92,8 +92,10 @@ function generateContentView(menuIndex, subMenIndex, element) {
             '               <p class="card-title text-neon text-center ">' + val.fileName + '</p>\n' +
             '           </div>\n' +
             '    </div>\n' +
-            '  </div>');
+            '  </div>').hide().fadeIn(500));
+       
     });
+    $('#gridSystem').append(newelements);
 }
 
 function importFile(menuIndex, subMenuIndex, fileIndex) {

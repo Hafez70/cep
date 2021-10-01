@@ -33,6 +33,7 @@ body {
 
 .text-neon {
     color: #49FFE1 !important;
+    font-size: 12px;
 }
 
 .bg-fancy {
@@ -349,7 +350,31 @@ li {
     }
 }
 
+.gridSystem {
+    max-height: calc(100vh - 10vh);
+}
 
+.mySidebar {
+    max-height: calc(100vh - 10vh);
+}
+
+.homeSlider {
+    height: 10vh !important;
+}
+
+.mainContainer {
+    height: calc(100vh - 10vh);
+    max-height: calc(100vh - 10vh);
+}
+
+.small-card {
+    max-height: 100px;
+    width: 200px;
+    padding: 1px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
 /* Smaller than standard 960 (devices and browsers) */
 @media only screen and (min-width: 959px) {
 
@@ -360,6 +385,12 @@ li {
         left: 0;
         z-index: 1020;
         width: 170px;
+        height: 10vh;
+        max-height: 70px;
+        margin: 10px;
+        background-image: url('../assets/images/logo.png');
+        background-size: contain;
+        background-repeat: no-repeat
     }
 
     .slider-background {
@@ -386,13 +417,6 @@ li {
         max-width: 30%;
     }
 
-    .small-card {
-        max-height: 100px;
-        min-width: 200px;
-        max-width: 200px;
-        padding: 1px;
-    }
-
     .sideMenu-width {
         flex: 0 0 auto;
         width: 160px;
@@ -408,6 +432,12 @@ li {
         left: 0;
         z-index: 1020;
         width: 170px;
+        height: 10vh;
+        max-height: 70px;
+        margin: 10px;
+        background-image: url('../assets/images/logo.png');
+        background-size: contain;
+        background-repeat: no-repeat
     }
 
     .slider-background {
@@ -433,12 +463,7 @@ li {
         max-height: 230px;
     }
 
-    .small-card {
-        max-height: 100px;
-        min-width: 200px;
-        max-width: 200px;
-        padding: 1px;
-    }
+  
 
     .sideMenu-width {
         flex: 0 0 auto;
@@ -457,6 +482,12 @@ li {
         left: 0;
         z-index: 1020;
         width: 170px;
+        height: 10vh;
+        max-height: 70px;
+        margin: 10px;
+        background-image: url('../assets/images/logo.png');
+        background-size: contain;
+        background-repeat: no-repeat
     }
 
     .slider-background {
@@ -481,12 +512,7 @@ li {
         width: 50%;
     }
 
-    .small-card {
-        max-height: 100px;
-        min-width: 200px;
-        max-width: 200px;
-        padding: 1px;
-    }
+   
 
     .sideMenu-width {
         flex: 0 0 auto;
@@ -504,6 +530,12 @@ li {
         left: 0;
         z-index: 1020;
         width: 170px;
+        height: 10vh;
+        max-height: 70px;
+        margin: 10px;
+        background-image: url('../assets/images/logo.png');
+        background-size: contain;
+        background-repeat: no-repeat
     }
 
     .slider-background {
@@ -535,12 +567,7 @@ li {
         display: block;
     }
 
-    .small-card {
-        max-height: 100px;
-        min-width: 200px;
-        max-width: 200px;
-        padding: 1px;
-    }
+    
 
     .sideMenu-width {
         flex: 0 0 auto;
@@ -556,6 +583,12 @@ li {
         left: 0;
         z-index: 1020;
         width: 170px;
+        height: 10vh;
+        max-height: 70px;
+        margin: 10px;
+        background-image: url('../assets/images/logo.png');
+        background-size: contain;
+        background-repeat: no-repeat
     }
 
     .col-xsm-12 {
@@ -583,12 +616,6 @@ li {
         min-width: 150px;
     }
 
-    .small-card {
-        max-height: 100px;
-        max-width: 200px;
-        min-width: 190px;
-        padding: 1px;
-    }
 
     .d-none-xs {
         display: none;
@@ -608,6 +635,12 @@ li {
         left: 0;
         z-index: 1020;
         width: 170px;
+        height: 10vh;
+        max-height: 70px;
+        margin: 10px;
+        background-image: url('../assets/images/logo.png');
+        background-size: contain;
+        background-repeat: no-repeat
     }
 
     .col-xsm-12 {
@@ -637,9 +670,11 @@ li {
 
     .small-card {
         max-height: 100px;
-        max-width: 200px;
-        min-width: 190px;
+        width: 200px;
         padding: 1px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
     }
 
     .d-none-xs {
@@ -654,13 +689,36 @@ li {
 /* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
 @media only screen and (max-width: 479px) {
 
+    .gridSystem {
+        max-height: calc(100vh - 190px);
+    }
+
+    .mySidebar {
+        max-height: 150px !important;
+    }
+
+    .homeSlider {
+        height: 60px !important;
+    }
+
+    .mainContainer {
+        height: calc(100vh - 60px);
+        max-height: calc(100vh - 60px);
+        flex-direction: column !important;
+    }
 
     .sticky {
-        position: absolute;
-        bottom: 0;
-        left: 0;
+        width: 100px;
+        position: relative;
+        display: block;
+        height: 20%;
+        max-height: 20%;
+        min-height: 25px;
         z-index: 1020;
-        width: 170px;
+        margin: 2px;
+        background-image: url(../assets/images/logo.png);
+        background-size: contain;
+        background-repeat: no-repeat;
     }
 
     .slider-background {
@@ -706,9 +764,12 @@ li {
     }
 
     .small-card {
-        max-height: 110px;
-        min-width: 110px;
+        max-height: 80px;
+        width: 160px;
         padding: 1px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
     }
 
     .d-none-xs {
@@ -717,17 +778,42 @@ li {
 
     .sideMenu-width {
         flex: 0 0 auto;
-        width: 50%;
+        width: 100%;
         min-width: 150px;
     }
 }
 
-/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
-@media only screen and (max-width: 300px) {
+@media only screen and (max-width: 380px) {
 
+    .gridSystem {
+        max-height: calc(100vh - 190px);
+    }
+
+    .mySidebar {
+        max-height: 150px !important;
+    }
+
+    .homeSlider {
+        height: 60px !important;
+    }
+
+    .mainContainer {
+        height: calc(100vh - 60px);
+        max-height: calc(100vh - 60px);
+    }
 
     .sticky {
-        display: none;
+        width: 100px;
+        position: relative;
+        display: block;
+        height: 20%;
+        max-height: 20%;
+        min-height: 25px;
+        z-index: 1020;
+        margin: 2px;
+        background-image: url(../assets/images/logo.png);
+        background-size: contain;
+        background-repeat: no-repeat;
     }
 
     .slider-background {
@@ -768,9 +854,182 @@ li {
 
     .small-card {
         max-height: 100px;
-        max-width: 200px;
-        min-width: 190px;
+        width: 200px;
         padding: 1px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
+    }
+
+
+    .sideMenu-width {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+}
+
+/* Mobile Portrait Size to Mobile Landscape Size (devices and browsers) */
+@media only screen and (max-width: 300px) {
+
+    .gridSystem {
+        max-height: calc(100vh - 190px);
+    }
+
+    .mySidebar {
+        max-height: 150px !important;
+    }
+
+    .homeSlider {
+        height: 60px !important;
+    }
+
+    .mainContainer {
+        height: calc(100vh - 60px);
+        max-height: calc(100vh - 60px);
+    }
+
+    .sticky {
+        width: 100px;
+        position: relative;
+        display: block;
+        height: 20%;
+        max-height: 20%;
+        min-height: 25px;
+        z-index: 1020;
+        margin: 2px;
+        background-image: url(../assets/images/logo.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+
+    .slider-background {
+        background-position: 60%;
+        background-size: cover;
+    }
+
+    .my-carousel-caption {
+        position: absolute;
+        right: 35%;
+        bottom: 2.25rem;
+        left: 20%;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        color: #fff;
+        text-align: center;
+        height: 50%;
+    }
+
+    .col-xxsm-12 {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+    .col-xxsm-6 {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+
+    .d-none-xxs {
+        display: none;
+    }
+
+    .first-triple-home {
+        max-height: 200px;
+        min-width: 150px;
+    }
+
+    .small-card {
+        max-height: 100px;
+        width: 200px;
+        padding: 1px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
+    }
+
+
+    .sideMenu-width {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 200px) {
+
+    .gridSystem {
+        max-height: calc(100vh - 190px);
+    }
+
+    .mySidebar {
+        max-height: 150px !important;
+    }
+
+    .homeSlider {
+        height: 60px !important;
+    }
+
+    .mainContainer {
+        height: calc(100vh - 60px);
+        max-height: calc(100vh - 60px);
+    }
+
+    .sticky {
+        width: 100px;
+        position: relative;
+        display: block;
+        height: 20%;
+        max-height: 20%;
+        min-height: 25px;
+        z-index: 1020;
+        margin: 2px;
+        background-image: url(../assets/images/logo.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+
+    .slider-background {
+        background-position: 60%;
+        background-size: cover;
+    }
+
+    .my-carousel-caption {
+        position: absolute;
+        right: 35%;
+        bottom: 2.25rem;
+        left: 20%;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        color: #fff;
+        text-align: center;
+        height: 50%;
+    }
+
+    .col-xxsm-12 {
+        flex: 0 0 auto;
+        width: 100%;
+    }
+
+    .col-xxsm-6 {
+        flex: 0 0 auto;
+        width: 50%;
+    }
+
+    .d-none-xxs {
+        display: none;
+    }
+
+    .first-triple-home {
+        max-height: 200px;
+        min-width: 150px;
+    }
+
+    .small-card {
+        max-height: 100px;
+        width: 100%;
+        padding: 1px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 10px;
     }
 
 
@@ -782,7 +1041,11 @@ li {
 
 @media screen and (max-height: 400px) {
     .gridSystem {
-        max-height: calc(100vh - 60px);
+        max-height: calc(100vh - 160px);
+    }
+
+    .mySidebar {
+        max-height: 100px !important;
     }
 
     .homeSlider {
@@ -795,17 +1058,4 @@ li {
     }
 }
 
-@media screen and (min-height: 401px) {
-    .gridSystem {
-        max-height: calc(100vh - 9vh);
-    }
 
-    .homeSlider {
-        height: 9vh !important;
-    }
-
-    .mainContainer {
-        height: calc(100vh - 9vh);
-        max-height: calc(100vh - 9vh);
-    }
-}

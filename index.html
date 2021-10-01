@@ -69,34 +69,25 @@
 <body class="bg-dark position-relative">
     <div class=" d-flex flex-column " id="mainContainer" style="height: 100vh; min-height: 100vh;">
         <div id="mySlider" class="carousel slide homeSlider" data-bs-ride="carousel">
-            <div class="carousel-indicators mb-0 pb-0">
+            <div class="carousel-indicators mb-0 pb-0" style="height: 15px;">
                 <button type="button" data-bs-target="#mySlider" data-bs-slide-to="0"
-                        class="active" aria-current="true" aria-label="Slide 1"></button>
+                        class="active" aria-current="true"
+                        aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#mySlider" data-bs-slide-to="1"
                         aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#mySlider" data-bs-slide-to="2"
-                        aria-label="Slide 3"></button>
             </div>
             <div class=" carousel-inner  h-100 w-100">
-                <div class="carousel-item active h-100 w-100 slider-background" onclick="openUrl('https://www.google.com')"
+                <div class="carousel-item active h-100 w-100 slider-background"
+                     onclick="openUrl('https://www.google.com')"
                      style="cursor: pointer; background-image: url('./assets/images/slide-1.jpg');">
-                    <div class="my-carousel-caption  d-block">
-                        <h5>Wonder Tutorials</h5>
-                        <p>Learn how to create amazing arts with some simple tools</p>
+                    <div class="text-light d-flex justify-content-center h-100">
+                        <p class="p-3 m-0 text-center align-self-center">Find Wonder Tutorials in our channel</p>
                     </div>
                 </div>
-                <div class="carousel-item   h-100 w-100 slider-background"
-                     style="background-image:url('./assets/images/slide-2.jpg')">
-                    <div class="my-carousel-caption d-block">
-                        <h5>Shortcut the Long path</h5>
-                        <p>Let us to run the long way and make yours simple and easy</p>
-                    </div>
-                </div>
-                <div class="carousel-item  h-100 w-100 slider-background"
+                <div class="carousel-item h-100 w-100 slider-background"
                      style="background-image:url('./assets/images/slide-3.jpg')">
-                    <div class="my-carousel-caption d-block">
-                        <h5>Turn Massive Work to some clicks</h5>
-                        <p>Use Shortcuts to turn long time work into few seconds easily</p>
+                     <div class="text-light d-flex justify-content-center h-100">
+                        <p class="p-3 m-0 text-center align-self-center">Stay up to date from Envato</p>
                     </div>
                 </div>
             </div>
@@ -111,26 +102,20 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-        <div class="container-fluid d-flex flex-fill mainContainer" id="mainContent">
-            <div class="row flex-fill mainContainer">
-                <div class="sideMenu-width p-0 d-flex flex-column m-0 overflow-auto gridSystem mySidebar"
+        <div class="container-fluid d-flex flex-fill mainContainer p-0" id="mainContent">
+            <div class="d-flex flex-fill mainContainer">
+                <div class="sideMenu-width p-0 d-flex flex-column m-0 overflow-auto mySidebar"
                      style=" background-color: #2f2e2e !important;" id="mySidebar">
 
-                    <div class="d-flex flex-column align-items-start p-2 text-white " style="max-height: 80%; overflow-y: auto;">
+                    <div class="d-flex flex-column align-items-start p-2 text-white " style="min-height:125px;height: 80%; overflow-y: auto;">
                         <ul class="nav flex-sm-row flex-column mb-sm-auto mb-0 align-items-start list-group list-group-flush"
                             id="sidebarMenu">
                         </ul>
                     </div>
-                    <footer class="ms-1 mt-1 sticky"
-                            style="height: 10vh;
-                            max-height: 70px;
-                            margin: 10px;
-                            background-image: url('./assets/images/logo.png');
-                            background-size: contain;
-                            background-repeat: no-repeat">
+                    <footer class="ms-1 mt-1 sticky">
                     </footer>
                 </div>
-                <div class="col row m-auto mt-0 justify-content-start p-3 gridSystem overflow-auto " id="gridSystem">
+                <div class="row m-auto mt-0 justify-content-center p-3 gridSystem overflow-auto " id="gridSystem">
                 </div>
             </div>
         </div>
