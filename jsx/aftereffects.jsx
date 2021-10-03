@@ -533,65 +533,70 @@
 
 
 function getSubFileItems(subFilePath, sourcPath) {
-    var sunbfiles = [];
-    var textsubFolder = Folder(subFilePath).getFiles();
+    try {
+        var sunbfiles = [];
+        var textsubFolder = Folder(subFilePath).getFiles();
 
-    for (var i = 0; i < textsubFolder.length; i++) {
-        if (textsubFolder[i] instanceof Folder) {
+        for (var i = 0; i < textsubFolder.length; i++) {
+            if (textsubFolder[i] instanceof Folder) {
 
-            // logoImage.onClick= function() {
-            //     var item = new ImportOptions();
-            //     item.file = new File(this.properties.path);
-            //     var Item = app.project.importFile(item);
-            // };
-            var settingFile = new File(textsubFolder[i].fullName + '/' + textsubFolder[i].name + '.json');
-            if (settingFile.exists) {
-                sunbfiles.push({
-                    fileName: textsubFolder[i].name.replace(/%20/g, " "),
-                    demoGifFilePath: './' + sourcPath + '/' + textsubFolder[i].name + '/demo.gif',
-                    //demoThumbFilePath: './' + sourcPath + '/' + textsubFolder[i].name + '/demo.png',
-                    projectPath: textsubFolder[i].fullName + '/' + textsubFolder[i].name + '.aep',
-                    settingPath: './' + sourcPath + '/' + textsubFolder[i].name + '/' + textsubFolder[i].name + '.json'
-                });
-            } else {
-                sunbfiles.push({
-                    fileName: textsubFolder[i].name.replace(/%20/g, " "),
-                    demoGifFilePath: './' + sourcPath + '/' + textsubFolder[i].name + '/demo.gif',
-                    //demoThumbFilePath: './' + sourcPath + '/' + textsubFolder[i].name + '/demo.png',
-                    projectPath: textsubFolder[i].fullName + '/' + textsubFolder[i].name + '.aep',
-                    settingPath: ''
-                });
+                // logoImage.onClick= function() {
+                //     var item = new ImportOptions();
+                //     item.file = new File(this.properties.path);
+                //     var Item = app.project.importFile(item);
+                // };
+                var settingFile = new File(textsubFolder[i].fullName + '/' + textsubFolder[i].name + '.json');
+                if (settingFile.exists) {
+                    sunbfiles.push({
+                        fileName: textsubFolder[i].name.replace(/%20/g, " "),
+                        demoGifFilePath: './' + sourcPath + '/' + textsubFolder[i].name + '/demo.gif',
+                        //demoThumbFilePath: './' + sourcPath + '/' + textsubFolder[i].name + '/demo.png',
+                        projectPath: textsubFolder[i].fullName + '/' + textsubFolder[i].name + '.aep',
+                        settingPath: './' + sourcPath + '/' + textsubFolder[i].name + '/' + textsubFolder[i].name + '.json'
+                    });
+                } else {
+                    sunbfiles.push({
+                        fileName: textsubFolder[i].name.replace(/%20/g, " "),
+                        demoGifFilePath: './' + sourcPath + '/' + textsubFolder[i].name + '/demo.gif',
+                        //demoThumbFilePath: './' + sourcPath + '/' + textsubFolder[i].name + '/demo.png',
+                        projectPath: textsubFolder[i].fullName + '/' + textsubFolder[i].name + '.aep',
+                        settingPath: ''
+                    });
+                }
+
             }
-
         }
+        return sunbfiles;
     }
-    return sunbfiles;
+    catch (e) {
+        var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message };
+        return err;
+    }
 }
 
 function getSubMenuItems(subMenuPath, sourcPath) {
-    var sunbMenu = [];
-    var textsubFolder = Folder(subMenuPath).getFiles();
+    try {
+        var sunbMenu = [];
+        var textsubFolder = Folder(subMenuPath).getFiles();
 
-    for (var i = 0; i < textsubFolder.length; i++) {
-        if (textsubFolder[i] instanceof Folder) {
-
-            // var logoImage = containerPanel.add("image", undefined, textsubFolder[i].fullName + '/demo.gif',{path : textsubFolder[i].fullName + '/' + textsubFolder[i].name + '.aep'});
-            // logoImage.text = textsubFolder[i].name;
-            // logoImage.onClick= function() {
-            //     var item = new ImportOptions();
-            //     item.file = new File(this.properties.path);
-            //     var Item = app.project.importFile(item);
-            // };
-
-            var subfiles = getSubFileItems(textsubFolder[i].fullName, sourcPath + '/' + textsubFolder[i].name);
-            sunbMenu.push({
-                subMenuName: textsubFolder[i].name.replace(/%20/g, " "),
-                subFiles: subfiles,
-                demo: './' + sourcPath + '/' + textsubFolder[i].name + '/demo.gif'
-            });
+        for (var i = 0; i < textsubFolder.length; i++) {
+            if (textsubFolder[i] instanceof Folder) {
+                var subfiles = getSubFileItems(textsubFolder[i].fullName, sourcPath + '/' + textsubFolder[i].name);
+                if(subfiles.err){return subfiles;}
+                
+                sunbMenu.push({
+                    subMenuName: textsubFolder[i].name.replace(/%20/g, " "),
+                    subFiles: subfiles,
+                    demo: './' + sourcPath + '/' + textsubFolder[i].name + '/demo.gif'
+                });
+            }
         }
+        return sunbMenu;
     }
-    return sunbMenu;
+    catch (e) {
+        var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message };
+        return err;
+    }
 }
 
 //getMainDirectories("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/packages");
@@ -604,6 +609,7 @@ function getMainDirectories(myPath) {
         for (var i = 0; i < textsubFolder.length; i++) {
             if (textsubFolder[i] instanceof Folder) {
                 var subMenus = getSubMenuItems(textsubFolder[i].fullName, textPath + '/' + textsubFolder[i].name);
+                if(subMenus.err){return subMenus;}
                 files.push({
                     menuName: textsubFolder[i].name.replace(/%20/g, " "),
                     mainPath: textsubFolder[i].fullName,
@@ -614,253 +620,67 @@ function getMainDirectories(myPath) {
         }
         var x = JSON.stringify(files);
         return x;
-    } catch (e) {
-        alert(e);
     }
-}
-
-//getCategiries("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/packages");
-function getCategiries(myPath) {
-    try {
-        var files = [];
-        var textsubFolder = Folder(myPath).getFiles();
-        var textPath = 'assets/packages';
-        for (var i = 0; i < textsubFolder.length; i++) {
-
-            if (textsubFolder[i] instanceof Folder) {
-                files.push({
-                    CatName: textsubFolder[i].name.replace(/%20/, " "),
-                    CatPath: textsubFolder[i].fullName,
-                    CatIndex: i,
-                    subMenuNames: subMenus,
-                    demo: './' + textPath + '/' + textsubFolder[i].name + '/demo.gif',
-                });
-            }
-        }
-        var x = JSON.stringify(files);
-        return x;
-    } catch (e) {
-        alert(e);
-    }
-}
-
-//ImportFile("~/AppData/Roaming/Adobe/CEP/extensions/hafez-test/assets/packages/simple-text-lists/moving/slide-down-to-up/slide-down-to-up.aep");
-function ImportFile(filePath) {
-    try {
-        var item = new ImportOptions();
-        item.file = new File(filePath);
-        var Item = app.project.importFile(item);
-        return JSON.stringify({ result: true });
-    } catch (e) {
-        return JSON.stringify({ result: false });
+    catch (e) {
+        var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message });
+        return err;
     }
 }
 
 //getAllComps();
 function getAllComps() {
+    try {
+        var comps = [];
+        var proj = app.project;
 
-    var comps = [];
-    var proj = app.project;
-
-    var numitems = proj.numItems
-    for (var i = 1; i < numitems; i++) {
-        if (proj.item(i).typeName === "Composition") {
-            comps.push({ compName: proj.item(i).parentFolder.name + ' > ' + proj.item(i).name, compItemIndex: i });
+        var numitems = proj.numItems
+        for (var i = 1; i < numitems; i++) {
+            if (proj.item(i).typeName === "Composition") {
+                comps.push({ compName: proj.item(i).parentFolder.name + ' > ' + proj.item(i).name, compItemIndex: i });
+            }
         }
+        var js = JSON.stringify(comps);
+        return js;
     }
-    var js = JSON.stringify(comps);
-    return js;
-
+    catch (e) {
+        var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message });
+        return err;
+    }
 }
 
-//getAllNullPointsInComp(1)
-function getAllNullPointsInComp(compIndex) {
-
-    var nullLayers = [];
-    var proj = app.project;
-    var curentComp = undefined;
-    if (compIndex === 0) {
-        curentComp = proj.activeItem;
-    } else {
-        curentComp = proj.item(compIndex);
-    }
-    var numLayers = curentComp.numLayers;
-    for (var i = 1; i <= numLayers; i++) {
-        var layer = curentComp.layer(i);
-        if (curentComp.layer(i).nullLayer)
-            nullLayers.push({ layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i });
-    }
-    var js = JSON.stringify(nullLayers);
-    return js;
-
-}
-
-//getAllLayersInComp(2)
+//getAllLayersInComp(0)
 function getAllLayersInComp(compIndex) {
-
-    var allLayers = [];
-    var proj = app.project;
-    var curentComp = undefined;
-    if (compIndex === 0) {
-        curentComp = proj.activeItem;
-    } else {
-        curentComp = proj.item(compIndex);
+    try {
+        var allLayers = [];
+        var proj = app.project;
+        var curentComp = undefined;
+        if (compIndex === 0) {
+            curentComp = proj.activeItem;
+        } else {
+            curentComp = proj.item(compIndex);
+        }
+    
+        if(!curentComp)
+        {
+            //alert("No active Comp. found!! active or select a Comp. to fetch layers")
+            var js = JSON.stringify(allLayers);
+            return js;
+        }
+        var numLayers = curentComp.numLayers;
+        for (var i = 1; i <= numLayers; i++) {
+            allLayers.push({ layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i });
+        }
+        var js = JSON.stringify(allLayers);
+        return js;
     }
-    var numLayers = curentComp.numLayers;
-    for (var i = 1; i <= numLayers; i++) {
-        allLayers.push({ layerName: curentComp.layer(i).name.replace('<', ' ').replace('>', ' '), layerIndex: i });
+    catch (e) {
+        var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message });
+        return err;
     }
-    var js = JSON.stringify(allLayers);
-    return js;
-
 }
 
-//importStickyTextWithBeamEffect("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Text Tips/4. ToolTips Title/title-1/title-1.aep",
-//'{"comp":"1","sticker":"4","layers":[],"cti":{"fromCti":false,"startTime":"0","endTime":"0"},"mainText":"first"}');
-
-function importStickyTextWithBeamEffect(projPath, params) {
-
-    var obj_params = JSON.parse(params);
-    var comps = [];
-    var _startTime = 0;
-    var _endTime = 0;
-
-    var proj = app.project;
-    var parent = undefined;
-    if (parseInt(obj_params.comp) === 0) {
-        parent = proj.activeItem;
-    } else {
-        parent = proj.item(parseInt(obj_params.comp));
-    }
-
-    if (obj_params.cti.fromCti) {
-        _startTime = parent.time;
-    } else {
-        if (parseFloat(obj_params.cti.startTime) !== 0) {
-            _startTime = parseFloat(obj_params.cti.startTime);
-        } else {
-            _startTime = parent.time;
-        }
-    }
-    if (parseFloat(obj_params.cti.endTime) !== 0) {
-        _endTime = parseFloat(obj_params.cti.endTime);
-    }
-
-
-    if (_endTime !== 0) {
-        if (_startTime >= _endTime) {
-            return "{'error' :'end time is not correct!'}"
-        }
-
-        if (_endTime > parent.workAreaDuration) {
-            return "{'error' :'wrong time range!'}"
-        }
-    }
-
-
-    //var startLayer = []; parent.layer(firstLayerIndex);
-    var textStickerLayer = parent.layer(parseInt(obj_params.sticker));
-
-    var nodeLayers = [];
-
-    for (var i = 0; i < obj_params.layers.length; i++) {
-        nodeLayers.push({
-            start: parent.layer(parseInt(obj_params.layers[i].start)),
-            end: parent.layer(parseInt(obj_params.layers[i].end))
-        });
-    }
-
-    var item = new ImportOptions();
-    item.file = new File(projPath);
-    var TextIFolder = proj.importFile(item);
-    //var textLayer = parent.layers.add(TextIFolder.item(1));
-    var RootComp = undefined;
-    var TextComp = undefined;
-
-    var TextIFolder_numitems = TextIFolder.numItems
-    for (var i = 1; i <= TextIFolder_numitems; i++) {
-        if (TextIFolder.item(i).typeName === "Composition" && TextIFolder.item(i).name === "RootComp") {
-            RootComp = TextIFolder.item(i);
-            continue;
-        }
-        if (TextIFolder.item(i).typeName === "Composition" && TextIFolder.item(i).name === "MyText") {
-            TextComp = TextIFolder.item(i);
-            continue;
-        }
-    }
-
-    if (obj_params.mainText && obj_params.mainText.length > 0) {
-        TextComp.layers.byName("SampleText").property("Source Text").setValue(obj_params.mainText);
-    }
-    if (obj_params.subText && obj_params.subText.length > 0) {
-        TextComp.layers.byName("Subtitle").property("Source Text").setValue(obj_params.subText);
-    }
-    var controlItem = RootComp.layers.byName("Control")
-
-    var textCompInParent = parent.layers.add(TextComp);
-    var y = RootComp.layers.byName("MyText").transform.anchorPoint;
-    //textCompInParent.moveToEnd();
-    textCompInParent.transform.anchorPoint.setValue(y.value);
-    textCompInParent.transform.position.setValue(textStickerLayer.transform.position.value);
-    //textCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(textStickerLayer.index);
-    textCompInParent.Effects.addProperty("Slider Control").property("Slider").setValue(45);
-    textCompInParent.effect("Slider Control").name = "Text-Size"
-    textCompInParent.startTime = _startTime;
-
-    if (_endTime !== 0) {
-        textCompInParent.outPoint = _endTime;
-    }
-
-    textCompInParent.selected = false;
-
-    if (textCompInParent.transform.position.canSetExpression) {
-        //textCompInParent.transform.position.expression = 'effect("Layer Control")("Layer").toComp([0,0,0])';
-        textCompInParent.transform.scale.expression = 'temp=effect("Text-Size")("Slider");[temp, temp]';
-    }
-
-    var ControlCounter = 0;
-    for (var i = 1; i <= parent.numLayers; i++) {
-        if (String(parent.layer(i).name).indexOf('MyText') >= 0) {
-            ControlCounter++;
-        }
-    }
-
-    var selectedLayers = parent.selectedLayers;
-    for (var i = 0; i < selectedLayers.length; i++) {
-        selectedLayers[i].selected = false;
-    }
-
-    var solids = [];
-
-    var y = nodeLayers.length;
-    for (var i = 0; i < y; i++) {
-        controlItem.copyToComp(parent);
-
-        solids.push(parent.layer(1));
-        var parentcontrolItem = parent.layer(1);
-
-        if (ControlCounter !== 0) {
-            parentcontrolItem.name = "Control-" + String(ControlCounter + 1) + "-" + i
-
-        } else {
-            parentcontrolItem.name = "Control-" + 1 + "-" + i
-        }
-        ControlCounter++;
-
-        //parentSolidItem.moveToEnd();
-
-        parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
-        parentcontrolItem.Effects("EndPoint").property("Layer").setValue(textCompInParent.index);
-        parentcontrolItem.startTime = _startTime;
-        if (_endTime !== 0) {
-            parentcontrolItem.outPoint = _endTime;
-        }
-    }
-
-}
-
-//importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/circle-1/circle-1.aep",
-//'{"comp":"0","sticker":"3","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":true}','circle-1');
+importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/element-1/element-1.aep",
+'{"comp":"1","sticker":"2","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":true}', "element-1");
 function importBasicHud(projPath, params, projectName) {
 
     try {
@@ -944,16 +764,14 @@ function importBasicHud(projPath, params, projectName) {
                 hudCompInParent.transform.orientation.setValue(hudStickerLayer.transform.orientation.value);
                 hudCompInParent.transform.xRotation.setValue(hudStickerLayer.transform.xRotation.value);
                 hudCompInParent.transform.yRotation.setValue(hudStickerLayer.transform.yRotation.value);
-                hudCompInParent.transform.zRotation.setValue(hudStickerLayer.transform.zRotation.value);
-                //hudCompInParent.transform.orientation.expression = 'if(transform.position.value.length === 3){' +
-                //    'x = effect("Layer Control")("Layer").orientation[0];' +
-                //    'y = effect("Layer Control")("Layer").orientation[1];' +
-                //    'z = effect("Layer Control")("Layer").orientation[2];' +
-                //    '[x,y,z]}';
+                if(hudStickerLayer.transform.zRotation){
+                    hudCompInParent.transform.zRotation.setValue(hudStickerLayer.transform.zRotation.value);
+                }
+
             } else {
                 hudCompInParent.threeDLayer = false;
                 hudCompInParent.transform.position.setValue(hudStickerLayer.transform.position.value);
-                //hudCompInParent.transform.rotation.expression = 'if(transform.position.value.length === 2){effect("Layer Control")("Layer").transform.rotation}';
+
             }
 
             hudCompInParent.startTime = _startTime;
@@ -964,16 +782,6 @@ function importBasicHud(projPath, params, projectName) {
 
             hudCompInParent.selected = false;
 
-            //if (hudCompInParent.transform.position.canSetExpression) {
-            //    hudCompInParent.transform.position.expression = 'if(transform.position.value.length === 2)' +
-            //        '{effect("Layer Control")("Layer").toComp([0,0,0])}' +
-            //        'else{' +
-            //        'x = effect("Layer Control")("Layer").position[0];' +
-            //        'y = effect("Layer Control")("Layer").position[1];' +
-            //        'z = effect("Layer Control")("Layer").position[2];' +
-            //        'zp = effect("z-position")("Slider");' +
-            //        '[x,y,z+zp]}';
-            //}
         } else {
             if (obj_params.thd) {
                 hudCompInParent.threeDLayer = true;
@@ -988,10 +796,12 @@ function importBasicHud(projPath, params, projectName) {
             hudCompInParent.selected = false;
         }
         hudFolder.remove();
-        //proj.autoFixExpressions("fixme",RootComp.name);
+
         return JSON.stringify({ res: 'ok' })
-    } catch (e) {
-        var err = e
+    }
+    catch (e) {
+        var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message });
+        return err;
     }
 }
 
@@ -1040,19 +850,19 @@ function importBasicSizeline(projPath, params, projectName) {
         var hudStartLayer = undefined;
         var hudEndLayer = undefined;
         if (obj_params.start != 0) {
-            //var startLayer = []; parent.layer(firstLayerIndex);
+
             hudStartLayer = parent.layer(parseInt(obj_params.start));
         }
 
         if (obj_params.end != 0) {
-            //var startLayer = []; parent.layer(firstLayerIndex);
+
             hudEndLayer = parent.layer(parseInt(obj_params.end));
         }
 
         var item = new ImportOptions();
         item.file = new File(projPath);
         var hudFolder = proj.importFile(item);
-        //var textLayer = parent.layers.add(TextIFolder.item(1));
+
         var RootComp = undefined;
 
         var hudFolder_numitems = hudFolder.numItems
@@ -1101,8 +911,10 @@ function importBasicSizeline(projPath, params, projectName) {
         hudFolder.remove();
         //proj.autoFixExpressions("fixme",RootComp.name);
         return JSON.stringify({ res: 'ok' })
-    } catch (e) {
-        var err = e
+    }
+    catch (e) {
+        var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message });
+        return err;
     }
 }
 
@@ -1112,198 +924,190 @@ function importBasicSizeline(projPath, params, projectName) {
 //'journal-L-1')
 
 function importLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, endTime) {
-    var proj = app.project;
-    var myfile = new ImportOptions();
-    myfile.file = new File(linePath);
-    var lineFolder = proj.importFile(myfile);
+    try {
+        var proj = app.project;
+        var myfile = new ImportOptions();
+        myfile.file = new File(linePath);
+        var lineFolder = proj.importFile(myfile);
 
-    var RootComp = undefined;
-    var lineFolder_numitems = lineFolder.numItems
+        var RootComp = undefined;
+        var lineFolder_numitems = lineFolder.numItems
 
-    for (var i = 1; i <= lineFolder_numitems; i++) {
-        if (lineFolder.item(i).typeName === "Composition" && lineFolder.item(i).name === "RootComp") {
-            RootComp = lineFolder.item(i);
-            break;
+        for (var i = 1; i <= lineFolder_numitems; i++) {
+            if (lineFolder.item(i).typeName === "Composition" && lineFolder.item(i).name === "RootComp") {
+                RootComp = lineFolder.item(i);
+                break;
+            }
         }
-    }
 
-    var controlItem = RootComp.layers.byName("line-control")
-    var solids = [];
+        var controlItem = RootComp.layers.byName("line-control")
+        var solids = [];
 
-    var y = nodeLayers.length;
-    for (var i = 0; i < y; i++) {
-        controlItem.copyToComp(parentComp);
+        var y = nodeLayers.length;
+        for (var i = 0; i < y; i++) {
+            controlItem.copyToComp(parentComp);
 
-        solids.push(parentComp.layer(1));
-        var parentcontrolItem = parentComp.layer(1);
+            solids.push(parentComp.layer(1));
+            var parentcontrolItem = parentComp.layer(1);
 
-        parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
-        parentcontrolItem.Effects("EndPoint").property("Layer").setValue(endPointLayer.index);
-        parentcontrolItem.startTime = startTime;
-        if (endTime !== 0) {
-            parentcontrolItem.outPoint = endTime;
+            parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
+            parentcontrolItem.Effects("EndPoint").property("Layer").setValue(endPointLayer.index);
+            parentcontrolItem.startTime = startTime;
+            if (endTime !== 0) {
+                parentcontrolItem.outPoint = endTime;
+            }
+            parentcontrolItem.name = "line-control-" + parentComp.layers.length + "-" + i
         }
-        parentcontrolItem.name = "line-control-" + parentComp.layers.length + "-" + i
-    }
 
-    lineFolder.remove();
+        lineFolder.remove();
+
+    }
+    catch (e) {
+        var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message };
+        return err;
+    }
 }
 
 function importCallOut(projPath, linePath, params, projectName) {
+    try {
+        var obj_params = JSON.parse(params);
+        var comps = [];
+        var _startTime = 0;
+        var _endTime = 0;
 
-    var obj_params = JSON.parse(params);
-    var comps = [];
-    var _startTime = 0;
-    var _endTime = 0;
-
-    var proj = app.project;
-    var parent = undefined;
-    if (parseInt(obj_params.comp) === 0) {
-        parent = proj.activeItem;
-    } else {
-        parent = proj.item(parseInt(obj_params.comp));
-    }
-
-    if (parent === undefined || parent === null) {
-        return "{ 'error' : 'no comp selected or active!' }";
-    }
-
-    if (obj_params.cti.fromCti) {
-        _startTime = parent.time;
-        _endTime = parent.duration
-    } else {
-        _startTime = parseFloat(obj_params.cti.startTime);
-        _endTime = parseFloat(obj_params.cti.endTime);
-    }
-
-    if (_endTime === 0) {
-        _endTime = parent.duration;
-    }
-
-
-    if (_endTime !== 0) {
-        if (_startTime >= _endTime) {
-            return "{'error' :'end time is not correct!'}"
+        var proj = app.project;
+        var parent = undefined;
+        if (parseInt(obj_params.comp) === 0) {
+            parent = proj.activeItem;
+        } else {
+            parent = proj.item(parseInt(obj_params.comp));
         }
 
-        if (_endTime > parent.workAreaDuration) {
-            return "{'error' :'wrong time range!'}"
+        if (parent === undefined || parent === null) {
+            return "{ 'error' : 'no comp selected or active!' }";
         }
-    }
 
-    var callOutStickerLayer = parent.layer(parseInt(obj_params.sticker));
-
-    var item = new ImportOptions();
-    item.file = new File(projPath);
-    item.importAs = ImportAsType.PROJECT;
-    var TextIFolder = proj.importFile(item);
-
-    var RootComp = undefined;
-    var TextComp = undefined;
-
-    var TextIFolder_numitems = TextIFolder.numItems
-    for (var i = 1; i <= TextIFolder_numitems; i++) {
-        if (TextIFolder.item(i).typeName === "Composition" && TextIFolder.item(i).name === "RootComp") {
-            RootComp = TextIFolder.item(i);
-            continue;
+        if (obj_params.cti.fromCti) {
+            _startTime = parent.time;
+            _endTime = parent.duration
+        } else {
+            _startTime = parseFloat(obj_params.cti.startTime);
+            _endTime = parseFloat(obj_params.cti.endTime);
         }
-        if (TextIFolder.item(i).typeName === "Composition" && TextIFolder.item(i).name === projectName) {
-            TextComp = TextIFolder.item(i);
-            continue;
+
+        if (_endTime === 0) {
+            _endTime = parent.duration;
         }
+
+
+        if (_endTime !== 0) {
+            if (_startTime >= _endTime) {
+                return "{'error' :'end time is not correct!'}"
+            }
+
+            if (_endTime > parent.workAreaDuration) {
+                return "{'error' :'wrong time range!'}"
+            }
+        }
+
+        var callOutStickerLayer = parent.layer(parseInt(obj_params.sticker));
+
+        var item = new ImportOptions();
+        item.file = new File(projPath);
+        item.importAs = ImportAsType.PROJECT;
+        var TextIFolder = proj.importFile(item);
+
+        var RootComp = undefined;
+        var TextComp = undefined;
+
+        var TextIFolder_numitems = TextIFolder.numItems
+        for (var i = 1; i <= TextIFolder_numitems; i++) {
+            if (TextIFolder.item(i).typeName === "Composition" && TextIFolder.item(i).name === "RootComp") {
+                RootComp = TextIFolder.item(i);
+                continue;
+            }
+            if (TextIFolder.item(i).typeName === "Composition" && TextIFolder.item(i).name === projectName) {
+                TextComp = TextIFolder.item(i);
+                continue;
+            }
+        }
+
+        if (obj_params.mainText && obj_params.mainText.length > 0) {
+            TextComp.layers.byName("main-text").property("Source Text").setValue(obj_params.mainText);
+        }
+        if (obj_params.subText && obj_params.subText.length > 0) {
+            TextComp.layers.byName("sub-text").property("Source Text").setValue(obj_params.subText);
+        }
+        if (obj_params.descText && obj_params.descText.length > 0) {
+            TextComp.layers.byName("desc-text").property("Source Text").setValue(obj_params.descText);
+        }
+
+
+        var nodeLayers = [];
+
+        for (var i = 0; i < obj_params.layers.length; i++) {
+            nodeLayers.push({
+                start: parent.layer(parseInt(obj_params.layers[i].start)),
+                end: parent.layer(parseInt(obj_params.layers[i].end))
+            });
+        }
+
+
+        var textCompInParent = parent.layers.add(TextComp);
+
+        var y = RootComp.layers.byName(projectName).transform.anchorPoint;
+
+        textCompInParent.transform.anchorPoint.setValue(y.value);
+        textCompInParent.transform.position.setValue(callOutStickerLayer.transform.position.value);
+
+        textCompInParent.Effects.addProperty("Slider Control").property("Slider").setValue(45);
+        textCompInParent.effect("Slider Control").name = "Text-Size"
+
+
+
+        var base_Duration = TextComp.duration;
+        var new_duration = _endTime - _startTime;
+        textCompInParent.stretch = (new_duration * 100) / base_Duration;
+
+        textCompInParent.startTime = _startTime;
+        if (_endTime !== 0) {
+            textCompInParent.outPoint = _endTime;
+        }
+
+        textCompInParent.selected = true;
+        textCompInParent.openInViewer();
+        app.executeCommand(app.findMenuCommandId("Update Markers From Source"));
+        textCompInParent.selected = false;
+        parent.openInViewer();
+
+
+        if (textCompInParent.transform.position.canSetExpression) {
+
+            textCompInParent.transform.scale.expression = 'temp=effect("Text-Size")("Slider");[temp, temp]';
+        }
+
+        textCompInParent.name = textCompInParent.name + "-" + parent.layers.length;
+
+
+
+        var selectedLayers = parent.selectedLayers;
+        for (var i = 0; i < selectedLayers.length; i++) {
+            selectedLayers[i].selected = false;
+        }
+
+
+        if (nodeLayers.length > 0) {
+            var res = importLine(linePath, nodeLayers, parent, textCompInParent, _startTime, _endTime);
+            if (res && res.err) { return JSON.stringify(res);}
+        }
+
+        return JSON.stringify({ res: 'ok' })
     }
-
-    if (obj_params.mainText && obj_params.mainText.length > 0) {
-        TextComp.layers.byName("main-text").property("Source Text").setValue(obj_params.mainText);
+    catch (e) {
+        var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message });
+        return err;
     }
-    if (obj_params.subText && obj_params.subText.length > 0) {
-        TextComp.layers.byName("sub-text").property("Source Text").setValue(obj_params.subText);
-    }
-    if (obj_params.descText && obj_params.descText.length > 0) {
-        TextComp.layers.byName("desc-text").property("Source Text").setValue(obj_params.descText);
-    }
-    //var controlItem = RootComp.layers.byName("line-control")
-
-    var nodeLayers = [];
-
-    for (var i = 0; i < obj_params.layers.length; i++) {
-        nodeLayers.push({
-            start: parent.layer(parseInt(obj_params.layers[i].start)),
-            end: parent.layer(parseInt(obj_params.layers[i].end))
-        });
-    }
-
-
-    var textCompInParent = parent.layers.add(TextComp);
-
-    var y = RootComp.layers.byName(projectName).transform.anchorPoint;
-
-    textCompInParent.transform.anchorPoint.setValue(y.value);
-    textCompInParent.transform.position.setValue(callOutStickerLayer.transform.position.value);
-
-    textCompInParent.Effects.addProperty("Slider Control").property("Slider").setValue(45);
-    textCompInParent.effect("Slider Control").name = "Text-Size"
-
-
-
-    var base_Duration = TextComp.duration;
-    var new_duration = _endTime - _startTime;
-    textCompInParent.stretch = (new_duration * 100) / base_Duration;
-
-    textCompInParent.startTime = _startTime;
-    if (_endTime !== 0) {
-        textCompInParent.outPoint = _endTime;
-    }
-
-    textCompInParent.selected = true;
-    textCompInParent.openInViewer();
-    app.executeCommand(app.findMenuCommandId("Update Markers From Source"));
-    textCompInParent.selected = false;
-    parent.openInViewer();
-
-
-    if (textCompInParent.transform.position.canSetExpression) {
-        //textCompInParent.transform.position.expression = 'effect("Layer Control")("Layer").toComp([0,0,0])';
-        textCompInParent.transform.scale.expression = 'temp=effect("Text-Size")("Slider");[temp, temp]';
-    }
-
-    textCompInParent.name = textCompInParent.name + "-" + parent.layers.length;
-
-    //var ControlCounter = 0;
-    //for (var i = 1; i <= parent.numLayers; i++) {
-    //    if (String(parent.layer(i).name).indexOf(projectName) >= 0) {
-    //        ControlCounter++;
-    //    }
-    //}
-
-    var selectedLayers = parent.selectedLayers;
-    for (var i = 0; i < selectedLayers.length; i++) {
-        selectedLayers[i].selected = false;
-    }
-
-
-    if (nodeLayers.length > 0) {
-        importLine(linePath, nodeLayers, parent, textCompInParent, _startTime, _endTime);
-    }
-    // var solids = [];
-
-    // var y = nodeLayers.length;
-    //for (var i = 0; i < y; i++) {
-    //   controlItem.copyToComp(parent);
-
-    // solids.push(parent.layer(1));
-    //var parentcontrolItem = parent.layer(1);
-
-    // parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
-    // parentcontrolItem.Effects("EndPoint").property("Layer").setValue(textCompInParent.index);
-    // parentcontrolItem.startTime = _startTime;
-    // if (_endTime !== 0) {
-    //    parentcontrolItem.outPoint = _endTime;
-    // }
-    // parentcontrolItem.name = "line-control-" + parent.layers.length + "-" + i
 }
-
-
 
 function importWithEffect(projPath, params, projectName) {
 
@@ -1378,8 +1182,10 @@ function importWithEffect(projPath, params, projectName) {
         witchEffect_Folder.remove();
         //proj.autoFixExpressions("fixme",RootComp.name);
         return JSON.stringify({ res: 'ok' })
-    } catch (e) {
-        var err = e
+    }
+    catch (e) {
+        var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message });
+        return err;
     }
 }
 
@@ -1394,33 +1200,41 @@ function importSamples(projPath) {
         proj.importFile(item);
 
         return JSON.stringify({ res: 'ok' })
-    } catch (e) {
-        var err = e
+    }
+    catch (e) {
+        var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message });
+        return err;
     }
 }
 //importNewPackage("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/packages");
 function importNewPackage(appPackagePath) {
-    var locFolder = new Folder();
-    var newPkgFolder = locFolder.selectDlg("Folder");
-    var error = "";
-    if (newPkgFolder != null) {
+    try {
+        var locFolder = new Folder();
+        var newPkgFolder = locFolder.selectDlg("Folder");
+        var error = "";
+        if (newPkgFolder != null) {
 
-        var newPkgFolder_files = newPkgFolder.getFiles();
+            var newPkgFolder_files = newPkgFolder.getFiles();
 
-        if (newPkgFolder_files.length > 1) {
-            return { error: "you need to import each package seperatly!!" }
+            if (newPkgFolder_files.length > 1) {
+                return { error: "you need to import each package seperatly!!" }
+            }
+
+            /// check if pkg exists remove!!!
+            var pkg_NewFolder = new Folder(appPackagePath + "/" + newPkgFolder_files[0].name.replace(/%20/, " "));
+            if (pkg_NewFolder.exists) {
+                error = removePackage(pkg_NewFolder);
+
+            }
+
+            error = copyNewPackage(newPkgFolder_files[0], appPackagePath)
         }
-
-        /// check if pkg exists remove!!!
-        var pkg_NewFolder = new Folder(appPackagePath + "/" + newPkgFolder_files[0].name.replace(/%20/, " "));
-        if (pkg_NewFolder.exists) {
-            error = removePackage(pkg_NewFolder);
-
-        }
-
-        error = copyNewPackage(newPkgFolder_files[0], appPackagePath)
+        return { error: error }
     }
-    return { error: error }
+    catch (e) {
+        var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message });
+        return err;
+    }
 }
 
 function copyNewPackage(new_pkg_folder, pathToCopy) {
@@ -1434,8 +1248,10 @@ function copyNewPackage(new_pkg_folder, pathToCopy) {
         if (newFolder.error != "") {
             return newFolder.error;
         }
-    } catch (e) {
-        var err = e;
+    }
+    catch (e) {
+        var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message };
+        return err;
     }
 
     for (var i = 0; i < files.length; i++) {
@@ -1494,11 +1310,16 @@ function removePackage(pkg_folder) {
 }
 //openURL("https://www.google.com")
 function openURL(url) {
-    var os = system.osName;
-    if (!os.length) {
-        // I never remember which one is available, but I think $.os always is, you'll have to check
-        os = $.os;
+    try {
+        var os = system.osName;
+        if (!os.length) {
+            // I never remember which one is available, but I think $.os always is, you'll have to check
+            os = $.os;
+        }
+        var app_os = (os.indexOf("Win") != -1) ? system.callSystem('explorer ' + url) : system.callSystem('open ' + url);
     }
-    var app_os = (os.indexOf("Win") != -1) ? system.callSystem('explorer ' + url) : system.callSystem('open ' + url);
-
+    catch (e) {
+        var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message };
+        return err;
+    }
 }

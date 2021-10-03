@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-weight: 400;
     line-height: 1.5;
     color: #212529;
@@ -11,7 +11,7 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width: 5px;
+    width: 8px;
 }
 
 /* Track */
@@ -74,6 +74,18 @@ body {
     background-position: left center;
     border-radius: 2em;
     transition: background-position 0.15s ease-in-out;
+}
+
+.accordion-button::after {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-left: auto;
+    content: "";
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'  %3e%3cpath fill='none' stroke='rgba(255, 255, 255)' fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-size: 1.25rem;
+    transition: transform 0.2s ease-in-out;
 }
 
 .splash-screen {
@@ -317,8 +329,8 @@ li {
 }
 
 .modal-icon-controls {
-    max-height: 30px;
-    max-width: 30px;
+    max-height: 35px;
+    max-width: 35px;
 }
 
 .modal-icon-controls-container {
@@ -374,6 +386,34 @@ li {
     margin-left: 10px;
     margin-right: 10px;
     margin-bottom: 10px;
+}
+
+.div-loader {
+    width: 100%;
+    height: 100vh;
+    background-color: #000000;
+    opacity: 0.8;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 2000;
+    display: none;
+}
+
+.div-loader-content {
+    margin-top: 35vh;
+    text-align: center;
+}
+
+.sk-double-bounce {
+    width: 90px;
+    height: 90px;
+    position: relative;
+    margin: 0px auto;
+}
+
+.my-form-label {
+    margin-top: 0.5rem;
 }
 /* Smaller than standard 960 (devices and browsers) */
 @media only screen and (min-width: 959px) {
