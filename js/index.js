@@ -14,7 +14,7 @@ var callout_linecount = 1;
     'use strict';
     var path;
     path = location.href;
-    var x = path.indexOf("index.html");
+    var x = path.indexOf("index_WonderCallOuts.html");
     if (x == -1) {
         x = path.indexOf("packageImport.html");
     }
@@ -562,7 +562,7 @@ function startTimeChangestickyImportFomr(value) {
         $("#endTimeSpecificValue_witchEffect").prop("disabled", false).parent().parent().css("opacity", "1");
 
         $("#startTimeSpecificValue_sizeline").text("from - to (Seconds - accept decimal)");
-        $("#startTimeSpecificValue_sizeline").prop("disabled", false).parent().css("opacity", "1");
+        $("#startTimeSpecificValue_sizeline").prop("disabled", false).parent().parent().css("opacity", "1");
         $("#endTimeSpecificValue_sizeline").prop("disabled", false).parent().parent().css("opacity", "1");
     } else {
         $("#startTimeSwitchlabel_hud").text("start from current CTI to end of timeline");
@@ -587,7 +587,7 @@ function startTimeChangestickyImportFomr(value) {
         $("#startTimeSpecificValue_sizeline")[0].value = 0;
         $("#endTimeSpecificValue_sizeline")[0].value = 0;
         $("#endTimeSpecificValue_sizeline").prop("disabled", true).parent().parent().css("opacity", "0.2");
-        $("#startTimeSpecificValue_sizeline").prop("disabled", true).parent().css("opacity", "0.2");
+        $("#startTimeSpecificValue_sizeline").prop("disabled", true).parent().parent().css("opacity", "0.2");
     }
 }
 

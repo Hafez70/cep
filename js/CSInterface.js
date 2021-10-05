@@ -16,8 +16,7 @@
 /**
  * Stores constants for the window types supported by the CSXS infrastructure.
  */
-function CSXSWindowType()
-{
+function CSXSWindowType() {
 };
 
 /** Constant for the CSXS window type Panel. */
@@ -45,8 +44,7 @@ EvalScript_ErrMessage = "EvalScript error.";
  *
  * @return A new \c Version object.
  */
-function Version(major, minor, micro, special)
-{
+function Version(major, minor, micro, special) {
     this.major = major;
     this.minor = minor;
     this.micro = micro;
@@ -69,8 +67,7 @@ Version.MAX_NUM = 999999999;
  *
  * @return A new \c VersionBound object.
  */
-function VersionBound(version, inclusive)
-{
+function VersionBound(version, inclusive) {
     this.version = version;
     this.inclusive = inclusive;
 };
@@ -84,8 +81,7 @@ function VersionBound(version, inclusive)
  *
  * @return A new \c VersionRange object.
  */
-function VersionRange(lowerBound, upperBound)
-{
+function VersionRange(lowerBound, upperBound) {
     this.lowerBound = lowerBound;
     this.upperBound = upperBound;
 };
@@ -101,8 +97,7 @@ function VersionRange(lowerBound, upperBound)
  *
  * @return A new \c Runtime object.
  */
-function Runtime(name, versionRange)
-{
+function Runtime(name, versionRange) {
     this.name = name;
     this.versionRange = versionRange;
 };
@@ -132,8 +127,7 @@ function Runtime(name, versionRange)
 * @return A new \c Extension object.
 */
 function Extension(id, name, mainPath, basePath, windowType, width, height, minWidth, minHeight, maxWidth, maxHeight,
-                   defaultExtensionDataXml, specialExtensionDataXml, requiredRuntimeList, isAutoVisible, isPluginExtension)
-{
+    defaultExtensionDataXml, specialExtensionDataXml, requiredRuntimeList, isAutoVisible, isPluginExtension) {
     this.id = id;
     this.name = name;
     this.mainPath = mainPath;
@@ -163,8 +157,7 @@ function Extension(id, name, mainPath, basePath, windowType, width, height, minW
  *
  * @return A new \c CSEvent object
  */
-function CSEvent(type, scope, appId, extensionId)
-{
+function CSEvent(type, scope, appId, extensionId) {
     this.type = type;
     this.scope = scope;
     this.appId = appId;
@@ -180,8 +173,7 @@ CSEvent.prototype.data = "";
  * \c #CSInterface.getSystemPath() method.
  * @return A new \c SystemPath object.
  */
-function SystemPath()
-{
+function SystemPath() {
 };
 
 /** The path to user data.  */
@@ -206,8 +198,7 @@ SystemPath.HOST_APPLICATION = "hostApplication";
  * @class ColorType
  * Stores color-type constants.
  */
-function ColorType()
-{
+function ColorType() {
 };
 
 /** RGB color type. */
@@ -233,8 +224,7 @@ ColorType.NONE = "none";
  *
  * @return A new RGBColor object.
  */
-function RGBColor(red, green, blue, alpha)
-{
+function RGBColor(red, green, blue, alpha) {
     this.red = red;
     this.green = green;
     this.blue = blue;
@@ -253,8 +243,7 @@ function RGBColor(red, green, blue, alpha)
  *
  * @return A new \c Direction object.
  */
-function Direction(x, y)
-{
+function Direction(x, y) {
     this.x = x;
     this.y = y;
 };
@@ -268,8 +257,7 @@ function Direction(x, y)
  *
  * @return GradientStop object.
  */
-function GradientStop(offset, rgbColor)
-{
+function GradientStop(offset, rgbColor) {
     this.offset = offset;
     this.rgbColor = rgbColor;
 };
@@ -286,8 +274,7 @@ function GradientStop(offset, rgbColor)
  *
  * @return A new \c GradientColor object.
  */
-function GradientColor(type, direction, numStops, arrGradientStop)
-{
+function GradientColor(type, direction, numStops, arrGradientStop) {
     this.type = type;
     this.direction = direction;
     this.numStops = numStops;
@@ -306,8 +293,7 @@ function GradientColor(type, direction, numStops, arrGradientStop)
  *
  * @return A new \c UIColor object.
  */
-function UIColor(type, antialiasLevel, color)
-{
+function UIColor(type, antialiasLevel, color) {
     this.type = type;
     this.antialiasLevel = antialiasLevel;
     this.color = color;
@@ -327,8 +313,7 @@ function UIColor(type, antialiasLevel, color)
  *
  * @return AppSkinInfo object.
  */
-function AppSkinInfo(baseFontFamily, baseFontSize, appBarBackgroundColor, panelBackgroundColor, appBarBackgroundColorSRGB, panelBackgroundColorSRGB, systemHighlightColor)
-{
+function AppSkinInfo(baseFontFamily, baseFontSize, appBarBackgroundColor, panelBackgroundColor, appBarBackgroundColorSRGB, panelBackgroundColorSRGB, systemHighlightColor) {
     this.baseFontFamily = baseFontFamily;
     this.baseFontSize = baseFontSize;
     this.appBarBackgroundColor = appBarBackgroundColor;
@@ -352,8 +337,7 @@ function AppSkinInfo(baseFontFamily, baseFontSize, appBarBackgroundColor, panelB
  *
  * @return A new \c HostEnvironment object.
  */
-function HostEnvironment(appName, appVersion, appLocale, appUILocale, appId, isAppOnline, appSkinInfo)
-{
+function HostEnvironment(appName, appVersion, appLocale, appUILocale, appId, isAppOnline, appSkinInfo) {
     this.appName = appName;
     this.appVersion = appVersion;
     this.appLocale = appLocale;
@@ -374,8 +358,7 @@ function HostEnvironment(appName, appVersion, appLocale, appUILocale, appId, isA
  *
  * @return A new \c HostCapabilities object.
  */
-function HostCapabilities(EXTENDED_PANEL_MENU, EXTENDED_PANEL_ICONS, DELEGATE_APE_ENGINE, SUPPORT_HTML_EXTENSIONS)
-{
+function HostCapabilities(EXTENDED_PANEL_MENU, EXTENDED_PANEL_ICONS, DELEGATE_APE_ENGINE, SUPPORT_HTML_EXTENSIONS) {
     this.EXTENDED_PANEL_MENU = EXTENDED_PANEL_MENU;
     this.EXTENDED_PANEL_ICONS = EXTENDED_PANEL_ICONS;
     this.DELEGATE_APE_ENGINE = DELEGATE_APE_ENGINE;
@@ -394,8 +377,7 @@ function HostCapabilities(EXTENDED_PANEL_MENU, EXTENDED_PANEL_ICONS, DELEGATE_AP
  *
  * @return ApiVersion object.
  */
-function ApiVersion(major, minor, micro)
-{
+function ApiVersion(major, minor, micro) {
     this.major = major;
     this.minor = minor;
     this.micro = micro;
@@ -415,8 +397,7 @@ function ApiVersion(major, minor, micro)
  *
  * @return A new \c CSInterface object
  */
-function CSInterface()
-{
+function CSInterface() {
 };
 
 /**
@@ -445,15 +426,13 @@ CSInterface.prototype.hostEnvironment = JSON.parse(window.__adobe_cep__.getHostE
  *
  *   @return A \c #HostEnvironment object.
  */
-CSInterface.prototype.getHostEnvironment = function()
-{
+CSInterface.prototype.getHostEnvironment = function () {
     this.hostEnvironment = JSON.parse(window.__adobe_cep__.getHostEnvironment());
     return this.hostEnvironment;
 };
 
 /** Closes this extension. */
-CSInterface.prototype.closeExtension = function()
-{
+CSInterface.prototype.closeExtension = function () {
     window.__adobe_cep__.closeExtension();
 };
 
@@ -464,17 +443,14 @@ CSInterface.prototype.closeExtension = function()
  *
  * @return The platform-specific system path string.
  */
-CSInterface.prototype.getSystemPath = function(pathType)
-{
+CSInterface.prototype.getSystemPath = function (pathType) {
     var path = decodeURI(window.__adobe_cep__.getSystemPath(pathType));
     var OSVersion = this.getOSInformation();
-    if (OSVersion.indexOf("Windows") >= 0)
-    {
-      path = path.replace("file:///", "");
+    if (OSVersion.indexOf("Windows") >= 0) {
+        path = path.replace("file:///", "");
     }
-    else if (OSVersion.indexOf("Mac") >= 0)
-    {
-      path = path.replace("file://", "");
+    else if (OSVersion.indexOf("Mac") >= 0) {
+        path = path.replace("file://", "");
     }
     return path;
 };
@@ -487,11 +463,9 @@ CSInterface.prototype.getSystemPath = function(pathType)
  * @param callback  Optional. A callback function that receives the result of execution.
  *          If execution fails, the callback function receives the error message \c EvalScript_ErrMessage.
  */
-CSInterface.prototype.evalScript = function(script, callback)
-{
-    if(callback == null || callback == undefined)
-    {
-        callback = function(result){};
+CSInterface.prototype.evalScript = function (script, callback) {
+    if (callback == null || callback == undefined) {
+        callback = function (result) { };
     }
     window.__adobe_cep__.evalScript(script, callback);
 };
@@ -502,8 +476,7 @@ CSInterface.prototype.evalScript = function(script, callback)
  *
  * @return The unique ID string.
  */
-CSInterface.prototype.getApplicationID = function()
-{
+CSInterface.prototype.getApplicationID = function () {
     var appId = this.hostEnvironment.appId;
     return appId;
 };
@@ -514,9 +487,8 @@ CSInterface.prototype.getApplicationID = function()
  *
  * @return A \c #HostCapabilities object.
  */
-CSInterface.prototype.getHostCapabilities = function()
-{
-    var hostCapabilities = JSON.parse(window.__adobe_cep__.getHostCapabilities() );
+CSInterface.prototype.getHostCapabilities = function () {
+    var hostCapabilities = JSON.parse(window.__adobe_cep__.getHostCapabilities());
     return hostCapabilities;
 };
 
@@ -526,10 +498,8 @@ CSInterface.prototype.getHostCapabilities = function()
  *
  * @param event A \c CSEvent object.
  */
-CSInterface.prototype.dispatchEvent = function(event)
-{
-    if (typeof event.data == "object")
-    {
+CSInterface.prototype.dispatchEvent = function (event) {
+    if (typeof event.data == "object") {
         event.data = JSON.stringify(event.data);
     }
 
@@ -547,8 +517,7 @@ CSInterface.prototype.dispatchEvent = function(event)
  * @param obj      Optional, the object containing the handler method, if any.
  *         Default is null.
  */
-CSInterface.prototype.addEventListener = function(type, listener, obj)
-{
+CSInterface.prototype.addEventListener = function (type, listener, obj) {
     window.__adobe_cep__.addEventListener(type, listener, obj);
 };
 
@@ -560,8 +529,7 @@ CSInterface.prototype.addEventListener = function(type, listener, obj)
  * @param obj       Optional, the object containing the handler method, if any.
  *          Default is null.
  */
-CSInterface.prototype.removeEventListener = function(type, listener, obj)
-{
+CSInterface.prototype.removeEventListener = function (type, listener, obj) {
     window.__adobe_cep__.removeEventListener(type, listener, obj);
 };
 
@@ -576,8 +544,7 @@ CSInterface.prototype.removeEventListener = function(type, listener, obj)
  * <code>requestOpenExtension("HLP", ""); </code>
  *
  */
-CSInterface.prototype.requestOpenExtension = function(extensionId, params)
-{
+CSInterface.prototype.requestOpenExtension = function (extensionId, params) {
     window.__adobe_cep__.requestOpenExtension(extensionId, params);
 };
 
@@ -591,8 +558,7 @@ CSInterface.prototype.requestOpenExtension = function(extensionId, params)
  *
  * @return Zero or more \c #Extension objects.
  */
-CSInterface.prototype.getExtensions = function(extensionIds)
-{
+CSInterface.prototype.getExtensions = function (extensionIds) {
     var extensionIdsStr = JSON.stringify(extensionIds);
     var extensionsStr = window.__adobe_cep__.getExtensions(extensionIdsStr);
 
@@ -605,8 +571,7 @@ CSInterface.prototype.getExtensions = function(extensionIds)
  *
  * @return A JavaScript object containing network preferences.
  */
-CSInterface.prototype.getNetworkPreferences = function()
-{
+CSInterface.prototype.getNetworkPreferences = function () {
     var result = window.__adobe_cep__.getNetworkPreferences();
     var networkPre = JSON.parse(result);
 
@@ -629,42 +594,35 @@ CSInterface.prototype.getNetworkPreferences = function()
  *
  * @return An object containing the resource bundle information.
  */
-CSInterface.prototype.initResourceBundle = function()
-{
+CSInterface.prototype.initResourceBundle = function () {
     var resourceBundle = JSON.parse(window.__adobe_cep__.initResourceBundle());
     var resElms = document.querySelectorAll('[data-locale]');
-    for (var n = 0; n < resElms.length; n++)
-    {
-       var resEl = resElms[n];
-       // Get the resource key from the element.
-       var resKey = resEl.getAttribute('data-locale');
-       if (resKey)
-       {
-           // Get all the resources that start with the key.
-           for (var key in resourceBundle)
-           {
-               if (key.indexOf(resKey) == 0)
-               {
-                   var resValue = resourceBundle[key];
-                   if (key.indexOf('.') == -1)
-                   {
-                       // No dot notation in resource key,
-                       // assign the resource value to the element's
-                       // innerHTML.
-                       resEl.innerHTML = resValue;
-                   }
-                   else
-                   {
-                       // Dot notation in resource key, assign the
-                       // resource value to the element's property
-                       // whose name corresponds to the substring
-                       // after the dot.
-                       var attrKey = key.substring(key.indexOf('.') + 1);
-                       resEl[attrKey] = resValue;
-                   }
-               }
-           }
-       }
+    for (var n = 0; n < resElms.length; n++) {
+        var resEl = resElms[n];
+        // Get the resource key from the element.
+        var resKey = resEl.getAttribute('data-locale');
+        if (resKey) {
+            // Get all the resources that start with the key.
+            for (var key in resourceBundle) {
+                if (key.indexOf(resKey) == 0) {
+                    var resValue = resourceBundle[key];
+                    if (key.indexOf('.') == -1) {
+                        // No dot notation in resource key,
+                        // assign the resource value to the element's
+                        // innerHTML.
+                        resEl.innerHTML = resValue;
+                    }
+                    else {
+                        // Dot notation in resource key, assign the
+                        // resource value to the element's property
+                        // whose name corresponds to the substring
+                        // after the dot.
+                        var attrKey = key.substring(key.indexOf('.') + 1);
+                        resEl[attrKey] = resValue;
+                    }
+                }
+            }
+        }
     }
     return resourceBundle;
 };
@@ -674,8 +632,7 @@ CSInterface.prototype.initResourceBundle = function()
  *
  * @return The file path.
  */
-CSInterface.prototype.dumpInstallationInfo = function()
-{
+CSInterface.prototype.dumpInstallationInfo = function () {
     return window.__adobe_cep__.dumpInstallationInfo();
 };
 
@@ -685,48 +642,38 @@ CSInterface.prototype.dumpInstallationInfo = function()
  *
  * @return A string containing the OS version, or "unknown Operation System".
  */
-CSInterface.prototype.getOSInformation = function()
-{
+CSInterface.prototype.getOSInformation = function () {
     var userAgent = navigator.userAgent;
 
-    if ((navigator.platform == "Win32") || (navigator.platform == "Windows"))
-    {
+    if ((navigator.platform == "Win32") || (navigator.platform == "Windows")) {
         var winVersion = "Windows platform";
-        if (userAgent.indexOf("Windows NT 5.0") > -1)
-        {
+        if (userAgent.indexOf("Windows NT 5.0") > -1) {
             winVersion = "Windows 2000";
         }
-        else if (userAgent.indexOf("Windows NT 5.1") > -1)
-        {
+        else if (userAgent.indexOf("Windows NT 5.1") > -1) {
             winVersion = "Windows XP";
         }
-        else if (userAgent.indexOf("Windows NT 5.2") > -1)
-        {
+        else if (userAgent.indexOf("Windows NT 5.2") > -1) {
             winVersion = "Windows Server 2003";
         }
-        else if (userAgent.indexOf("Windows NT 6.0") > -1)
-        {
+        else if (userAgent.indexOf("Windows NT 6.0") > -1) {
             winVersion = "Windows Vista";
         }
-        else if (userAgent.indexOf("Windows NT 6.1") > -1)
-        {
+        else if (userAgent.indexOf("Windows NT 6.1") > -1) {
             winVersion = "Windows 7";
         }
-        else if (userAgent.indexOf("Windows NT 6.2") > -1)
-        {
+        else if (userAgent.indexOf("Windows NT 6.2") > -1) {
             winVersion = "Windows 8";
         }
 
         var winBit = "32-bit";
-        if (userAgent.indexOf("WOW64") > -1)
-        {
+        if (userAgent.indexOf("WOW64") > -1) {
             winBit = "64-bit";
         }
 
         return winVersion + " " + winBit;
     }
-    else if ((navigator.platform == "MacIntel") || (navigator.platform == "Macintosh"))
-    {
+    else if ((navigator.platform == "MacIntel") || (navigator.platform == "Macintosh")) {
         var agentStr = new String();
         agentStr = userAgent;
         var verLength = agentStr.indexOf(")") - agentStr.indexOf("Mac OS X");
@@ -752,8 +699,7 @@ CSInterface.prototype.getOSInformation = function()
  *          <li>ERR_INVALID_URL - 201</li>\n
  *      </ul>\n
  */
-CSInterface.prototype.openURLInDefaultBrowser = function(url)
-{
+CSInterface.prototype.openURLInDefaultBrowser = function (url) {
     return cep.util.openURLInDefaultBrowser(url);
 };
 
@@ -764,9 +710,8 @@ CSInterface.prototype.openURLInDefaultBrowser = function(url)
  *
  * @return extension ID.
  */
-CSInterface.prototype.getExtensionID = function()
-{
-     return window.__adobe_cep__.getExtensionId();
+CSInterface.prototype.getExtensionID = function () {
+    return window.__adobe_cep__.getExtensionId();
 };
 
 /**
@@ -781,8 +726,7 @@ CSInterface.prototype.getExtensionID = function()
  *          <li>2 means HiDPI screen</li>\n
  *      </ul>\n
  */
-CSInterface.prototype.getScaleFactor = function()
-{
+CSInterface.prototype.getScaleFactor = function () {
     return window.__adobe_cep__.getScaleFactor();
 };
 
@@ -794,8 +738,7 @@ CSInterface.prototype.getScaleFactor = function()
  * @param handler   The function to be called when scale factor is changed.
  *
  */
-CSInterface.prototype.setScaleFactorChangedHandler = function(handler)
-{
+CSInterface.prototype.setScaleFactorChangedHandler = function (handler) {
     window.__adobe_cep__.setScaleFactorChangedHandler(handler);
 };
 
@@ -807,8 +750,7 @@ CSInterface.prototype.setScaleFactorChangedHandler = function(handler)
  * @return ApiVersion object.
  *
  */
-CSInterface.prototype.getCurrentApiVersion = function()
-{
+CSInterface.prototype.getCurrentApiVersion = function () {
     var apiVersion = JSON.parse(window.__adobe_cep__.getCurrentApiVersion());
     return apiVersion;
 };

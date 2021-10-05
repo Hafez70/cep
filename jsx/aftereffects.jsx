@@ -679,8 +679,8 @@ function getAllLayersInComp(compIndex) {
     }
 }
 
-importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/element-1/element-1.aep",
-'{"comp":"1","sticker":"2","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":true}', "element-1");
+//importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/element-1/element-1.aep",
+//'{"comp":"1","sticker":"2","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":true}', "element-1");
 function importBasicHud(projPath, params, projectName) {
 
     try {
