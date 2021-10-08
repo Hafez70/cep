@@ -1,8 +1,6 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
     <style>
 
         a {
@@ -33,86 +31,40 @@
         }
     </style>
     <title>hafez test window</title>
-    <script src="js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="external-libs/popper.min.js"></script>
+    <script type="text/javascript" src="js/CSInterface.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
     <link rel="stylesheet" href="external-libs/bootstrap-5/css/bootstrap.css">
-    <script src="external-libs/bootstrap-5/js/bootstrap.js"></script>
+    <script type="text/javascript" src="external-libs/bootstrap-5/js/bootstrap.js"></script>
     <link rel="stylesheet" href="external-libs/fontawesome/css/all.css">
     <link rel="stylesheet" href="css/styles.css">
-    <script src="js/CSInterface.js"></script>
-    <script src="js/index.js"></script>
-    <script type="text/javascript">
-
-        $(function () {
-            // //if (!firstTime || firstTime === "0") {
-            // $('#mySlider').hide();
-            // $('#myHeader').hide();
-            // $('#myNavBar').hide();
-            // $('#mainContainer').hide();
-            // $('#gridSystem').hide();
-            // $('#myHeader').fadeIn(200, function () {
-            //     $('#myNavBar').fadeIn(200, function () {
-            //         $('#mainContainer').fadeIn(200, function () {
-            //             $('#mySlider').fadeIn(200, function () {
-            //                 $('#gridSystem').fadeIn(200);
-            //                 //localStorage.setItem("first_time","1");
-            //             });
-            //         });
-            //     });
-            // });
-        });
-
-    </script>
-
 
 </head>
 <body class="bg-dark position-relative">
     <div class=" d-flex flex-column " id="mainContainer" style="height: 100vh; min-height: 100vh;">
-        <div id="mySlider" class="carousel slide homeSlider" data-bs-ride="carousel">
-            <div class="carousel-indicators mb-0 pb-0" style="height: 15px;">
-                <button type="button" data-bs-target="#mySlider" data-bs-slide-to="0"
-                        class="active" aria-current="true"
-                        aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#mySlider" data-bs-slide-to="1"
-                        aria-label="Slide 2"></button>
+        <div id="mybanner " class="homeSlider d-flex flex-row">
+            <div class="col-6 h-100 w-100 slider-background"
+                 onclick="getCCversion"
+                 style="cursor: pointer; background-image: url('./assets/images/banner-1.jpg');">
             </div>
-            <div class=" carousel-inner  h-100 w-100">
-                <div class="carousel-item active h-100 w-100 slider-background"
-                     onclick="openUrl('https://www.youtube.com/channel/UCNRVLqoNOfqFfNYTPFaEUYA')"
-                     style="cursor: pointer; background-image: url('./assets/images/slide-1.jpg');">
-                    <div class="text-light d-flex justify-content-center h-100">
-                        <p class="p-3 m-0 text-center align-self-center">Find Wonder Tutorials in our channel</p>
-                    </div>
-                </div>
-                <div class="carousel-item h-100 w-100 slider-background"
-                     style="background-image:url('./assets/images/slide-3.jpg')">
-                    <div class="text-light d-flex justify-content-center h-100">
-                        <p class="p-3 m-0 text-center align-self-center">Stay up to date from Envato</p>
-                    </div>
-                </div>
+            <div class="col-6 h-100 w-100 slider-background"
+                 onclick=""
+                 style="cursor: pointer; background-image: url('./assets/images/banner-2.jpg');">
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#mySlider"
-                    data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#mySlider"
-                    data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
         </div>
+
         <div class="container-fluid d-flex flex-fill mainContainer p-0" id="mainContent">
-            <div class="d-flex flex-fill mainContainer">
+            <div class="w-100 d-flex align-items-stretch mainContent">
                 <div class="sideMenu-width p-0 d-flex flex-column m-0 overflow-auto mySidebar"
                      style=" background-color: #2f2e2e !important;" id="mySidebar">
-
-                    <div class="d-flex flex-column align-items-start p-2 text-white " style="min-height:125px;height: 80%; overflow-y: auto;">
-                        <ul class="nav flex-sm-row flex-column mb-sm-auto mb-0 align-items-start list-group list-group-flush"
+                    <div class="d-flex flex-column align-items-start p-2 text-white "
+                         style="min-height:125px;height: 80%; overflow-y: auto;">
+                        <ul class="flex-column mb-sm-auto mb-0 align-items-start pl-0 list-group-flush"
                             id="sidebarMenu">
                         </ul>
                     </div>
-                    <footer class="ms-1 mt-1 sticky">
+                    <footer class="ml-1 mt-1 sticky">
                     </footer>
                 </div>
                 <div class="row m-auto mt-0 justify-content-center p-3 gridSystem overflow-auto " id="gridSystem">
@@ -122,13 +74,15 @@
     </div>
     <!-- Modal -->
 
-    <div class="modal modal-fullscreen fade" id="hudSettingModal" tabindex="-1" role="dialog" aria-labelledby="hud Setting"
+    <div class="modal fade" id="hudSettingModal" tabindex="-1" role="dialog" aria-labelledby="hud Setting"
          aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-fullscreen modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
             <div class="modal-content text-light bg-dark">
                 <div class="modal-header p-1">
-                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Pre-setup</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title text-light">Pre-setup</h5>
+                    <button type="button" class="btn-close bg-dark text-light border-0" data-dismiss="modal" aria-label="Close">
+                        <i class="fa fa-times"></i>
+                    </button>
                 </div>
                 <div class="modal-body position-relative">
                     <form class="row needs-validation" id="hudImportForm" novalidate>
@@ -137,13 +91,13 @@
                         <div class="col-12 position-relative" id="div_compSelect_hud">
                             <label for="compSelect_hud" class="my-form-label">Select Comp.</label>
                             <div class="input-group  input-group-sm">
-                                <select class="form-select form-select-md text-light bg-dark rounded-pill border-light"
+                                <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
                                         onchange="compSelected(this.value)" id="compSelect_hud">
                                 </select>
                                 <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent  ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/Comp.png" />
+                                    <div class="input-group-text border-0 bg-transparent  pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Comp.png" />
                                     </div>
                                 </span>
                             </div>
@@ -153,13 +107,13 @@
                         <div class="col-12 has-validation position-relative" id="div_Sticker_hud">
                             <label for="layerSticker_hud" class="my-form-label">select a layer to Stick </label>
                             <div class="input-group input-group-sm">
-                                <select class="form-select form-select-md text-light bg-dark rounded-pill border-light"
+                                <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
                                         id="layerSticker_hud">
                                 </select>
                                 <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent   ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1"
+                                    <div class="input-group-text border-0 bg-transparent   pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1"
                                              src="./assets/images/icons/startPoint-1.png" />
                                     </div>
                                 </span>
@@ -170,7 +124,7 @@
                             <div class="input-group input-group-sm">
                                 <label class="my-form-label m-1">reload to get newly added layer and Comps</label>
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-primary border-end-0 border-start-0 border-light rounded-pill p-2"
+                                    <button class="btn btn-outline-primary border-right-0 border-left-0 border-light rounded-pill p-2"
                                             onclick="reloadComps()" type="button">
                                         <i class="fa fa-sync"></i>
                                     </button>
@@ -178,47 +132,54 @@
                             </div>
                         </div>
                         <!--//2d/3d-->
-                        <div class="col-12 has-validation position-relative pb-2 pt-2" id="div_3D_hud">
+                        <div class="col-12 has-validation position-relative mt-3" id="div_3D_hud">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
                                     <div class="modal-icon-controls-container">
-                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/Three-D.png" />
+                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Three-D.png" />
                                     </div>
                                     <label class="d-none-xxs col-3 col-sm-5 text-center" for="select_3D_hud">
                                         Import 2D
                                     </label>
-                                    <input type="checkbox" class="col-2 border-light form-check-input p-0 m-0 mt-1"
-                                           id="select_3D_hud">
-                                    <label class="d-none-xxs col-3 form-check-label ms-2" for="select_3D_hud"> 3D</label>
+                                    <label class="switch ml-2">
+                                        <input type="checkbox"
+                                               onchange="startTimeChangestickyImportFomr(this.checked)"
+                                               id="select_3D_hud">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <label class="d-none-xxs col-3 form-check-label ml-2" for="select_3D_hud"> 3D</label>
                                 </div>
                             </div>
                         </div>
                         <!--//2d/3d-->
                         <!--//Cti-->
-                        <div class="col-12 has-validation position-relative cti pt-2">
+                        <div class="col-12 has-validation position-relative mt-3 cti">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
-                                    <input type="checkbox" class="form-check-input border-light ms-2"
-                                           id="startTimeSwitch_hud"
-                                           onchange="startTimeChangestickyImportFomr(this.checked)">
-                                    <label id="startTimeSwitchlabel_hud" class="ps-2 form-check-label"
+                                    <label class="switch ml-2">
+                                        <input type="checkbox"
+                                               onchange="startTimeChangestickyImportFomr(this.checked)"
+                                               id="startTimeSwitch_hud">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <label id="startTimeSwitchlabel_hud" class="pl-2 form-check-label"
                                            for="startTimeSwitch_hud">
                                         start from current CTI to end of timeline
                                     </label>
                                     <span class="input-group-append">
-                                        <div class="input-group-text border-0 bg-transparent ps-1 p-0  ml-n5">
-                                            <img class="modal-icon-controls pe-1"
+                                        <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                            <img class="modal-icon-controls pr-1"
                                                  src="./assets/images/icons/Indicator.png" />
                                         </div>
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 has-validation position-relative disabled cti pe-1" style="opacity:0.2;">
+                        <div class="col-6 has-validation position-relative disabled cti pr-1" style="opacity:0.2;">
                             <label for="startTimeSpecificValue_hud" class="my-form-label">Start Time</label>
                             <div class="input-group input-group-sm">
                                 <input type="number" value="0" disabled
-                                       class="form-control text-center text-light bg-dark ps-4 rounded-pill border-end-0 rounded-end border-light"
+                                       class="form-control text-center text-light bg-dark pl-4 rounded-pill border-right-0 rounded-pill-right border-light"
                                        id="startTimeSpecificValue_hud"
                                        placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
                             </div>
@@ -227,12 +188,12 @@
                             <label for="endTimeSpecificValue_hud" class="my-form-label">End Time</label>
                             <div class="input-group input-group-sm">
                                 <input type="number" value="0" disabled
-                                       class="form-control  text-center text-light bg-dark  rounded-pill rounded-start border-start-0 border-light"
+                                       class="form-control  text-center text-light bg-dark  rounded-pill rounded-pill-left border-left-0 border-light"
                                        id="endTimeSpecificValue_hud"
                                        placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
                                 <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/Time.png" />
+                                    <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Time.png" />
                                     </div>
                                 </span>
                             </div>
@@ -244,7 +205,7 @@
                 <div class="modal-footer p-1">
                     <button type="button"
                             class="btn btn-secondary btn-sm" onclick="rawModal()"
-                            data-bs-dismiss="modal">
+                            data-dismiss="modal">
                         Close
                     </button>
                     <button class="btn btn-primary btn-sm" onclick="generateJsonSetting()" type="submit">Import</button>
@@ -259,7 +220,9 @@
             <div class="modal-content text-light bg-dark">
                 <div class="modal-header p-1">
                     <h5 class="modal-title text-light" id="exampleModalLongTitle">Import Setting</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close bg-dark text-light border-0" data-dismiss="modal" aria-label="Close">
+                        <i class="fa fa-times"></i>
+                    </button>
                 </div>
                 <div class="modal-body position-relative">
                     <form class="row needs-validation" id="sizelineImportForm" novalidate>
@@ -268,13 +231,13 @@
                         <div class="col-12 position-relative" id="div_compSelect_sizeline">
                             <label for="compSelect_sizeline" class="my-form-label">Select Comp.</label>
                             <div class="input-group  input-group-sm">
-                                <select class="form-select form-select-md text-light bg-dark rounded-pill border-light"
+                                <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
                                         onchange="compSelected(this.value)" id="compSelect_sizeline">
                                 </select>
                                 <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent  ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/Comp.png" />
+                                    <div class="input-group-text border-0 bg-transparent  pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Comp.png" />
                                     </div>
                                 </span>
                             </div>
@@ -284,13 +247,13 @@
                         <div class="col-12 has-validation position-relative" id="div_start_point_sizeline">
                             <label for="start_point_sizeline" class="my-form-label">start point</label>
                             <div class="input-group input-group-sm">
-                                <select class="form-select form-select-md text-light bg-dark rounded-pill border-light"
+                                <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
                                         id="start_point_sizeline">
                                 </select>
                                 <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent  ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1"
+                                    <div class="input-group-text border-0 bg-transparent  pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1"
                                              src="./assets/images/icons/startPoint-1.png" />
                                     </div>
                                 </span>
@@ -301,13 +264,13 @@
                         <div class="col-12 has-validation position-relative" id="div_end_point_sizeline">
                             <label for="end_point_sizeline" class="my-form-label">end point</label>
                             <div class="input-group input-group-sm">
-                                <select class="form-select form-select-md text-light bg-dark rounded-pill border-light"
+                                <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
                                         id="end_point_sizeline">
                                 </select>
                                 <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1"
+                                    <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1"
                                              src="./assets/images/icons/startPoint-1.png" />
                                     </div>
                                 </span>
@@ -318,7 +281,7 @@
                             <div class="input-group input-group-sm">
                                 <label class="my-form-label m-1">reload to get newly added layer and Comps</label>
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-primary border-end-0 border-start-0 border-light rounded-pill p-2"
+                                    <button class="btn btn-outline-primary border-right-0 border-left-0 border-light rounded-pill p-2"
                                             onclick="reloadComps()" type="button">
                                         <i class="fa fa-sync"></i>
                                     </button>
@@ -330,14 +293,14 @@
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
                                     <div class="modal-icon-controls-container">
-                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/Three-D.png" />
+                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Three-D.png" />
                                     </div>
                                     <label class="d-none-xxs col-3 col-sm-5 text-center" for="select_3D_sizeline">
                                         Import 2D
                                     </label>
                                     <input type="checkbox" class="col-2 border-light form-check-input p-0 m-0 mt-1"
                                            id="select_3D_sizeline">
-                                    <label class="d-none-xxs col-3 form-check-label ms-2" for="select_3D_sizeline"> 3D</label>
+                                    <label class="d-none-xxs col-3 form-check-label ml-2" for="select_3D_sizeline"> 3D</label>
                                 </div>
                             </div>
                         </div>
@@ -346,27 +309,27 @@
                         <div class="col-12 has-validation position-relative cti pt-2">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
-                                    <input type="checkbox" class="form-check-input border-light ms-2"
+                                    <input type="checkbox" class="form-check-input border-light ml-2"
                                            id="startTimeSwitch_sizeline"
                                            onchange="startTimeChangestickyImportFomr(this.checked)">
-                                    <label id="startTimeSwitchlabel_sizeline" class="ps-2 form-check-label"
+                                    <label id="startTimeSwitchlabel_sizeline" class="pl-2 form-check-label"
                                            for="startTimeSwitch_sizeline">
                                         start from current CTI to end of timeline
                                     </label>
                                     <span class="input-group-append">
-                                        <div class="input-group-text border-0 bg-transparent ps-1 p-0  ml-n5">
-                                            <img class="modal-icon-controls pe-1"
+                                        <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                            <img class="modal-icon-controls pr-1"
                                                  src="./assets/images/icons/Indicator.png" />
                                         </div>
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 has-validation position-relative disabled cti pe-1" style="opacity:0.2;">
+                        <div class="col-6 has-validation position-relative disabled cti pr-1" style="opacity:0.2;">
                             <label for="startTimeSpecificValue_sizeline" class="my-form-label">Start Time</label>
                             <div class="input-group input-group-sm">
                                 <input type="number" value="0" disabled
-                                       class="form-control text-light bg-dark ps-4 rounded-pill border-end-0 rounded-end border-light"
+                                       class="form-control text-light bg-dark pl-4 rounded-pill border-right-0 rounded-pill-right border-light"
                                        id="startTimeSpecificValue_sizeline"
                                        placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
                             </div>
@@ -375,12 +338,12 @@
                             <label for="endTimeSpecificValue_sizeline" class="my-form-label">End Time</label>
                             <div class="input-group input-group-sm">
                                 <input type="number" value="0" disabled
-                                       class="form-control text-end text-light bg-dark  rounded-pill rounded-start border-start-0 border-light"
+                                       class="form-control text-end text-light bg-dark  rounded-pill rounded-pill-left border-left-0 border-light"
                                        id="endTimeSpecificValue_sizeline"
                                        placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
                                 <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/Time.png" />
+                                    <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Time.png" />
                                     </div>
                                 </span>
                             </div>
@@ -392,7 +355,7 @@
                 <div class="modal-footer p-1">
                     <button type="button"
                             class="btn btn-secondary btn-sm" onclick="rawModal()"
-                            data-bs-dismiss="modal">
+                            data-dismiss="modal">
                         Close
                     </button>
                     <button class="btn btn-primary btn-sm" onclick="generateJsonSetting()" type="submit">Import</button>
@@ -401,13 +364,15 @@
         </div>
     </div>
 
-    <div class="modal modal-fullscreen fade" id="calloutSettingModal" tabindex="-1" role="dialog" aria-labelledby="calloutTextSetting"
+    <div class="modal fade" id="calloutSettingModal" tabindex="-1" role="dialog" aria-labelledby="calloutTextSetting"
          aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-fullscreen modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
             <div class="modal-content text-light bg-dark">
                 <div class="modal-header p-1">
-                    <h5 class="modal-title text-light" id="calloutSettingModalTitle">Pre-setup</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title text-light" >Pre-setup</h5>
+                    <button type="button" class="btn-close bg-dark text-light border-0" data-dismiss="modal" aria-label="Close">
+                        <i class="fa fa-times"></i>
+                    </button>
                 </div>
                 <div class="modal-body position-relative">
                     <form class="row needs-validation" id="calloutImportFomr" novalidate>
@@ -421,8 +386,8 @@
                                        id="TextSourceInput_MainText_callout" placeholder="Main Text"
                                        maxlength="50">
                                 <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent   ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1"
+                                    <div class="input-group-text border-0 bg-transparent   pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1"
                                              src="./assets/images/icons/Text-Title.png" />
                                     </div>
                                 </span>
@@ -437,8 +402,8 @@
                                        id="TextSourceInput_SubText_callout" placeholder="sub text"
                                        maxlength="50">
                                 <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent   ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1"
+                                    <div class="input-group-text border-0 bg-transparent   pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1"
                                              src="./assets/images/icons/Sub-Title.png" />
                                     </div>
                                 </span>
@@ -453,8 +418,8 @@
                                        id="TextSourceInput_DescText_callout" placeholder="Description text"
                                        maxlength="50">
                                 <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent   ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1"
+                                    <div class="input-group-text border-0 bg-transparent   pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1"
                                              src="./assets/images/icons/Desc-Title.png" />
                                     </div>
                                 </span>
@@ -467,13 +432,13 @@
                         <div class="col-12 position-relative" id="div_compSelect_callout">
                             <label for="compSelect_callout" class="my-form-label">Select Comp.</label>
                             <div class="input-group  input-group-sm">
-                                <select class="form-select form-select-md text-light bg-dark rounded-pill border-light"
+                                <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
                                         onchange="compSelected(this.value)" id="compSelect_callout">
                                 </select>
                                 <div class="input-group-append">
-                                    <label class="input-group-text border-0 bg-transparent  ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/Comp.png" />
+                                    <label class="input-group-text border-0 bg-transparent  pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Comp.png" />
                                     </label>
                                 </div>
                             </div>
@@ -485,14 +450,14 @@
                                 Select a layer to stick
                             </label>
                             <div class="input-group input-group-sm">
-                                <select class="form-select form-select-md m-0 text-light bg-dark rounded-pill border-light"
+                                <select class="form-control  form-select form-select-md custom-select  m-0 text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
                                         id="layerTextSticker_callout"
                                         required>
                                 </select>
                                 <div class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent    ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/EndPoint.png" />
+                                    <div class="input-group-text border-0 bg-transparent    pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/EndPoint.png" />
                                     </div>
                                 </div>
                             </div>
@@ -501,12 +466,16 @@
                         <!--//line1-->
                         <div class="col-12 has-validation position-relative callout_line pt-2" id="div_startlayerSelect_callout_line1">
                             <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-dark text-light rounded-pill rounded-end" id="inputGroup-sizing-sm">line 1</span>
-                                <select class="form-select form-select-md m-0 text-light bg-dark border-end-0 border-light"
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text bg-dark text-light rounded-pill rounded-pill-right"
+                                           id="inputGroup-sizing-sm" for="startlayerSelect_callout_line1">line 1</label>
+                                </div>
+
+                                <select class="form-control  form-select form-select-md custom-select  m-0 text-light bg-dark border-light"
                                         aria-label=".form-select-md"
                                         id="startlayerSelect_callout_line1">
                                 </select>
-                                <button class="btn btn-outline rounded-pill rounded-start border-light text-light border-start-0"
+                                <button class="btn btn-dark rounded-pill rounded-pill-left border-light text-light border-left-0"
                                         onclick="addline()"
                                         type="button">
                                     <i class="fa fa-plus"></i>
@@ -517,12 +486,15 @@
                         <!--//line2-->
                         <div class="col-12 has-validation position-relative callout_line pt-1 d-none" id="div_startlayerSelect_callout_line2">
                             <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-dark text-light rounded-pill rounded-end" id="inputGroup-sizing-sm">line 2</span>
-                                <select class="form-select form-select-md m-0 text-light bg-dark border-end-0 border-light"
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text bg-dark text-light rounded-pill rounded-pill-right"
+                                           id="inputGroup-sizing-sm" for="startlayerSelect_callout_line2">line 2</label>
+                                </div>
+                                <select class="form-control  form-select form-select-md custom-select  m-0 text-light bg-dark border-light"
                                         aria-label=".form-select-md"
                                         id="startlayerSelect_callout_line2">
                                 </select>
-                                <button class="btn btn-outline rounded-pill rounded-start border-light text-light border-start-0"
+                                <button class="btn btn-dark rounded-pill rounded-pill-left border-light text-light border-left-0"
                                         onclick="removeline()"
                                         type="button">
                                     <i class="fa fa-minus"></i>
@@ -533,12 +505,15 @@
                         <!--//line3-->
                         <div class="col-12 has-validation position-relative callout_line pt-1 d-none" id="div_startlayerSelect_callout_line3">
                             <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-dark text-light rounded-pill rounded-end" id="inputGroup-sizing-sm">line 3</span>
-                                <select class="form-select form-select-md m-0 text-light bg-dark border-end-0 border-light"
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text bg-dark text-light rounded-pill rounded-pill-right"
+                                           id="inputGroup-sizing-sm" for="startlayerSelect_callout_line3">line 3</label>
+                                </div>
+                                <select class="form-control  form-select form-select-md custom-select  m-0 text-light bg-dark border-light"
                                         aria-label=".form-select-md"
                                         id="startlayerSelect_callout_line3">
                                 </select>
-                                <button class="btn btn-outline rounded-pill rounded-start border-light text-light border-start-0"
+                                <button class="btn btn-dark rounded-pill rounded-pill-left border-light text-light border-left-0"
                                         onclick="removeline()"
                                         type="button">
                                     <i class="fa fa-minus"></i>
@@ -549,12 +524,15 @@
                         <!--//line4-->
                         <div class="col-12 has-validation position-relative callout_line pt-1 d-none" id="div_startlayerSelect_callout_line4">
                             <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-dark text-light rounded-pill rounded-end" id="inputGroup-sizing-sm">line 4</span>
-                                <select class="form-select form-select-md m-0 text-light bg-dark border-end-0 border-light"
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text bg-dark text-light rounded-pill rounded-pill-right"
+                                           id="inputGroup-sizing-sm" for="startlayerSelect_callout_line4">line 4</label>
+                                </div>
+                                <select class="form-control  form-select form-select-md custom-select  m-0 text-light bg-dark border-light"
                                         aria-label=".form-select-md"
                                         id="startlayerSelect_callout_line4">
                                 </select>
-                                <button class="btn btn-outline rounded-pill rounded-start border-light text-light border-start-0"
+                                <button class="btn btn-dark rounded-pill rounded-pill-left border-light text-light border-left-0"
                                         onclick="removeline()"
                                         type="button">
                                     <i class="fa fa-minus"></i>
@@ -563,31 +541,45 @@
                         </div>
                         <hr />
                         <!--//line4-->
+                        <div class="col-12 pt-2">
+                            <div class="input-group input-group-sm">
+                                <label class="my-form-label m-1">reload to get newly added layer and Comps</label>
+                                <div class="input-group-append">
+                                    <button class="btn btn-outline-primary border-right-0 border-left-0 border-light rounded-pill p-2"
+                                            onclick="reloadComps()" type="button">
+                                        <i class="fa fa-sync"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                         <!--//Cti-->
-                        <div class="col-12 has-validation position-relative cti">
+                        <div class="col-12 has-validation position-relative mt-3 cti">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
-                                    <input type="checkbox" class="form-check-input border-light ms-2"
-                                           id="startTimeSwitch_callout"
-                                           onchange="startTimeChangestickyImportFomr(this.checked)">
-                                    <label id="startTimeSwitchlabel_callout" class="ps-2 form-check-label"
+                                    <label class="switch ml-2">
+                                        <input type="checkbox"
+                                               onchange="startTimeChangestickyImportFomr(this.checked)"
+                                               id="startTimeSwitch_callout">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <label id="startTimeSwitchlabel_callout" class="pl-2 form-check-label"
                                            for="startTimeSwitch_callout">
                                         start from current CTI to end of timeline
                                     </label>
                                     <div class="input-group-append">
-                                        <div class="input-group-text border-0 bg-transparent ps-1 p-0  ml-n5">
-                                            <img class="modal-icon-controls pe-1"
+                                        <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                            <img class="modal-icon-controls pr-1"
                                                  src="./assets/images/icons/Indicator.png" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-5 has-validation position-relative disabled cti pe-1" style="opacity:0.2;">
+                        <div class="col-5 has-validation position-relative disabled cti pr-1" style="opacity:0.2;">
                             <label for="startTimeSpecificValue_callout" class="my-form-label">Start Time</label>
                             <div class="input-group input-group-sm">
                                 <input type="number" value="0" disabled
-                                       class="form-control text-light bg-dark text-center rounded-pill border-end-0 rounded-end border-light"
+                                       class="form-control text-light bg-dark text-center rounded-pill border-right-0 rounded-pill-right border-light"
                                        id="startTimeSpecificValue_callout"
                                        placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
                             </div>
@@ -596,12 +588,12 @@
                             <label for="endTimeSpecificValue_callout" class="my-form-label">End Time</label>
                             <div class="input-group input-group-sm">
                                 <input type="number" value="0" disabled
-                                       class="form-control text-center text-light bg-dark  rounded-pill rounded-start border-start-0 border-light"
+                                       class="form-control text-center text-light bg-dark  rounded-pill rounded-pill-left border-left-0 border-light"
                                        id="endTimeSpecificValue_callout"
                                        placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
                                 <div class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/Time.png" />
+                                    <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Time.png" />
                                     </div>
                                 </div>
                             </div>
@@ -612,7 +604,7 @@
                 <div class="modal-footer p-1">
                     <button type="button"
                             class="btn btn-secondary btn-sm" onclick="rawModal()"
-                            data-bs-dismiss="modal">
+                            data-dismiss="modal">
                         Close
                     </button>
                     <button class="btn btn-primary btn-sm" onclick="generateJsonSetting()" type="submit">Import</button>
@@ -628,7 +620,9 @@
             <div class="modal-content text-light bg-dark">
                 <div class="modal-header p-1">
                     <h5 class="modal-title text-light" id="witchEffectSettingModalTitle">Pre-setup</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close bg-dark text-light border-0" data-dismiss="modal" aria-label="Close">
+                        <i class="fa fa-times"></i>
+                    </button>
                 </div>
                 <div class="modal-body position-relative">
                     <form class="row g-3 needs-validation" id="witchEffectImportForm" novalidate>
@@ -637,13 +631,13 @@
                         <div class="col-12 position-relative" id="div_compSelect_witchEffect">
                             <label for="compSelect_witchEffect" class="my-form-label">Select Comp.</label>
                             <div class="input-group input-group-sm">
-                                <select class="form-select form-select-md text-light bg-dark rounded-pill border-light"
+                                <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
                                         onchange="compSelected(this.value)" id="compSelect_witchEffect">
                                 </select>
                                 <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/Comp.png" />
+                                    <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Comp.png" />
                                     </div>
                                 </span>
                             </div>
@@ -653,7 +647,7 @@
                             <div class="input-group input-group-sm pt-2">
                                 <label class="my-form-label m-1">reload to get newly added layer and Comps</label>
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-primary border-end-0 border-start-0 border-light rounded-pill p-2"
+                                    <button class="btn btn-outline-primary border-right-0 border-left-0 border-light rounded-pill p-2"
                                             onclick="reloadComps()" type="button">
                                         <i class="fa fa-sync"></i>
                                     </button>
@@ -664,27 +658,27 @@
                         <div class="col-12 has-validation position-relative cti">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
-                                    <input type="checkbox" class="form-check-input border-light ms-2"
+                                    <input type="checkbox" class="form-check-input border-light ml-2"
                                            id="startTimeSwitch_witchEffect"
                                            onchange="startTimeChangestickyImportFomr(this.checked)">
-                                    <label id="startTimeSwitchlabel_witchEffect" class="ps-2 form-check-label"
+                                    <label id="startTimeSwitchlabel_witchEffect" class="pl-2 form-check-label"
                                            for="startTimeSwitch_witchEffect">
                                         start from current CTI to end of timeline
                                     </label>
                                     <span class="input-group-append">
-                                        <div class="input-group-text border-0 bg-transparent ps-1 p-0  ml-n5">
-                                            <img class="modal-icon-controls pe-1"
+                                        <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                            <img class="modal-icon-controls pr-1"
                                                  src="./assets/images/icons/Indicator.png" />
                                         </div>
                                     </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6 has-validation position-relative disabled cti pe-1" style="opacity:0.2;">
+                        <div class="col-6 has-validation position-relative disabled cti pr-1" style="opacity:0.2;">
                             <label for="startTimeSpecificValue_witchEffect" class="my-form-label">Start Time</label>
                             <div class="input-group input-group-sm">
                                 <input type="number" value="0" disabled
-                                       class="form-control text-center text-light bg-dark ps-4 rounded-pill border-end-0 rounded-end border-light"
+                                       class="form-control text-center text-light bg-dark pl-4 rounded-pill border-right-0 rounded-pill-right border-light"
                                        id="startTimeSpecificValue_witchEffect"
                                        placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
                             </div>
@@ -693,12 +687,12 @@
                             <label for="endTimeSpecificValue_witchEffect" class="my-form-label">End Time</label>
                             <div class="input-group input-group-sm">
                                 <input type="number" value="0" disabled
-                                       class="form-control text-center text-light bg-dark  rounded-pill rounded-start border-start-0 border-light"
+                                       class="form-control text-center text-light bg-dark  rounded-pill rounded-pill-left border-left-0 border-light"
                                        id="endTimeSpecificValue_witchEffect"
                                        placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
                                 <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent ps-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pe-1" src="./assets/images/icons/Time.png" />
+                                    <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Time.png" />
                                     </div>
                                 </span>
                             </div>
@@ -710,7 +704,7 @@
                 <div class="modal-footer p-1">
                     <button type="button"
                             class="btn btn-secondary btn-sm" onclick="rawModal()"
-                            data-bs-dismiss="modal">
+                            data-dismiss="modal">
                         Close
                     </button>
                     <button class="btn btn-primary btn-sm" onclick="generateJsonSetting()" type="submit">Import</button>
@@ -726,12 +720,14 @@
             <div class="modal-content text-light bg-dark">
                 <div class="modal-header p-1">
                     <h5 class="modal-title text-light">Are you sure about Import?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close bg-dark text-light border-0" data-dismiss="modal" aria-label="Close">
+                        <i class="fa fa-times"></i>
+                    </button>
                 </div>
                 <div class="modal-footer p-1">
                     <button type="button"
                             class="btn btn-secondary btn-sm" onclick="rawModal()"
-                            data-bs-dismiss="modal">
+                            data-dismiss="modal">
                         Close
                     </button>
                     <button class="btn btn-primary btn-sm" onclick="generateJsonSetting()" type="submit">Import</button>

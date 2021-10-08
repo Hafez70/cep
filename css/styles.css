@@ -6,8 +6,8 @@ body {
     line-height: 1.5;
     color: #212529;
     background-color: #f7f7f7;
-    height: 100vh;
-    max-height: 100vh;
+    height: 100%;
+    max-height: 100%;
 }
 
 ::-webkit-scrollbar {
@@ -65,6 +65,32 @@ body {
     flex: 1 1 auto;
     padding: 1rem;
     background-color: #2f2f2f !important;
+}
+
+.modal-fullscreen {
+    width: 100vw;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+}
+
+.modal-fullscreen .modal-content {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+}
+
+.modal-fullscreen .modal-body {
+    overflow-y: auto;
+}
+
+.btn-close {
+    box-sizing: content-box;
+    width: 1em;
+    height: 1em;
+    padding: .5em .25em;
+    color: #000;
+    opacity: .5;
 }
 
 .form-switch .form-check-input {
@@ -334,8 +360,23 @@ li {
 }
 
 .modal-icon-controls-container {
-    height: 100%;
     max-width: 30px;
+}
+
+.rounded-pill {
+    border-radius: 0.6rem !important;
+}
+
+.rounded-pill-left {
+    border-radius: 0.6rem !important;
+    border-top-left-radius: 0rem !important;
+    border-bottom-left-radius: 0rem !important;
+}
+
+.rounded-pill-right {
+    border-radius: 0.6rem !important;
+    border-top-right-radius: 0rem !important;
+    border-bottom-right-radius: 0rem !important;
 }
 
 @media screen and (max-width: 250px) {
@@ -363,20 +404,39 @@ li {
 }
 
 .gridSystem {
-    max-height: calc(100vh - 10vh);
+    max-height: calc(100% - 60px);
+    overflow-x:auto;
 }
 
-.mySidebar {
-    max-height: calc(100vh - 10vh);
+@supports (max-height: calc(100vh - 60px)) {
+    .mySidebar {
+        max-height: calc(100vh - 60px);
+    }
+}
+@supports not (max-height: calc(100vh - 60px)) {
+    .mySidebar {
+        max-height: calc(100% - 60px);
+    }
 }
 
 .homeSlider {
-    height: 10vh !important;
+    height: 60px !important;
+    min-height: 60px !important;
 }
 
 .mainContainer {
-    height: calc(100vh - 10vh);
-    max-height: calc(100vh - 10vh);
+    height: 100vh;
+    max-height: 100vh;
+    
+}
+
+.mainContent {
+    -webkit-box-orient: horizontal !important;
+    -webkit-box-direction: normal !important;
+    -ms-flex-direction: row !important;
+    flex-direction: row !important;
+    max-height: calc(100vh - 60px);
+    height: calc(100vh - 60px);
 }
 
 .small-card {
@@ -390,7 +450,7 @@ li {
 
 .div-loader {
     width: 100%;
-    height: 100vh;
+    height: 100%;
     background-color: #000000;
     opacity: 0.8;
     position: absolute;
@@ -401,7 +461,7 @@ li {
 }
 
 .div-loader-content {
-    margin-top: 35vh;
+    margin-top: 35%;
     text-align: center;
 }
 
@@ -415,6 +475,70 @@ li {
 .my-form-label {
     margin-top: 0.5rem;
 }
+
+/* The switch - the box around the slider */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+}
+
+    /* Hide default HTML checkbox */
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 15px;
+        width: 15px;
+        left: 1px;
+        bottom: 3px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(22px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
 /* Smaller than standard 960 (devices and browsers) */
 @media only screen and (min-width: 959px) {
 
@@ -425,7 +549,7 @@ li {
         left: 0;
         z-index: 1020;
         width: 170px;
-        height: 10vh;
+        height: 10%;
         max-height: 70px;
         margin: 10px;
         background-image: url('../assets/images/logo.png');
@@ -472,7 +596,7 @@ li {
         left: 0;
         z-index: 1020;
         width: 170px;
-        height: 10vh;
+        height: 10%;
         max-height: 70px;
         margin: 10px;
         background-image: url('../assets/images/logo.png');
@@ -522,7 +646,7 @@ li {
         left: 0;
         z-index: 1020;
         width: 170px;
-        height: 10vh;
+        height: 10%;
         max-height: 70px;
         margin: 10px;
         background-image: url('../assets/images/logo.png');
@@ -570,7 +694,7 @@ li {
         left: 0;
         z-index: 1020;
         width: 170px;
-        height: 10vh;
+        height: 10%;
         max-height: 70px;
         margin: 10px;
         background-image: url('../assets/images/logo.png');
@@ -623,7 +747,7 @@ li {
         left: 0;
         z-index: 1020;
         width: 170px;
-        height: 10vh;
+        height: 10%;
         max-height: 70px;
         margin: 10px;
         background-image: url('../assets/images/logo.png');
@@ -675,7 +799,7 @@ li {
         left: 0;
         z-index: 1020;
         width: 170px;
-        height: 10vh;
+        height: 10%;
         max-height: 70px;
         margin: 10px;
         background-image: url('../assets/images/logo.png');
@@ -730,21 +854,21 @@ li {
 @media only screen and (max-width: 479px) {
 
     .gridSystem {
-        max-height: calc(100vh - 190px);
+        max-height: calc(100% - 190px);
     }
 
     .mySidebar {
         max-height: 150px !important;
     }
 
-    .homeSlider {
-        height: 60px !important;
-    }
 
-    .mainContainer {
-        height: calc(100vh - 60px);
-        max-height: calc(100vh - 60px);
+    .mainContent {
+        -webkit-box-orient: vertical !important;
+        -webkit-box-direction: normal !important;
+        -ms-flex-direction: column !important;
         flex-direction: column !important;
+        max-height: calc(100vh - 60px);
+        height: calc(100vh - 60px);
     }
 
     .sticky {
@@ -826,20 +950,20 @@ li {
 @media only screen and (max-width: 380px) {
 
     .gridSystem {
-        max-height: calc(100vh - 190px);
+        max-height: calc(100% - 190px);
     }
 
     .mySidebar {
         max-height: 150px !important;
     }
 
-    .homeSlider {
-        height: 60px !important;
-    }
-
-    .mainContainer {
-        height: calc(100vh - 60px);
+    .mainContent {
+        -webkit-box-orient: vertical !important;
+        -webkit-box-direction: normal !important;
+        -ms-flex-direction: column !important;
+        flex-direction: column !important;
         max-height: calc(100vh - 60px);
+        height: calc(100vh - 60px);
     }
 
     .sticky {
@@ -912,20 +1036,20 @@ li {
 @media only screen and (max-width: 300px) {
 
     .gridSystem {
-        max-height: calc(100vh - 190px);
+        max-height: calc(100% - 190px);
     }
 
     .mySidebar {
         max-height: 150px !important;
     }
 
-    .homeSlider {
-        height: 60px !important;
-    }
-
-    .mainContainer {
-        height: calc(100vh - 60px);
+    mainContent {
+        -webkit-box-orient: vertical !important;
+        -webkit-box-direction: normal !important;
+        -ms-flex-direction: column !important;
+        flex-direction: column !important;
         max-height: calc(100vh - 60px);
+        height: calc(100vh - 60px);
     }
 
     .sticky {
@@ -997,20 +1121,20 @@ li {
 @media only screen and (max-width: 200px) {
 
     .gridSystem {
-        max-height: calc(100vh - 190px);
+        max-height: calc(100% - 190px);
     }
 
     .mySidebar {
         max-height: 150px !important;
     }
 
-    .homeSlider {
-        height: 60px !important;
-    }
-
-    .mainContainer {
-        height: calc(100vh - 60px);
+    mainContent {
+        -webkit-box-orient: vertical !important;
+        -webkit-box-direction: normal !important;
+        -ms-flex-direction: column !important;
+        flex-direction: column !important;
         max-height: calc(100vh - 60px);
+        height: calc(100vh - 60px);
     }
 
     .sticky {
@@ -1079,23 +1203,11 @@ li {
     }
 }
 
-@media screen and (max-height: 400px) {
+/*@media screen and (max-height: 400px) {
     .gridSystem {
-        max-height: calc(100vh - 160px);
+        max-height: calc(100% - 160px);
     }
 
-    .mySidebar {
-        max-height: 100px !important;
-    }
-
-    .homeSlider {
-        height: 60px !important;
-    }
-
-    .mainContainer {
-        height: calc(100vh - 60px);
-        max-height: calc(100vh - 60px);
-    }
-}
+}*/
 
 

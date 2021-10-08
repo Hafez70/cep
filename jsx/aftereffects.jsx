@@ -918,10 +918,8 @@ function importBasicSizeline(projPath, params, projectName) {
     }
 }
 
-//importCallOut("/c/Program Files/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Call Out/5.journal/journal-L-1/journal-L-1.aep",
-//"C:/Program%20Files/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/basicRequiers/line/line.aep",
-//'{"comp":"1","sticker":"1","layers":[{"start":"2","end":"1"}],"cti":{"fromCti":true,"startTime":"0","endTime":"0"}}',
-//'journal-L-1')
+
+
 
 function importLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, endTime) {
     try {
@@ -968,13 +966,86 @@ function importLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, 
     }
 }
 
+function importBeamLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, endTime) {
+    try {
+        var proj = app.project;
+        var myfile = new ImportOptions();
+        myfile.file = new File(linePath);
+        var lineFolder = proj.importFile(myfile);
+        
+        var RootComp = undefined;
+        var lineFolder_numitems = lineFolder.numItems
+
+        for (var i = 1; i <= lineFolder_numitems; i++) {
+            if (lineFolder.item(i).typeName === "Composition" && lineFolder.item(i).name === "RootComp") {
+                RootComp = lineFolder.item(i);
+                break;
+            }
+        }
+
+        var controlItem = RootComp.layers.byName("line-beam")
+        
+        var y = nodeLayers.length;
+        for (var i = 0; i < y; i++) {
+            controlItem.copyToComp(parentComp);
+            var parentcontrolItem = parentComp.layer(1);
+
+            parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
+            parentcontrolItem.Effects("EndPoint").property("Layer").setValue(endPointLayer.index);
+            parentcontrolItem.startTime = startTime;
+            if (endTime !== 0) {
+                parentcontrolItem.outPoint = endTime;
+            }
+            parentcontrolItem.name = "line-control-" + parentComp.layers.length + "-" + i
+            parentcontrolItem.moveToEnd();
+        }
+        
+        lineFolder.parentFolder = getWonderFolder();
+
+    }
+    catch (e) {
+        var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message };
+        return err;
+    }
+}
+
+function getWonderFolder(){
+     try {
+         var proj = app.project;
+         var _numitems = proj.numItems
+         var wonderToolsFolder = null;
+
+         for (var i = 1; i <= _numitems; i++) {
+             if (proj.item(i) instanceof FolderItem && proj.item(i).name === "WonderTools") {
+                 wonderToolsFolder = proj.item(i);
+                 break;
+             }
+         }
+
+         if (wonderToolsFolder === null) {
+             wonderToolsFolder = proj.items.addFolder("WonderTools");
+         }
+
+         return wonderToolsFolder;
+    }
+    catch (e) {
+        var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message };
+        return err;
+    }
+}
+
+importCallOut("~/AppData/Roaming/Adobe/CEP/extensions/wonder-2018/assets/packages/Call Out/compatible versions/time-13/time-13.aep",
+"C:/Users/h-ghods/AppData/Roaming/Adobe/CEP/extensions/wonder-2018/assets/basicRequiers/line",
+'{"comp":"0","sticker":"1","layers":[{"start":"2","end":"1"},{"start":"3","end":"1"},{"start":"4","end":"1"}],"cti":{"fromCti":true,"startTime":"0","endTime":"0"},"mainText":"beam 1"}',
+'time-13')
+
 function importCallOut(projPath, linePath, params, projectName) {
     try {
         var obj_params = JSON.parse(params);
         var comps = [];
         var _startTime = 0;
         var _endTime = 0;
-
+        
         var proj = app.project;
         var parent = undefined;
         if (parseInt(obj_params.comp) === 0) {
@@ -1006,17 +1077,17 @@ function importCallOut(projPath, linePath, params, projectName) {
             }
 
             if (_endTime > parent.workAreaDuration) {
-                return "{'error' :'wrong time range!'}"
+               _endTime = parent.duration;
             }
         }
 
         var callOutStickerLayer = parent.layer(parseInt(obj_params.sticker));
-
+        
         var item = new ImportOptions();
         item.file = new File(projPath);
         item.importAs = ImportAsType.PROJECT;
         var TextIFolder = proj.importFile(item);
-
+        
         var RootComp = undefined;
         var TextComp = undefined;
 
@@ -1042,7 +1113,6 @@ function importCallOut(projPath, linePath, params, projectName) {
             TextComp.layers.byName("desc-text").property("Source Text").setValue(obj_params.descText);
         }
 
-
         var nodeLayers = [];
 
         for (var i = 0; i < obj_params.layers.length; i++) {
@@ -1052,9 +1122,8 @@ function importCallOut(projPath, linePath, params, projectName) {
             });
         }
 
-
         var textCompInParent = parent.layers.add(TextComp);
-
+        
         var y = RootComp.layers.byName(projectName).transform.anchorPoint;
 
         textCompInParent.transform.anchorPoint.setValue(y.value);
@@ -1062,8 +1131,6 @@ function importCallOut(projPath, linePath, params, projectName) {
 
         textCompInParent.Effects.addProperty("Slider Control").property("Slider").setValue(45);
         textCompInParent.effect("Slider Control").name = "Text-Size"
-
-
 
         var base_Duration = TextComp.duration;
         var new_duration = _endTime - _startTime;
@@ -1074,33 +1141,79 @@ function importCallOut(projPath, linePath, params, projectName) {
             textCompInParent.outPoint = _endTime;
         }
 
-        textCompInParent.selected = true;
-        textCompInParent.openInViewer();
-        app.executeCommand(app.findMenuCommandId("Update Markers From Source"));
-        textCompInParent.selected = false;
-        parent.openInViewer();
-
+        //textCompInParent.selected = true;
+        //textCompInParent.openInViewer();
+        //app.executeCommand(app.findMenuCommandId("Update Markers From Source"));
+        //textCompInParent.selected = false;
+        //parent.openInViewer();
+        TextComp.name = textCompInParent.name + "-" + parent.layers.length
+        textCompInParent.name = TextComp.name;
+        
+        app.beginUndoGroup("Time Remap Layer");
+        textCompInParent.timeRemapEnabled = true;
+        if(textCompInParent.timeRemap.canSetExpression)
+        {
+            var in_time = _startTime +  ((_endTime  - _startTime) / 3);
+            var out_time = _endTime -  ((_endTime  - _startTime) / 3);
+            var inMarker = new MarkerValue("in");
+        
+            textCompInParent.marker.setValueAtTime(in_time, inMarker);
+            var outMarker = new MarkerValue("out");
+            textCompInParent.marker.setValueAtTime(out_time, outMarker);
+            textCompInParent.timeRemap.expression = 'action = comp("'+textCompInParent.name+'").layer("action");'+
+                                                                            'n = 0;'+
+                                                                            'if (marker.numKeys > 0){'+
+                                                                            '  n = marker.nearestKey(time).index;'+
+                                                                            '  if (marker.key(n).time > time){'+
+                                                                            '    n--;'+
+                                                                            '  }'+
+                                                                            '}'+
+                                                                            'if (n != 0){'+
+                                                                            '  m = marker.key(n);'+
+                                                                            '  myComment = m.comment;'+
+                                                                            '  t = time - m.time;'+
+                                                                            '  try{'+
+                                                                            '    actMarker = action.marker.key(myComment);'+
+                                                                            '    if (action.marker.numKeys > actMarker.index){'+
+                                                                            '      tMax = action.marker.key(actMarker.index + 1).time - actMarker.time;'+
+                                                                            '    }else{'+
+                                                                            '      tMax = action.outPoint - actMarker.time;'+
+                                                                            '    }'+
+                                                                            '    t = Math.min(t, tMax);'+
+                                                                            '    actMarker.time + t;'+
+                                                                            '  }catch (err){'+
+                                                                            '    0'+
+                                                                            '  }'+
+                                                                            '}';
+                                                                            
+            }
+        app.endUndoGroup();
 
         if (textCompInParent.transform.position.canSetExpression) {
 
             textCompInParent.transform.scale.expression = 'temp=effect("Text-Size")("Slider");[temp, temp]';
         }
-
-        textCompInParent.name = textCompInParent.name + "-" + parent.layers.length;
-
-
+        
+        
 
         var selectedLayers = parent.selectedLayers;
         for (var i = 0; i < selectedLayers.length; i++) {
             selectedLayers[i].selected = false;
         }
 
-
+        var lineResult = '';
         if (nodeLayers.length > 0) {
-            var res = importLine(linePath, nodeLayers, parent, textCompInParent, _startTime, _endTime);
-            if (res && res.err) { return JSON.stringify(res);}
+            if(getversion() >= 15){
+                lineResult = importLine(linePath + '/line.aep', nodeLayers, parent, textCompInParent, _startTime, _endTime);
+            }
+            else{//beam
+                lineResult = importBeamLine(linePath + '/line-Beam.aep', nodeLayers, parent, textCompInParent, _startTime, _endTime);
+            }
+            if (lineResult && lineResult.err) { return JSON.stringify(lineResult); }
         }
-
+       
+        TextIFolder.parentFolder = getWonderFolder();
+        
         return JSON.stringify({ res: 'ok' })
     }
     catch (e) {
@@ -1108,6 +1221,16 @@ function importCallOut(projPath, linePath, params, projectName) {
         return err;
     }
 }
+
+function getmarkers(comp){
+    var p = thisComp.marker;
+    var M = p.numKeys;
+    var  a = [];
+
+    for (m=1; m<=M; m++) a.push(p.key(m).time);
+
+    var x = (M===0 ? "NO_KEYS" : a);
+    }
 
 function importWithEffect(projPath, params, projectName) {
 
@@ -1317,6 +1440,16 @@ function openURL(url) {
             os = $.os;
         }
         var app_os = (os.indexOf("Win") != -1) ? system.callSystem('explorer ' + url) : system.callSystem('open ' + url);
+    }
+    catch (e) {
+        var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' +  e.message };
+        return err;
+    }
+}
+
+function getversion() {
+    try {
+        return app.version.split('.')[0];
     }
     catch (e) {
         var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message };

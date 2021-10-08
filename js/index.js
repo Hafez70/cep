@@ -3,7 +3,7 @@ var importProjPath = '';
 var importProjName = '';
 var setingNeede = null;
 var textPath = 'assets/packages';
-var linePath = 'assets/basicRequiers/line/line.aep';
+var linePath = 'assets/basicRequiers/line';
 var lineFullPath = '';
 var packagesPath = '';
 var ads = {};
@@ -31,11 +31,26 @@ var callout_linecount = 1;
     getFilesTree(path);
 }());
 
+function getOS() {
+    var userAgent = window.navigator.userAgent,
+        platform = window.navigator.platform,
+        macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
+        windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
+        os = null;
+
+    if (macosPlatforms.indexOf(platform) != -1) {
+        os = "MAC";
+    } else if (windowsPlatforms.indexOf(platform) != -1) {
+        os = "WIN";
+    }
+    return os;
+}
+
 
 ///-----------------create menu part ----
 function getFilesTree(myPath) {
     const csInterface = new CSInterface();
-    csInterface.evalScript('getMainDirectories("' + myPath + '")', function (res) {
+    csInterface.evalScript("getMainDirectories('" + myPath+"');", function (res) {
         var result = JSON.parse(res);
 
         if (result.err) {
@@ -52,12 +67,10 @@ function getFilesTree(myPath) {
 
 function generateSideBar() {
     $('#sidebarMenu').empty();
-    contentTree.map((val, indx, arr) => {
-
+    Array.prototype.map.call(contentTree, function (val, indx) {
         var child_li = '';
-
-        val.subMenuNames.map((ch_val, ch_indx, ch_arr) => {
-            child_li += '<li class="w-100 ps-2 mt-1" onclick="generateContentView(' + indx + ',' + ch_indx + ',this)">\n' +
+        Array.prototype.map.call(val.subMenuNames, function (ch_val, ch_indx) {
+            child_li += '<li class="w-100 pl-2 mt-1" onclick="generateContentView(' + indx + ',' + ch_indx + ',this)">\n' +
                 '           <a href="#" class="px-0 align-self-end text-light pkg"> ' +
                 '<span class="d-inline">' + ch_val.subMenuName + '</span>\n' +
                 '           </a>\n' +
@@ -65,17 +78,16 @@ function generateSideBar() {
         });
 
         $('#sidebarMenu').append('<li class="w-100 ">\n' +
-            ' <a href="#submenu' + indx + '" data-bs-toggle="collapse" ' +
-            'data-bs-target="#submenu' + indx + '" aria-expanded="false" class="px-0 align-middle text-light collapsed">\n' +
-            '       <span class="ms-1 d-inline">' + val.menuName + '</span>\n' +
+            ' <a href="#submenu' + indx + '" data-toggle="collapse" ' +
+            '       data-target="#submenu' + indx + '" aria-expanded="false" class="px-0 align-middle text-light collapsed">\n' +
+            '       <span class="ml-1 d-inline">' + val.menuName + '</span>\n' +
             ' </a>\n' +
-            ' <ul class="ps-sm-2 collapse fade nav flex-column ms-1 list-group list-group-flush" id="submenu' + indx + '" data-bs-parent="#sidebarMenu">\n' +
+            ' <ul class="pl-sm-2 collapse fade flex-column ml-1 list-group-flush" id="submenu' + indx + '" data-parent="#sidebarMenu">\n' +
             child_li + '\n' +
             ' </ul>\n' +
             '</li>'
         )
     });
-
     // $('#sidebarMenu').append('<a href="./packageImport.html" class="pt-2 align-self-end text-light">\n' +
     //     '      <div class="row "><i class="fa fa-file-import col-1"></i><p class="col">Import Package</p></div>\n' +
     //     ' </a>\n');
@@ -89,20 +101,20 @@ function generateContentView(menuIndex, subMenIndex, element) {
     $(element).find("span").addClass("sideMenu-selected");
     $(element).addClass(" border rounded-pill border-light ");
     var newelements = [];
-    contentTree[menuIndex].subMenuNames[subMenIndex].subFiles.map((val, indx, arr) => {
-        newelements.push($('<div class="shadow-fancy card bg-dark small-card" ' +
-            '                       onclick="importFile(' + menuIndex + ',' + subMenIndex + ',' + indx + ')">\n' +
-            '      <div class="card-body  h-100 m-0 p-0">\n' +
-            '           <div class="card-img-top h-75">\n' +
-            '               <img id="img' + indx + '" src="' + val.demoGifFilePath + '" class="card-img-top w-100 h-100" >' +
-            '           </div>\n' +
-            '           <div class="card-title bg-fancy h-25">\n' +
-            '               <p class="card-title text-neon text-center ">' + val.fileName + '</p>\n' +
-            '           </div>\n' +
-            '    </div>\n' +
-            '  </div>').hide().fadeIn(500));
-
-    });
+    Array.prototype.map.call(contentTree[menuIndex].subMenuNames[subMenIndex].subFiles,
+        function (val, indx, arr) {
+            newelements.push($('<div class="shadow-fancy card bg-dark small-card" ' +
+                '                       onclick="importFile(' + menuIndex + ',' + subMenIndex + ',' + indx + ')">\n' +
+                '      <div class="card-body m-0 p-0">\n' +
+                '           <div class="card-img-top">\n' +
+                '               <img id="img' + indx + '" src="' + val.demoGifFilePath + '" class="card-img-top" >' +
+                '           </div>\n' +
+                '           <div class=" bg-fancy">\n' +
+                '               <p class="m-0 p-0 text-neon text-center ">' + val.fileName + '</p>\n' +
+                '           </div>\n' +
+                '    </div>\n' +
+                '  </div>').hide().fadeIn(500));
+        });
     $('#gridSystem').append(newelements);
 }
 
@@ -121,8 +133,144 @@ function importFile(menuIndex, subMenuIndex, fileIndex) {
                 return;
             }
 
-            opneSetting(settingPath, allComps);
+           opneSetting(settingPath, allComps);
 
+        }
+    });
+}
+
+function opneSetting(settingPath, comps) {
+
+    $.ajax({
+        cache: false,
+        url: settingPath,
+        success: function (settingResult) {
+            setingNeede = JSON.parse(settingResult);
+            rawModal();
+            var items = '<option value="0" selected>Active Comp</option>\n';
+            $('#compSelect_hud').empty();
+            $('#compSelect_sizeline').empty();
+            $('#compSelect_callout').empty();
+            $('#compSelect_witchEffect').empty();
+
+            Array.prototype.map.call(comps, function (val) {
+                items += '<option value="' + val.compItemIndex + '">' + val.compName + '</option> \n';
+            });
+
+            $('#compSelect_hud').append(items);
+            $('#compSelect_sizeline').append(items);
+            $('#compSelect_callout').append(items);
+            $('#compSelect_witchEffect').append(items);
+
+            compSelected(0);
+
+            var _setting = setingNeede.setting;
+
+            if (setingNeede.type === "hud") {
+
+                $('#hudSettingModal').modal('show');
+            }
+            if (setingNeede.type === "sizeline") {
+
+                $('#sizelineSettingModal').modal('show');
+            }
+            else if (setingNeede.type === "WitchEffect") {
+
+                $('#witchEffectSettingModal').modal('show');
+            }
+            else if (setingNeede.type === "Sample") {
+
+                $('#SampleSettingModal').modal('show');
+            }
+            else if (setingNeede.type === "CallOut") {
+
+                var lineCount = _setting.beam;
+
+                $("#div_compSelect_callout").show();
+
+                $('#div_textSticker_callout').show();
+                if (lineCount > 0) {
+                    $("#div_lineSelect_callout").show();
+                    for (var i = 1; i <= lineCount; i++) {
+                        $("#div_startlayerSelect_callout_line" + i).show();
+                    }
+                }
+                if (_setting.time) {
+                    $("div .cti").show();
+                }
+
+                
+                if (_setting.text.indexOf("main", 0) !== -1) {
+                    $("#div_mainText_callout").show();
+                }
+
+                if (_setting.text.indexOf("sub", 0) !== -1) {
+                    $("#div_subText_callout").show();
+                }
+
+                if (_setting.text.indexOf("desc", 0) !== -1) {
+                    $("#div_descText_callout").show();
+                }
+
+                $('#calloutSettingModal').modal('show');
+            }
+        }
+    });
+
+    
+}
+
+function compSelected(this_val) {
+    const csInterface = new CSInterface();
+    csInterface.evalScript('getAllLayersInComp(' + this_val + ')', function (res) {
+        if (res !== "") {
+
+            var layers = JSON.parse(res);
+            if (layers.err) {
+                alert(layers.msg);
+                return;
+            }
+
+            var _layers = '';
+            var _layers_first = '<option value="0" selected>Do not Stick</option> \n';
+            var _layers_first_withNull = '<option value="" selected>Choose layer ...</option> \n';
+
+            Array.prototype.map.call(layers, function (val) { 
+                _layers += '<option value="' + val.layerIndex + '">' + val.layerName + '</option> \n'
+            });
+
+            $('#startlayerSelect_line1').empty();
+            $('#startlayerSelect_line1').append(_layers_first_withNull + _layers);
+
+            $('#startlayerSelect_line2').empty();
+            $('#startlayerSelect_line2').append(_layers_first_withNull + _layers);
+
+            $('#startlayerSelect_line3').empty();
+            $('#startlayerSelect_line3').append(_layers_first_withNull + _layers);
+
+            $('#layerTextSticker_callout').empty();
+            $('#layerTextSticker_callout').append(_layers_first_withNull + _layers);
+
+            $('#startlayerSelect_callout_line1').empty();
+            $('#startlayerSelect_callout_line1').append(_layers_first_withNull + _layers);
+
+            $('#startlayerSelect_callout_line2').empty();
+            $('#startlayerSelect_callout_line2').append(_layers_first_withNull + _layers);
+
+            $('#startlayerSelect_callout_line3').empty();
+            $('#startlayerSelect_callout_line3').append(_layers_first_withNull + _layers);
+
+            $('#startlayerSelect_callout_line4').empty();
+            $('#startlayerSelect_callout_line4').append(_layers_first_withNull + _layers);
+
+            $('#layerSticker_hud').empty();
+            $('#layerSticker_hud').append(_layers_first + _layers);
+
+            $('#start_point_sizeline').empty();
+            $('#start_point_sizeline').append(_layers_first_withNull + _layers);
+
+            $('#end_point_sizeline').empty();
+            $('#end_point_sizeline').append(_layers_first_withNull + _layers);
         }
     });
 }
@@ -141,7 +289,7 @@ function reloadComps() {
             $('#compSelect_callout').empty();
             $('#compSelect_witchEffect').empty();
             var items = '<option value="0" selected>Active Comp</option>\n';
-            allComps.map((val, indx, arr) => {
+            Array.prototype.map.call(allComps, function (val) { 
                 items += '<option value="' + val.compItemIndex + '">' + val.compName + '</option> \n';
             });
             $('#compSelect_hud').append(items);
@@ -150,85 +298,6 @@ function reloadComps() {
             compSelected(0);
         }
     });
-}
-
-async function opneSetting(settingPath, comps) {
-
-    var settingResult = await $.ajax({
-        cache: false,
-        url: settingPath
-    });
-
-    setingNeede = JSON.parse(settingResult);
-    rawModal();
-    var items = '<option value="0" selected>Active Comp</option>\n';
-    $('#compSelect_hud').empty();
-    $('#compSelect_sizeline').empty();
-    $('#compSelect_callout').empty();
-    $('#compSelect_witchEffect').empty();
-
-    comps.map((val, indx, arr) => {
-        items += '<option value="' + val.compItemIndex + '">' + val.compName + '</option> \n';
-
-    });
-
-    $('#compSelect_hud').append(items);
-    $('#compSelect_sizeline').append(items);
-    $('#compSelect_callout').append(items);
-    $('#compSelect_witchEffect').append(items);
-
-    compSelected(0);
-
-    var _setting = setingNeede.setting;
-
-    if (setingNeede.type === "hud") {
-
-        $('#hudSettingModal').modal('show');
-    }
-    if (setingNeede.type === "sizeline") {
-
-        $('#sizelineSettingModal').modal('show');
-    }
-    else if (setingNeede.type === "WitchEffect") {
-
-        $('#witchEffectSettingModal').modal('show');
-    }
-    else if (setingNeede.type === "Sample") {
-
-        $('#SampleSettingModal').modal('show');
-    }
-    else if (setingNeede.type === "CallOut") {
-
-        let lineCount = _setting.beam;
-
-        $("#div_compSelect_callout").show();
-
-        $('#div_textSticker_callout').show();
-        if (lineCount > 0) {
-            $("#div_lineSelect_callout").show();
-            for (let i = 1; i <= lineCount; i++) {
-                $("#div_startlayerSelect_callout_line" + i).show();
-            }
-        }
-        if (_setting.time) {
-            $("div .cti").show();
-        }
-
-        if (_setting.text.includes("main")) {
-            $("#div_mainText_callout").show();
-        }
-
-        if (_setting.text.includes("sub")) {
-            $("#div_subText_callout").show();
-        }
-
-        if (_setting.text.includes("desc")) {
-            $("#div_descText_callout").show();
-        }
-
-
-        $('#calloutSettingModal').modal('show');
-    }
 }
 
 function rawModal() {
@@ -268,283 +337,6 @@ function rawModal() {
     $('#div_startlayerSelect_callout_line4').addClass('d-none');
 
     $('#startTimeSwitch_callout')[0].checked = false;
-}
-
-function generateJsonSetting() {
-    if (setingNeede !== null) {
-        if (setingNeede.type === "hud") {
-            let json_result = {};
-
-            $('#stickyImportFomr').addClass('was-validated');
-
-            let _setting = setingNeede.setting;
-            if (!$('#compSelect_hud').find("option:selected").val()) {
-
-                return;
-            }
-
-            json_result.comp = (!$('#compSelect_hud').find("option:selected").val() ? 0 : $('#compSelect_hud').find("option:selected").val());
-
-            json_result.sticker = $('#layerSticker_hud').find("option:selected").val();
-
-            if (_setting.time) {
-
-                json_result.cti = {
-                    fromCti: (!$('#startTimeSwitch_hud')[0].checked),
-                    startTime: (!$('#startTimeSpecificValue_hud')[0].value ? 0 : $('#startTimeSpecificValue_hud')[0].value),
-                    endTime: (!$('#endTimeSpecificValue_hud')[0].value ? 0 : $('#endTimeSpecificValue_hud')[0].value),
-                };
-            }
-
-            if (_setting.thd) {
-                json_result.thd = $('#select_3D_hud')[0].checked
-            }
-
-            importHud(json_result);
-        }
-        if (setingNeede.type === "sizeline") {
-            let json_result = {};
-
-            $('#sizelineImportForm').addClass('was-validated');
-
-            let _setting = setingNeede.setting;
-            if (!$('#compSelect_sizeline').find("option:selected").val()) {
-
-                return;
-            }
-
-            json_result.comp = (!$('#compSelect_sizeline').find("option:selected").val() ? 0 : $('#compSelect_sizeline').find("option:selected").val());
-
-            json_result.start = $('#start_point_sizeline').find("option:selected").val();
-            json_result.end = $('#end_point_sizeline').find("option:selected").val();
-
-            if (_setting.time) {
-
-                json_result.cti = {
-                    fromCti: (!$('#startTimeSwitch_sizeline')[0].checked),
-                    startTime: (!$('#startTimeSpecificValue_sizeline')[0].value ? 0 : $('#startTimeSpecificValue_sizeline')[0].value),
-                    endTime: (!$('#endTimeSpecificValue_sizeline')[0].value ? 0 : $('#endTimeSpecificValue_sizeline')[0].value),
-                };
-            }
-
-            if (_setting.thd) {
-                json_result.thd = $('#select_3D_sizeline')[0].checked
-            }
-
-            importSizeline(json_result);
-        }
-        else if (setingNeede.type === "WitchEffect") {
-            let json_result = {};
-
-            $('#witchEffectImportForm').addClass('was-validated');
-
-            let _setting = setingNeede.setting;
-            if (!$('#compSelect_witchEffect').find("option:selected").val()) {
-
-                return;
-            }
-
-            json_result.comp = (!$('#compSelect_witchEffect').find("option:selected").val() ? 0 : $('#compSelect_witchEffect').find("option:selected").val());
-
-            if (_setting.time) {
-
-                json_result.cti = {
-                    fromCti: (!$('#startTimeSwitch_witchEffect')[0].checked),
-                    startTime: (!$('#startTimeSpecificValue_witchEffect')[0].value ? 0 : $('#startTimeSpecificValue_witchEffect')[0].value),
-                    endTime: (!$('#endTimeSpecificValue_witchEffect')[0].value ? 0 : $('#endTimeSpecificValue_witchEffect')[0].value),
-                };
-            }
-
-            importWitchEffect(json_result);
-        }
-        else if (setingNeede.type === "CallOut") {
-
-            $('#calloutImportFomr').addClass('was-validated');
-
-            let _setting = setingNeede.setting;
-            let lineCount = _setting.beam;
-            let json_result = {};
-            if (!$('#compSelect_callout').find("option:selected").val()) {
-
-                return;
-            }
-            json_result.comp = $('#compSelect_callout').find("option:selected").val();
-            if (!$('#layerTextSticker_callout').find("option:selected").val() || $('#layerTextSticker_callout').find("option:selected").val() === 0) {
-
-                return;
-            }
-            json_result.sticker = $('#layerTextSticker_callout').find("option:selected").val();
-
-            let layers_selected = [];
-
-            if (lineCount > 0) {
-
-                for (let i = 1; i <= lineCount; i++) {
-                    if (!$('#startlayerSelect_callout_line' + i).find("option:selected").val()
-                        || $('#startlayerSelect_callout_line' + i).find("option:selected").val() === 0) {
-                        continue;
-                    }
-                    layers_selected.push({
-                        start: $('#startlayerSelect_callout_line' + i).find("option:selected").val(),
-                        end: json_result.sticker
-                    });
-                }
-            }
-
-            json_result.layers = layers_selected;
-
-            if (_setting.time) {
-                json_result.cti = {
-                    fromCti: (!$('#startTimeSwitch_callout')[0].checked),
-                    startTime: (!$('#startTimeSpecificValue_callout')[0].value ? 0 : $('#startTimeSpecificValue_callout')[0].value),
-                    endTime: (!$('#endTimeSpecificValue_callout')[0].value ? 0 : $('#endTimeSpecificValue_callout')[0].value),
-                };
-            }
-
-            if (_setting.text.includes("main")) {
-                if ($('#TextSourceInput_MainText_callout').val() !== "") {
-                    json_result.mainText = $('#TextSourceInput_MainText_callout').val();
-                }
-            }
-
-            if (_setting.text.includes("sub")) {
-
-                if ($('#TextSourceInput_SubText_callout').val() !== "") {
-                    json_result.subText = $('#TextSourceInput_SubText_callout').val();
-                }
-            }
-
-            if (_setting.text.includes("desc")) {
-
-                if ($('#TextSourceInput_DescText_callout').val() !== "") {
-                    json_result.descText = $('#TextSourceInput_DescText_callout').val();
-                }
-            }
-
-            importCallOut(json_result);
-        }
-        else if (setingNeede.type === "Sample") {
-            importSample();
-        }
-    }
-}
-
-function importHud(jsonInput) {
-    var str_input = JSON.stringify(jsonInput);
-    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
-    const csInterface = new CSInterface();
-    const strEval = 'importBasicHud("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
-    ShowLoader();
-    csInterface.evalScript(strEval
-        , function (res) {
-            HideLoader();
-            var result = JSON.parse(res);
-            if (result.err) {
-                alert(result.msg);
-                return;
-            }
-            else {
-                $('#hudSettingModal').modal('hide');
-                $('#hudImportForm').removeClass('was-validated');
-            }
-
-        });
-    //} else {
-
-    //}
-}
-
-function importSizeline(jsonInput) {
-    var str_input = JSON.stringify(jsonInput);
-    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
-    const csInterface = new CSInterface();
-    const strEval = 'importBasicSizeline("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
-    ShowLoader();
-    csInterface.evalScript(strEval
-        , function (res) {
-            HideLoader();
-            var result = JSON.parse(res);
-            if (result.err) {
-                alert(result.msg);
-                return;
-            }
-            else {
-                $('#sizelineSettingModal').modal('hide');
-                $('#sizelineImportForm').removeClass('was-validated');
-            }
-        });
-    //} else {
-
-    //}
-}
-
-function importWitchEffect(jsonInput) {
-    var str_input = JSON.stringify(jsonInput);
-    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
-    const csInterface = new CSInterface();
-    const strEval = 'importWithEffect("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
-    ShowLoader();
-    csInterface.evalScript(strEval
-        , function (res) {
-            HideLoader();
-            var result = JSON.parse(res);
-            if (result.err) {
-                alert(result.msg);
-                return;
-            }
-            else {
-                $('#witchEffectSettingModal').modal('hide');
-                $('#witchEffectImportForm').removeClass('was-validated');
-            }
-        });
-    //} else {
-
-    //}
-}
-
-function importSample() {
-    const csInterface = new CSInterface();
-    const strEval = 'importSamples("' + importProjPath + '")';
-    ShowLoader();
-    csInterface.evalScript(strEval
-        , function (res) {
-            HideLoader();
-            var result = JSON.parse(res);
-            if (result.err) {
-                alert(result.msg);
-                return;
-            }
-            else {
-                $('#SampleSettingModal').modal('hide');
-            }
-        });
-    //} else {
-
-    //}
-}
-
-function importCallOut(jsonInput) {
-    var str_input = JSON.stringify(jsonInput);
-    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
-    const csInterface = new CSInterface();
-    const strEval = 'importCallOut("' + importProjPath + '","' + lineFullPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
-    ShowLoader();
-    csInterface.evalScript(strEval
-        , function (res) {
-            HideLoader();
-            var result = JSON.parse(res);
-            if (result.err) {
-                alert(result.msg);
-                return;
-            }
-            else {
-                $('#calloutSettingModal').modal('hide');
-                $('#calloutImportFomr').removeClass('was-validated');
-            }
-        });
-    //} else {
-
-    //}
 }
 
 function startTimeChangestickyImportFomr(value) {
@@ -591,88 +383,300 @@ function startTimeChangestickyImportFomr(value) {
     }
 }
 
-function compSelected(this_val) {
-    const csInterface = new CSInterface();
-    csInterface.evalScript('getAllLayersInComp(' + this_val + ')', function (res) {
-        if (res !== "") {
+function generateJsonSetting() {
+    if (setingNeede !== null) {
+        if (setingNeede.type === "hud") {
+            var json_result = {};
 
-            var layers = JSON.parse(res);
-            if (layers.err) {
-                alert(layers.msg);
+            $('#stickyImportFomr').addClass('was-validated');
+
+            var _setting = setingNeede.setting;
+            if (!$('#compSelect_hud').find("option:selected").val()) {
+
                 return;
             }
 
-            var _layers = '';
-            var _layers_first = '<option value="0" selected>Do not Stick</option> \n';
-            var _layers_first_withNull = '<option value="" selected>Choose layer ...</option> \n';
+            json_result.comp = (!$('#compSelect_hud').find("option:selected").val() ? 0 : $('#compSelect_hud').find("option:selected").val());
 
+            json_result.sticker = $('#layerSticker_hud').find("option:selected").val();
 
-            layers.map((val, indx, arr) => {
-                _layers += '<option value="' + val.layerIndex + '">' + val.layerName + '</option> \n'
-            });
+            if (_setting.time) {
 
+                json_result.cti = {
+                    fromCti: (!$('#startTimeSwitch_hud')[0].checked),
+                    startTime: (!$('#startTimeSpecificValue_hud')[0].value ? 0 : $('#startTimeSpecificValue_hud')[0].value),
+                    endTime: (!$('#endTimeSpecificValue_hud')[0].value ? 0 : $('#endTimeSpecificValue_hud')[0].value),
+                };
+            }
 
-            $('#startlayerSelect_line1').empty();
-            $('#startlayerSelect_line1').append(_layers_first_withNull + _layers);
+            if (_setting.thd) {
+                json_result.thd = $('#select_3D_hud')[0].checked
+            }
 
-            $('#startlayerSelect_line2').empty();
-            $('#startlayerSelect_line2').append(_layers_first_withNull + _layers);
-
-            $('#startlayerSelect_line3').empty();
-            $('#startlayerSelect_line3').append(_layers_first_withNull + _layers);
-
-            $('#layerTextSticker_callout').empty();
-            $('#layerTextSticker_callout').append(_layers_first_withNull + _layers);
-
-            $('#startlayerSelect_callout_line1').empty();
-            $('#startlayerSelect_callout_line1').append(_layers_first_withNull + _layers);
-
-            $('#startlayerSelect_callout_line2').empty();
-            $('#startlayerSelect_callout_line2').append(_layers_first_withNull + _layers);
-
-            $('#startlayerSelect_callout_line3').empty();
-            $('#startlayerSelect_callout_line3').append(_layers_first_withNull + _layers);
-
-            $('#startlayerSelect_callout_line4').empty();
-            $('#startlayerSelect_callout_line4').append(_layers_first_withNull + _layers);
-
-            $('#layerSticker_hud').empty();
-            $('#layerSticker_hud').append(_layers_first + _layers);
-
-            $('#start_point_sizeline').empty();
-            $('#start_point_sizeline').append(_layers_first_withNull + _layers);
-
-            $('#end_point_sizeline').empty();
-            $('#end_point_sizeline').append(_layers_first_withNull + _layers);
+            importHud(json_result);
         }
-    });
-}
+        if (setingNeede.type === "sizeline") {
+            var json_result = {};
 
-function getOS() {
-    var userAgent = window.navigator.userAgent,
-        platform = window.navigator.platform,
-        macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
-        windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
-        os = null;
+            $('#sizelineImportForm').addClass('was-validated');
 
-    if (macosPlatforms.indexOf(platform) != -1) {
-        os = "MAC";
-    } else if (windowsPlatforms.indexOf(platform) != -1) {
-        os = "WIN";
+            var _setting = setingNeede.setting;
+            if (!$('#compSelect_sizeline').find("option:selected").val()) {
+
+                return;
+            }
+
+            json_result.comp = (!$('#compSelect_sizeline').find("option:selected").val() ? 0 : $('#compSelect_sizeline').find("option:selected").val());
+
+            json_result.start = $('#start_point_sizeline').find("option:selected").val();
+            json_result.end = $('#end_point_sizeline').find("option:selected").val();
+
+            if (_setting.time) {
+
+                json_result.cti = {
+                    fromCti: (!$('#startTimeSwitch_sizeline')[0].checked),
+                    startTime: (!$('#startTimeSpecificValue_sizeline')[0].value ? 0 : $('#startTimeSpecificValue_sizeline')[0].value),
+                    endTime: (!$('#endTimeSpecificValue_sizeline')[0].value ? 0 : $('#endTimeSpecificValue_sizeline')[0].value),
+                };
+            }
+
+            if (_setting.thd) {
+                json_result.thd = $('#select_3D_sizeline')[0].checked
+            }
+
+            importSizeline(json_result);
+        }
+        else if (setingNeede.type === "WitchEffect") {
+            var json_result = {};
+
+            $('#witchEffectImportForm').addClass('was-validated');
+
+            var _setting = setingNeede.setting;
+            if (!$('#compSelect_witchEffect').find("option:selected").val()) {
+
+                return;
+            }
+
+            json_result.comp = (!$('#compSelect_witchEffect').find("option:selected").val() ? 0 : $('#compSelect_witchEffect').find("option:selected").val());
+
+            if (_setting.time) {
+
+                json_result.cti = {
+                    fromCti: (!$('#startTimeSwitch_witchEffect')[0].checked),
+                    startTime: (!$('#startTimeSpecificValue_witchEffect')[0].value ? 0 : $('#startTimeSpecificValue_witchEffect')[0].value),
+                    endTime: (!$('#endTimeSpecificValue_witchEffect')[0].value ? 0 : $('#endTimeSpecificValue_witchEffect')[0].value),
+                };
+            }
+
+            importWitchEffect(json_result);
+        }
+        else if (setingNeede.type === "CallOut") {
+
+            $('#calloutImportFomr').addClass('was-validated');
+
+            var _setting = setingNeede.setting;
+            var lineCount = _setting.beam;
+            var json_result = {};
+            if (!$('#compSelect_callout').find("option:selected").val()) {
+
+                return;
+            }
+            json_result.comp = $('#compSelect_callout').find("option:selected").val();
+            if (!$('#layerTextSticker_callout').find("option:selected").val() || $('#layerTextSticker_callout').find("option:selected").val() === 0) {
+
+                return;
+            }
+            json_result.sticker = $('#layerTextSticker_callout').find("option:selected").val();
+
+            var layers_selected = [];
+
+            if (lineCount > 0) {
+
+                for (var i = 1; i <= lineCount; i++) {
+                    if (!$('#startlayerSelect_callout_line' + i).find("option:selected").val()
+                        || $('#startlayerSelect_callout_line' + i).find("option:selected").val() === 0) {
+                        continue;
+                    }
+                    layers_selected.push({
+                        start: $('#startlayerSelect_callout_line' + i).find("option:selected").val(),
+                        end: json_result.sticker
+                    });
+                }
+            }
+
+            json_result.layers = layers_selected;
+
+            if (_setting.time) {
+                json_result.cti = {
+                    fromCti: (!$('#startTimeSwitch_callout')[0].checked),
+                    startTime: (!$('#startTimeSpecificValue_callout')[0].value ? 0 : $('#startTimeSpecificValue_callout')[0].value),
+                    endTime: (!$('#endTimeSpecificValue_callout')[0].value ? 0 : $('#endTimeSpecificValue_callout')[0].value),
+                };
+            }
+
+            if (_setting.text.indexOf("main", 0) !== -1) {
+                if ($('#TextSourceInput_MainText_callout').val() !== "") {
+                    json_result.mainText = $('#TextSourceInput_MainText_callout').val();
+                }
+            }
+
+            if (_setting.text.indexOf("sub", 0) !== -1){
+
+                if ($('#TextSourceInput_SubText_callout').val() !== "") {
+                    json_result.subText = $('#TextSourceInput_SubText_callout').val();
+                }
+            }
+
+            if (_setting.text.indexOf("desc", 0) !== -1){
+                if ($('#TextSourceInput_DescText_callout').val() !== "") {
+                    json_result.descText = $('#TextSourceInput_DescText_callout').val();
+                }
+            }
+
+            importCallOut(json_result);
+        }
+        else if (setingNeede.type === "Sample") {
+            importSample();
+        }
     }
-    return os;
 }
 
-function importPackage() {
+function importCallOut(jsonInput) {
+    var str_input = JSON.stringify(jsonInput);
+    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
     const csInterface = new CSInterface();
-    const strEval = 'importNewPackage("' + packagesPath + '")';
+    const strEval = 'importCallOut("' + importProjPath + '","' + lineFullPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
+    ShowLoader();
     csInterface.evalScript(strEval
         , function (res) {
-            if (res !== "") {
-                $('#backtoHome')[0].click();
+            HideLoader();
+            var result = JSON.parse(res);
+            if (result.err) {
+                alert(result.msg);
+                return;
+            }
+            else {
+                $('#calloutSettingModal').modal('hide');
+                $('#calloutImportFomr').removeClass('was-validated');
             }
         });
+    //} else {
+
+    //}
 }
+
+function importHud(jsonInput) {
+    var str_input = JSON.stringify(jsonInput);
+    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
+    const csInterface = new CSInterface();
+    const strEval = 'importBasicHud("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
+    ShowLoader();
+    csInterface.evalScript(strEval
+        , function (res) {
+            HideLoader();
+            var result = JSON.parse(res);
+            if (result.err) {
+                alert(result.msg);
+                return;
+            }
+            else {
+                $('#hudSettingModal').modal('hide');
+                $('#hudImportForm').removeClass('was-validated');
+            }
+
+        });
+    //} else {
+
+    //}
+}
+
+//function importSizeline(jsonInput) {
+//    var str_input = JSON.stringify(jsonInput);
+//    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
+//    const csInterface = new CSInterface();
+//    const strEval = 'importBasicSizeline("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
+//    ShowLoader();
+//    csInterface.evalScript(strEval
+//        , function (res) {
+//            HideLoader();
+//            var result = JSON.parse(res);
+//            if (result.err) {
+//                alert(result.msg);
+//                return;
+//            }
+//            else {
+//                $('#sizelineSettingModal').modal('hide');
+//                $('#sizelineImportForm').removeClass('was-validated');
+//            }
+//        });
+//    //} else {
+
+//    //}
+//}
+
+//function importWitchEffect(jsonInput) {
+//    var str_input = JSON.stringify(jsonInput);
+//    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
+//    const csInterface = new CSInterface();
+//    const strEval = 'importWithEffect("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
+//    ShowLoader();
+//    csInterface.evalScript(strEval
+//        , function (res) {
+//            HideLoader();
+//            var result = JSON.parse(res);
+//            if (result.err) {
+//                alert(result.msg);
+//                return;
+//            }
+//            else {
+//                $('#witchEffectSettingModal').modal('hide');
+//                $('#witchEffectImportForm').removeClass('was-validated');
+//            }
+//        });
+//    //} else {
+
+//    //}
+//}
+
+//function importSample() {
+//    const csInterface = new CSInterface();
+//    const strEval = 'importSamples("' + importProjPath + '")';
+//    ShowLoader();
+//    csInterface.evalScript(strEval
+//        , function (res) {
+//            HideLoader();
+//            var result = JSON.parse(res);
+//            if (result.err) {
+//                alert(result.msg);
+//                return;
+//            }
+//            else {
+//                $('#SampleSettingModal').modal('hide');
+//            }
+//        });
+//    //} else {
+
+//    //}
+//}
+
+
+
+
+
+
+
+
+
+//function importPackage() {
+//    const csInterface = new CSInterface();
+//    const strEval = 'importNewPackage("' + packagesPath + '")';
+//    csInterface.evalScript(strEval
+//        , function (res) {
+//            if (res !== "") {
+//                $('#backtoHome')[0].click();
+//            }
+//        });
+//}
 
 function openUrl(url) {
     const csInterface = new CSInterface();
@@ -691,7 +695,7 @@ function HideLoader() {
 function addline() {
     if (callout_linecount < 4) {
         callout_linecount++;
-        for (let i = 1; i <= callout_linecount; i++) {
+        for (var i = 1; i <= callout_linecount; i++) {
             $('#div_startlayerSelect_callout_line' + i).removeClass('d-none');
         }
     }
