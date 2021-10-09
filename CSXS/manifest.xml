@@ -29,7 +29,7 @@
         <Resources>
          
           <MainPath>./index_WonderCallOuts.html</MainPath>
-          <ScriptPath>./jsx/aftereffects.jsx</ScriptPath>
+          <ScriptPath>./jsx/aftereffects.jsxbin</ScriptPath>
           
           <CEFCommandLine>
             <Parameter>--allow-file-access</Parameter>

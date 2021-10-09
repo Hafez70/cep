@@ -590,29 +590,29 @@ function importHud(jsonInput) {
     //}
 }
 
-//function importSizeline(jsonInput) {
-//    var str_input = JSON.stringify(jsonInput);
-//    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
-//    const csInterface = new CSInterface();
-//    const strEval = 'importBasicSizeline("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
-//    ShowLoader();
-//    csInterface.evalScript(strEval
-//        , function (res) {
-//            HideLoader();
-//            var result = JSON.parse(res);
-//            if (result.err) {
-//                alert(result.msg);
-//                return;
-//            }
-//            else {
-//                $('#sizelineSettingModal').modal('hide');
-//                $('#sizelineImportForm').removeClass('was-validated');
-//            }
-//        });
-//    //} else {
+function importSizeline(jsonInput) {
+    var str_input = JSON.stringify(jsonInput);
+    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
+    const csInterface = new CSInterface();
+    const strEval = 'importBasicSizeline("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
+    ShowLoader();
+    csInterface.evalScript(strEval
+        , function (res) {
+            HideLoader();
+            var result = JSON.parse(res);
+            if (result.err) {
+                alert(result.msg);
+                return;
+            }
+            else {
+                $('#sizelineSettingModal').modal('hide');
+                $('#sizelineImportForm').removeClass('was-validated');
+            }
+        });
+    //} else {
 
-//    //}
-//}
+    //}
+}
 
 //function importWitchEffect(jsonInput) {
 //    var str_input = JSON.stringify(jsonInput);
@@ -658,13 +658,6 @@ function importHud(jsonInput) {
 
 //    //}
 //}
-
-
-
-
-
-
-
 
 
 //function importPackage() {

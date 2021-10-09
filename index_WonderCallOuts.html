@@ -135,19 +135,19 @@
                         <div class="col-12 has-validation position-relative mt-3" id="div_3D_hud">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
-                                    <div class="modal-icon-controls-container">
-                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Three-D.png" />
+                                    <div class="input-group-text border-0 bg-transparent pl-1 p-0">
+                                        <img class="modal-icon-controls pr-1"
+                                             src="./assets/images/icons/Three-D.png" />
                                     </div>
-                                    <label class="d-none-xxs col-3 col-sm-5 text-center" for="select_3D_hud">
+                                    <label class="d-none-xxs col-3 col-sm-5 text-center pt-2 p-0 m-0" for="select_3D_hud">
                                         Import 2D
                                     </label>
-                                    <label class="switch ml-2">
+                                    <label class="switch mt-2 p-0 m-0">
                                         <input type="checkbox"
-                                               onchange="startTimeChangestickyImportFomr(this.checked)"
                                                id="select_3D_hud">
                                         <span class="slider round"></span>
                                     </label>
-                                    <label class="d-none-xxs col-3 form-check-label ml-2" for="select_3D_hud"> 3D</label>
+                                    <label class="col-3 form-check-label pt-2 pl-2 m-0" for="select_3D_hud"> 3D</label>
                                 </div>
                             </div>
                         </div>
@@ -156,6 +156,12 @@
                         <div class="col-12 has-validation position-relative mt-3 cti">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
+                                    <span class="input-group-append">
+                                        <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                            <img class="modal-icon-controls pr-1"
+                                                 src="./assets/images/icons/Indicator.png" />
+                                        </div>
+                                    </span>
                                     <label class="switch ml-2">
                                         <input type="checkbox"
                                                onchange="startTimeChangestickyImportFomr(this.checked)"
@@ -166,12 +172,7 @@
                                            for="startTimeSwitch_hud">
                                         start from current CTI to end of timeline
                                     </label>
-                                    <span class="input-group-append">
-                                        <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
-                                            <img class="modal-icon-controls pr-1"
-                                                 src="./assets/images/icons/Indicator.png" />
-                                        </div>
-                                    </span>
+
                                 </div>
                             </div>
                         </div>
@@ -214,9 +215,9 @@
         </div>
     </div>
 
-    <div class="modal modal-fullscreen fade" id="sizelineSettingModal" tabindex="-1" role="dialog" aria-labelledby="sizeline Setting"
+    <div class="modal fade" id="sizelineSettingModal" tabindex="-1" role="dialog" aria-labelledby="sizeline Setting"
          aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-fullscreen modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
             <div class="modal-content text-light bg-dark">
                 <div class="modal-header p-1">
                     <h5 class="modal-title text-light" id="exampleModalLongTitle">Import Setting</h5>
@@ -289,39 +290,46 @@
                             </div>
                         </div>
                         <!--//2d/3d-->
-                        <div class="col-12 has-validation position-relative pt-2" id="div_3D_sizeline">
+                        <div class="col-12 has-validation position-relative mt-3" id="div_3D_hud">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
-                                    <div class="modal-icon-controls-container">
-                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Three-D.png" />
+                                    <div class="input-group-text border-0 bg-transparent pl-1 p-0">
+                                        <img class="modal-icon-controls pr-1"
+                                             src="./assets/images/icons/Three-D.png" />
                                     </div>
-                                    <label class="d-none-xxs col-3 col-sm-5 text-center" for="select_3D_sizeline">
+                                    <label class="d-none-xxs col-3 col-sm-5 text-center pt-2 p-0 m-0" for="select_3D_sizeline">
                                         Import 2D
                                     </label>
-                                    <input type="checkbox" class="col-2 border-light form-check-input p-0 m-0 mt-1"
-                                           id="select_3D_sizeline">
-                                    <label class="d-none-xxs col-3 form-check-label ml-2" for="select_3D_sizeline"> 3D</label>
+                                    <label class="switch mt-2 p-0 m-0">
+                                        <input type="checkbox"
+                                               id="select_3D_sizeline">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <label class="col-3 form-check-label pt-2 pl-2 m-0" for="select_3D_sizeline"> 3D</label>
                                 </div>
                             </div>
                         </div>
                         <!--//2d/3d-->
                         <!--//Cti-->
-                        <div class="col-12 has-validation position-relative cti pt-2">
+                        <div class="col-12 has-validation position-relative mt-3 cti">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
-                                    <input type="checkbox" class="form-check-input border-light ml-2"
-                                           id="startTimeSwitch_sizeline"
-                                           onchange="startTimeChangestickyImportFomr(this.checked)">
-                                    <label id="startTimeSwitchlabel_sizeline" class="pl-2 form-check-label"
-                                           for="startTimeSwitch_sizeline">
-                                        start from current CTI to end of timeline
-                                    </label>
                                     <span class="input-group-append">
                                         <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
                                             <img class="modal-icon-controls pr-1"
                                                  src="./assets/images/icons/Indicator.png" />
                                         </div>
                                     </span>
+                                    <label class="switch ml-2">
+                                        <input type="checkbox"
+                                               onchange="startTimeChangestickyImportFomr(this.checked)"
+                                               id="startTimeSwitch_sizeline">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <label id="startTimeSwitchlabel_sizeline" class="pl-2 form-check-label"
+                                           for="startTimeSwitch_sizeline">
+                                        start from current CTI to end of timeline
+                                    </label>
                                 </div>
                             </div>
                         </div>

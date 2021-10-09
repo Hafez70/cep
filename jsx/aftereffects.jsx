@@ -1153,11 +1153,10 @@ function importCallOut(projPath, linePath, params, projectName) {
         textCompInParent.timeRemapEnabled = true;
         if(textCompInParent.timeRemap.canSetExpression)
         {
-            var in_time = _startTime +  ((_endTime  - _startTime) / 3);
             var out_time = _endTime -  ((_endTime  - _startTime) / 3);
             var inMarker = new MarkerValue("in");
         
-            textCompInParent.marker.setValueAtTime(in_time, inMarker);
+            textCompInParent.marker.setValueAtTime(_startTime, inMarker);
             var outMarker = new MarkerValue("out");
             textCompInParent.marker.setValueAtTime(out_time, outMarker);
             textCompInParent.timeRemap.expression = 'action = comp("'+textCompInParent.name+'").layer("action");'+
@@ -1193,8 +1192,6 @@ function importCallOut(projPath, linePath, params, projectName) {
 
             textCompInParent.transform.scale.expression = 'temp=effect("Text-Size")("Slider");[temp, temp]';
         }
-        
-        
 
         var selectedLayers = parent.selectedLayers;
         for (var i = 0; i < selectedLayers.length; i++) {
