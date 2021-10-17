@@ -89,7 +89,9 @@
 
                         <!--//CompSelector-->
                         <div class="col-12 position-relative" id="div_compSelect_hud">
-                            <label for="compSelect_hud" class="my-form-label">Select Comp.</label>
+                            <label for="compSelect_hud" class="my-form-label">Select Comp.  
+                            <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('comp-edit')"></i>
+                            </label>
                             <div class="input-group  input-group-sm">
                                 <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
@@ -147,7 +149,7 @@
                                                id="select_3D_hud">
                                         <span class="slider round"></span>
                                     </label>
-                                    <label class="col-3 form-check-label pt-2 pl-2 m-0" for="select_3D_hud"> 3D</label>
+                                    <label class="col-3 form-check-label pt-2 pl-2 m-0" for="select_3D_hud"> 3D  <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('3d-edit')"></i></label>
                                 </div>
                             </div>
                         </div>
@@ -156,12 +158,6 @@
                         <div class="col-12 has-validation position-relative mt-3 cti">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
-                                    <span class="input-group-append">
-                                        <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
-                                            <img class="modal-icon-controls pr-1"
-                                                 src="./assets/images/icons/Indicator.png" />
-                                        </div>
-                                    </span>
                                     <label class="switch ml-2">
                                         <input type="checkbox"
                                                onchange="startTimeChangestickyImportFomr(this.checked)"
@@ -172,7 +168,13 @@
                                            for="startTimeSwitch_hud">
                                         start from current CTI to end of timeline
                                     </label>
-
+                                    <div class="input-group-append">
+                                        <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                            <img class="modal-icon-controls pr-1"
+                                                 src="./assets/images/icons/Indicator.png" />
+                                        </div>
+                                        <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('time-edit')"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -230,7 +232,7 @@
 
                         <!--//CompSelector-->
                         <div class="col-12 position-relative" id="div_compSelect_sizeline">
-                            <label for="compSelect_sizeline" class="my-form-label">Select Comp.</label>
+                            <label for="compSelect_sizeline" class="my-form-label">Select Comp.  <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('comp-edit')"></i></label>
                             <div class="input-group  input-group-sm">
                                 <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
@@ -305,7 +307,7 @@
                                                id="select_3D_sizeline">
                                         <span class="slider round"></span>
                                     </label>
-                                    <label class="col-3 form-check-label pt-2 pl-2 m-0" for="select_3D_sizeline"> 3D</label>
+                                    <label class="col-3 form-check-label pt-2 pl-2 m-0" for="select_3D_sizeline"> 3D  <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('3d-edit')"></i></label>
                                 </div>
                             </div>
                         </div>
@@ -314,12 +316,6 @@
                         <div class="col-12 has-validation position-relative mt-3 cti">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
-                                    <span class="input-group-append">
-                                        <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
-                                            <img class="modal-icon-controls pr-1"
-                                                 src="./assets/images/icons/Indicator.png" />
-                                        </div>
-                                    </span>
                                     <label class="switch ml-2">
                                         <input type="checkbox"
                                                onchange="startTimeChangestickyImportFomr(this.checked)"
@@ -330,6 +326,15 @@
                                            for="startTimeSwitch_sizeline">
                                         start from current CTI to end of timeline
                                     </label>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
+                                            <img class="modal-icon-controls pr-1"
+                                                 src="./assets/images/icons/Indicator.png" />
+                                        </div>
+                                        <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('time-edit')"></i>
+                                    </div>
+
+
                                 </div>
                             </div>
                         </div>
@@ -377,7 +382,7 @@
         <div class="modal-fullscreen modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
             <div class="modal-content text-light bg-dark">
                 <div class="modal-header p-1">
-                    <h5 class="modal-title text-light" >Pre-setup</h5>
+                    <h5 class="modal-title text-light">Pre-setup</h5>
                     <button type="button" class="btn-close bg-dark text-light border-0" data-dismiss="modal" aria-label="Close">
                         <i class="fa fa-times"></i>
                     </button>
@@ -387,7 +392,10 @@
 
                         <!--//mainText-->
                         <div class="col-12 position-relative pb-1" id="div_mainText_callout">
-                            <label for="TextSourceInput_DescText_callout" class="my-form-label ">Edit Text</label>
+                            <label for="TextSourceInput_DescText_callout" class="my-form-label ">
+                                Edit Text
+                                <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('text-edit')"></i>
+                            </label>
                             <div class="input-group input-group-sm">
                                 <input type="text"
                                        class="form-control text-light bg-dark rounded-pill border-light "
@@ -438,7 +446,10 @@
 
                         <!--//CompSelector-->
                         <div class="col-12 position-relative" id="div_compSelect_callout">
-                            <label for="compSelect_callout" class="my-form-label">Select Comp.</label>
+                            <label for="compSelect_callout" class="my-form-label">
+                                Select Comp.
+                                <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('comp-edit')"></i>
+                            </label>
                             <div class="input-group  input-group-sm">
                                 <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
@@ -455,7 +466,7 @@
                         <!--//text stick-->
                         <div class="col-12 has-validation position-relative" id="div_textSticker_callout">
                             <label for="layerTextSticker_callout" class="my-form-label">
-                                Select a layer to stick
+                                Select a layer to stick  <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('layers-edit')"></i>
                             </label>
                             <div class="input-group input-group-sm">
                                 <select class="form-control  form-select form-select-md custom-select  m-0 text-light bg-dark rounded-pill border-light"
@@ -579,6 +590,7 @@
                                             <img class="modal-icon-controls pr-1"
                                                  src="./assets/images/icons/Indicator.png" />
                                         </div>
+                                        <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('time-edit')"></i>
                                     </div>
                                 </div>
                             </div>
@@ -637,7 +649,7 @@
 
                         <!--//CompSelector-->
                         <div class="col-12 position-relative" id="div_compSelect_witchEffect">
-                            <label for="compSelect_witchEffect" class="my-form-label">Select Comp.</label>
+                            <label for="compSelect_witchEffect" class="my-form-label">Select Comp.  <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('comp-edit')"></i></label>
                             <div class="input-group input-group-sm">
                                 <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
@@ -663,22 +675,26 @@
                             </div>
                         </div>
                         <!--//Cti-->
-                        <div class="col-12 has-validation position-relative cti">
+                        <div class="col-12 has-validation position-relative mt-3 cti">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
-                                    <input type="checkbox" class="form-check-input border-light ml-2"
-                                           id="startTimeSwitch_witchEffect"
-                                           onchange="startTimeChangestickyImportFomr(this.checked)">
+                                    <label class="switch ml-2">
+                                        <input type="checkbox"
+                                               onchange="startTimeChangestickyImportFomr(this.checked)"
+                                               id="startTimeSwitch_witchEffect">
+                                        <span class="slider round"></span>
+                                    </label>
                                     <label id="startTimeSwitchlabel_witchEffect" class="pl-2 form-check-label"
                                            for="startTimeSwitch_witchEffect">
                                         start from current CTI to end of timeline
                                     </label>
-                                    <span class="input-group-append">
+                                    <div class="input-group-append">
                                         <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
                                             <img class="modal-icon-controls pr-1"
                                                  src="./assets/images/icons/Indicator.png" />
                                         </div>
-                                    </span>
+                                        <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('time-edit')"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -751,5 +767,29 @@
             </div>
         </div>
     </div>
+
+    <div id="helper" class="col-12 div-helper p-0 m-0">
+        <div class="modal-fullscreen modal-dialog modal-dialog-scrollable modal-dialog-centered p-1 m-0">
+
+            <div class="modal-content  text-light bg-light">
+                <div class="modal-header p-1 d-flex flex-row-reverse">
+                    <button type="button" class="text-dark border-0 " data-dismiss="modal" aria-label="Close" onclick="closeHelp()">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <div class="d-flex align-items-center flex-column justify-content-center h-100 position-relative" style="back">
+                    <div class="pt-2">
+                        <div class="helper-gif-container" id="helperGifContainer">
+
+                        </div>
+                        <div class="input-group input-group-sm col-12">
+                            <label class="my-form-label m-1 text-dark text-center col-12" id="helpText">reload to get newly added layer and Comps</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

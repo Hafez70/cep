@@ -5,6 +5,8 @@ var setingNeede = null;
 var textPath = 'assets/packages';
 var linePath = 'assets/basicRequiers/line';
 var lineFullPath = '';
+var helpjsonPath = '';
+var helpDirPath = '';
 var packagesPath = '';
 var ads = {};
 var callout_linecount = 1;
@@ -20,10 +22,14 @@ var callout_linecount = 1;
     }
     if (getOS() == "MAC") {
         linePath = path.substring(0, x) + linePath;
+        helpjsonPath = path.substring(0, x) + 'assets/help/help.json';
+        helpDirPath = path.substring(0, x) + 'assets/help/';
         path = path.substring(0, x) + textPath;
     }
     if (getOS() == "WIN") {
         linePath = path.substring(8, x) + linePath;
+        helpjsonPath = path.substring(8, x) + 'assets/help/help.json';
+        helpDirPath = path.substring(8, x) + 'assets/help/';
         path = path.substring(8, x) + textPath;
     }
     packagesPath = path;
@@ -85,13 +91,8 @@ function generateSideBar() {
             ' <ul class="pl-sm-2 collapse fade flex-column ml-1 list-group-flush" id="submenu' + indx + '" data-parent="#sidebarMenu">\n' +
             child_li + '\n' +
             ' </ul>\n' +
-            '</li>'
-        )
+            '</li>')
     });
-    // $('#sidebarMenu').append('<a href="./packageImport.html" class="pt-2 align-self-end text-light">\n' +
-    //     '      <div class="row "><i class="fa fa-file-import col-1"></i><p class="col">Import Package</p></div>\n' +
-    //     ' </a>\n');
-
 }
 
 function generateContentView(menuIndex, subMenIndex, element) {
@@ -698,4 +699,26 @@ function removeline() {
     $('#startlayerSelect_callout_line' + callout_linecount).val('');
     $('#div_startlayerSelect_callout_line' + callout_linecount).addClass('d-none');
     callout_linecount--;
+}
+
+function openHelp(key) {
+    $.ajax({
+        cache: false,
+        url: helpjsonPath,
+        success: function (helpResult) {
+            var helpObj = JSON.parse(helpResult);
+            Array.prototype.find.call(helpObj.texts, function (val, indx) {
+                if (val.key === key) {
+                    $('#helperGifContainer').css('background-image', 'url(./assets/help/' + key+'.gif)');
+                    $('#helpText').text(val.text);
+                    $('#helper').fadeIn();
+                    return;
+                }
+            });
+        }
+    });
+}
+
+function closeHelp() {
+    $('#helper').fadeOut();
 }

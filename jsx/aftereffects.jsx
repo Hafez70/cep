@@ -531,7 +531,6 @@
     }());
 })();
 
-
 function getSubFileItems(subFilePath, sourcPath) {
     try {
         var sunbfiles = [];
@@ -582,8 +581,8 @@ function getSubMenuItems(subMenuPath, sourcPath) {
         for (var i = 0; i < textsubFolder.length; i++) {
             if (textsubFolder[i] instanceof Folder) {
                 var subfiles = getSubFileItems(textsubFolder[i].fullName, sourcPath + '/' + textsubFolder[i].name);
-                if(subfiles.err){return subfiles;}
-                
+                if (subfiles.err) { return subfiles; }
+
                 sunbMenu.push({
                     subMenuName: textsubFolder[i].name.replace(/%20/g, " "),
                     subFiles: subfiles,
@@ -609,7 +608,7 @@ function getMainDirectories(myPath) {
         for (var i = 0; i < textsubFolder.length; i++) {
             if (textsubFolder[i] instanceof Folder) {
                 var subMenus = getSubMenuItems(textsubFolder[i].fullName, textPath + '/' + textsubFolder[i].name);
-                if(subMenus.err){return subMenus;}
+                if (subMenus.err) { return subMenus; }
                 files.push({
                     menuName: textsubFolder[i].name.replace(/%20/g, " "),
                     mainPath: textsubFolder[i].fullName,
@@ -659,9 +658,8 @@ function getAllLayersInComp(compIndex) {
         } else {
             curentComp = proj.item(compIndex);
         }
-    
-        if(!curentComp)
-        {
+
+        if (!curentComp) {
             //alert("No active Comp. found!! active or select a Comp. to fetch layers")
             var js = JSON.stringify(allLayers);
             return js;
@@ -764,7 +762,7 @@ function importBasicHud(projPath, params, projectName) {
                 hudCompInParent.transform.orientation.setValue(hudStickerLayer.transform.orientation.value);
                 hudCompInParent.transform.xRotation.setValue(hudStickerLayer.transform.xRotation.value);
                 hudCompInParent.transform.yRotation.setValue(hudStickerLayer.transform.yRotation.value);
-                if(hudStickerLayer.transform.zRotation){
+                if (hudStickerLayer.transform.zRotation) {
                     hudCompInParent.transform.zRotation.setValue(hudStickerLayer.transform.zRotation.value);
                 }
 
@@ -918,9 +916,6 @@ function importBasicSizeline(projPath, params, projectName) {
     }
 }
 
-
-
-
 function importLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, endTime) {
     try {
         var proj = app.project;
@@ -966,13 +961,34 @@ function importLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, 
     }
 }
 
+function checkIfBeamExist() {
+    try {
+        var wonderfolder = getWonderFolder();
+        var beamFolder = null;
+        var _numitems = wonderfolder.numItems
+        for (var i = 1; i <= _numitems; i++) {
+            if (wonderfolder.item(i) instanceof FolderItem && wonderfolder.item(i).name === "line-Beam.aep") {
+                beamFolder = wonderfolder.item(i);
+                break;
+            }
+        }
+        return beamFolder
+    }
+    catch (e) {
+        var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message };
+        return err;
+    }
+}
+
 function importBeamLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, endTime) {
     try {
-        var proj = app.project;
-        var myfile = new ImportOptions();
-        myfile.file = new File(linePath);
-        var lineFolder = proj.importFile(myfile);
-        
+        var lineFolder =checkIfBeamExist();
+        if(lineFolder == null){
+            var proj = app.project;
+            var myfile = new ImportOptions();
+            myfile.file = new File(linePath);
+            lineFolder = proj.importFile(myfile);
+        }
         var RootComp = undefined;
         var lineFolder_numitems = lineFolder.numItems
 
@@ -984,22 +1000,22 @@ function importBeamLine(linePath, nodeLayers, parentComp, endPointLayer, startTi
         }
 
         var controlItem = RootComp.layers.byName("line-beam")
-        
+
         var y = nodeLayers.length;
         for (var i = 0; i < y; i++) {
             controlItem.copyToComp(parentComp);
             var parentcontrolItem = parentComp.layer(1);
-
+            parentcontrolItem.name = "line-control-" + (i + 1) + '-' + endPointLayer.name;
             parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
             parentcontrolItem.Effects("EndPoint").property("Layer").setValue(endPointLayer.index);
             parentcontrolItem.startTime = startTime;
             if (endTime !== 0) {
                 parentcontrolItem.outPoint = endTime;
             }
-            parentcontrolItem.name = "line-control-" + parentComp.layers.length + "-" + i
+            parentcontrolItem.name = "line-control-" + (i + 1) + '-' + endPointLayer.name;
             parentcontrolItem.moveToEnd();
         }
-        
+
         lineFolder.parentFolder = getWonderFolder();
 
     }
@@ -1009,24 +1025,24 @@ function importBeamLine(linePath, nodeLayers, parentComp, endPointLayer, startTi
     }
 }
 
-function getWonderFolder(){
-     try {
-         var proj = app.project;
-         var _numitems = proj.numItems
-         var wonderToolsFolder = null;
+function getWonderFolder() {
+    try {
+        var proj = app.project;
+        var _numitems = proj.numItems
+        var wonderToolsFolder = null;
 
-         for (var i = 1; i <= _numitems; i++) {
-             if (proj.item(i) instanceof FolderItem && proj.item(i).name === "WonderTools") {
-                 wonderToolsFolder = proj.item(i);
-                 break;
-             }
-         }
+        for (var i = 1; i <= _numitems; i++) {
+            if (proj.item(i) instanceof FolderItem && proj.item(i).name === "WonderTools") {
+                wonderToolsFolder = proj.item(i);
+                break;
+            }
+        }
 
-         if (wonderToolsFolder === null) {
-             wonderToolsFolder = proj.items.addFolder("WonderTools");
-         }
+        if (wonderToolsFolder === null) {
+            wonderToolsFolder = proj.items.addFolder("WonderTools");
+        }
 
-         return wonderToolsFolder;
+        return wonderToolsFolder;
     }
     catch (e) {
         var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message };
@@ -1034,18 +1050,17 @@ function getWonderFolder(){
     }
 }
 
-importCallOut("~/AppData/Roaming/Adobe/CEP/extensions/wonder-2018/assets/packages/Call Out/compatible versions/time-13/time-13.aep",
-"C:/Users/h-ghods/AppData/Roaming/Adobe/CEP/extensions/wonder-2018/assets/basicRequiers/line",
-'{"comp":"0","sticker":"1","layers":[{"start":"2","end":"1"},{"start":"3","end":"1"},{"start":"4","end":"1"}],"cti":{"fromCti":true,"startTime":"0","endTime":"0"},"mainText":"beam 1"}',
-'time-13')
-
+//importCallOut("~/AppData/Roaming/Adobe/CEP/extensions/wonder-2018/assets/packages/Call Out/compatible versions/time-13/time-13.aep",
+//"C:/Users/h-ghods/AppData/Roaming/Adobe/CEP/extensions/wonder-2018/assets/basicRequiers/line",
+//'{"comp":"0","sticker":"1","layers":[{"start":"2","end":"1"},{"start":"3","end":"1"},{"start":"4","end":"1"}],"cti":{"fromCti":true,"startTime":"0","endTime":"0"},"mainText":"beam 1"}',
+//'time-13')
 function importCallOut(projPath, linePath, params, projectName) {
     try {
         var obj_params = JSON.parse(params);
         var comps = [];
         var _startTime = 0;
         var _endTime = 0;
-        
+
         var proj = app.project;
         var parent = undefined;
         if (parseInt(obj_params.comp) === 0) {
@@ -1077,17 +1092,17 @@ function importCallOut(projPath, linePath, params, projectName) {
             }
 
             if (_endTime > parent.workAreaDuration) {
-               _endTime = parent.duration;
+                _endTime = parent.duration;
             }
         }
 
         var callOutStickerLayer = parent.layer(parseInt(obj_params.sticker));
-        
+
         var item = new ImportOptions();
         item.file = new File(projPath);
         item.importAs = ImportAsType.PROJECT;
         var TextIFolder = proj.importFile(item);
-        
+
         var RootComp = undefined;
         var TextComp = undefined;
 
@@ -1123,7 +1138,7 @@ function importCallOut(projPath, linePath, params, projectName) {
         }
 
         var textCompInParent = parent.layers.add(TextComp);
-        
+
         var y = RootComp.layers.byName(projectName).transform.anchorPoint;
 
         textCompInParent.transform.anchorPoint.setValue(y.value);
@@ -1141,51 +1156,47 @@ function importCallOut(projPath, linePath, params, projectName) {
             textCompInParent.outPoint = _endTime;
         }
 
-        //textCompInParent.selected = true;
-        //textCompInParent.openInViewer();
-        //app.executeCommand(app.findMenuCommandId("Update Markers From Source"));
-        //textCompInParent.selected = false;
-        //parent.openInViewer();
         TextComp.name = textCompInParent.name + "-" + parent.layers.length
         textCompInParent.name = TextComp.name;
-        
+
         app.beginUndoGroup("Time Remap Layer");
         textCompInParent.timeRemapEnabled = true;
-        if(textCompInParent.timeRemap.canSetExpression)
-        {
-            var out_time = _endTime -  ((_endTime  - _startTime) / 3);
+        if (textCompInParent.timeRemap.canSetExpression) {
+            var out_time = _endTime - ((_endTime - _startTime) / 3);
             var inMarker = new MarkerValue("in");
-        
+
             textCompInParent.marker.setValueAtTime(_startTime, inMarker);
             var outMarker = new MarkerValue("out");
             textCompInParent.marker.setValueAtTime(out_time, outMarker);
-            textCompInParent.timeRemap.expression = 'action = comp("'+textCompInParent.name+'").layer("action");'+
-                                                                            'n = 0;'+
-                                                                            'if (marker.numKeys > 0){'+
-                                                                            '  n = marker.nearestKey(time).index;'+
-                                                                            '  if (marker.key(n).time > time){'+
-                                                                            '    n--;'+
-                                                                            '  }'+
-                                                                            '}'+
-                                                                            'if (n != 0){'+
-                                                                            '  m = marker.key(n);'+
-                                                                            '  myComment = m.comment;'+
-                                                                            '  t = time - m.time;'+
-                                                                            '  try{'+
-                                                                            '    actMarker = action.marker.key(myComment);'+
-                                                                            '    if (action.marker.numKeys > actMarker.index){'+
-                                                                            '      tMax = action.marker.key(actMarker.index + 1).time - actMarker.time;'+
-                                                                            '    }else{'+
-                                                                            '      tMax = action.outPoint - actMarker.time;'+
-                                                                            '    }'+
-                                                                            '    t = Math.min(t, tMax);'+
-                                                                            '    actMarker.time + t;'+
-                                                                            '  }catch (err){'+
-                                                                            '    0'+
-                                                                            '  }'+
-                                                                            '}';
-                                                                            
-            }
+            textCompInParent.timeRemap.expression = 'src = comp("' + textCompInParent.name + '").layer("MarkerWt");' +
+                'n = 0;' +
+                'if (marker.numKeys > 0) {' +
+                '    n = marker.nearestKey(time).index;' +
+                '    if (marker.key(n).time > time) {' +
+                '        n--;' +
+                '    }' +
+                '}' +
+                'if (n == 0) {' +
+                '    0' +
+                '} else {' +
+                '    m = marker.key(n);' +
+                '    myComment = m.comment;' +
+                '    t = time - m.time;' +
+                '    try {' +
+                '        mark = src.marker.key(myComment);' +
+                '        if (src.marker.numKeys > mark.index) {' +
+                '            tMax = src.marker.key(mark.index + 1).time - mark.time;' +
+                '        } else {' +
+                '            tMax = src.outPoint - mark.time;' +
+                '        }' +
+                '        t = Math.min(t, tMax);' +
+                '        mark.time + t;' +
+                '    }catch (err) {' +
+                '        0' +
+                '    }' +
+                '}';
+
+        }
         app.endUndoGroup();
 
         if (textCompInParent.transform.position.canSetExpression) {
@@ -1200,17 +1211,17 @@ function importCallOut(projPath, linePath, params, projectName) {
 
         var lineResult = '';
         if (nodeLayers.length > 0) {
-            if(getversion() >= 15){
+            if (getversion() >= 15) {
                 lineResult = importLine(linePath + '/line.aep', nodeLayers, parent, textCompInParent, _startTime, _endTime);
             }
-            else{//beam
+            else {//beam
                 lineResult = importBeamLine(linePath + '/line-Beam.aep', nodeLayers, parent, textCompInParent, _startTime, _endTime);
             }
             if (lineResult && lineResult.err) { return JSON.stringify(lineResult); }
         }
-       
+
         TextIFolder.parentFolder = getWonderFolder();
-        
+
         return JSON.stringify({ res: 'ok' })
     }
     catch (e) {
@@ -1219,15 +1230,15 @@ function importCallOut(projPath, linePath, params, projectName) {
     }
 }
 
-function getmarkers(comp){
+function getmarkers(comp) {
     var p = thisComp.marker;
     var M = p.numKeys;
-    var  a = [];
+    var a = [];
 
-    for (m=1; m<=M; m++) a.push(p.key(m).time);
+    for (m = 1; m <= M; m++) a.push(p.key(m).time);
 
-    var x = (M===0 ? "NO_KEYS" : a);
-    }
+    var x = (M === 0 ? "NO_KEYS" : a);
+}
 
 function importWithEffect(projPath, params, projectName) {
 
@@ -1310,7 +1321,6 @@ function importWithEffect(projPath, params, projectName) {
 }
 
 //importSamples("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Call Out/samples/sample-callout/sample-callout.aep");
-
 function importSamples(projPath) {
 
     try {
@@ -1326,6 +1336,7 @@ function importSamples(projPath) {
         return err;
     }
 }
+
 //importNewPackage("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/packages");
 function importNewPackage(appPackagePath) {
     try {
@@ -1428,6 +1439,7 @@ function removePackage(pkg_folder) {
 
     return "";
 }
+
 //openURL("https://www.google.com")
 function openURL(url) {
     try {
@@ -1439,7 +1451,7 @@ function openURL(url) {
         var app_os = (os.indexOf("Win") != -1) ? system.callSystem('explorer ' + url) : system.callSystem('open ' + url);
     }
     catch (e) {
-        var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' +  e.message };
+        var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message };
         return err;
     }
 }
