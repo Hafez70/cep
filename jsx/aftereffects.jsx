@@ -677,8 +677,8 @@ function getAllLayersInComp(compIndex) {
     }
 }
 
-//importBasicHud("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/basic shapes/element-1/element-1.aep",
-//'{"comp":"1","sticker":"2","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":true}', "element-1");
+//importBasicHud("~/AppData/Roaming/Adobe/CEP/extensions/wonder-2018/assets/packages/H-U-D.s/basic shapes/element-01/element-01.aep",
+//'{"comp":"1","sticker":"5","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":false}', "element-01");
 function importBasicHud(projPath, params, projectName) {
 
     try {
@@ -695,18 +695,18 @@ function importBasicHud(projPath, params, projectName) {
             parent = proj.item(parseInt(obj_params.comp));
         }
 
-        if (obj_params.cti.fromCti) {
+      if (obj_params.cti.fromCti) {
             _startTime = parent.time;
+            _endTime = parent.duration
         } else {
-            if (parseFloat(obj_params.cti.startTime) !== 0) {
-                _startTime = parseFloat(obj_params.cti.startTime);
-            } else {
-                _startTime = parent.time;
-            }
-        }
-        if (parseFloat(obj_params.cti.endTime) !== 0) {
+            _startTime = parseFloat(obj_params.cti.startTime);
             _endTime = parseFloat(obj_params.cti.endTime);
         }
+
+        if (_endTime === 0) {
+            _endTime = parent.duration;
+        }
+
 
         if (_endTime !== 0) {
             if (_startTime >= _endTime) {
@@ -714,16 +714,17 @@ function importBasicHud(projPath, params, projectName) {
             }
 
             if (_endTime > parent.workAreaDuration) {
-                return "{'error' :'wrong time range!'}"
+                _endTime = parent.duration;
             }
         }
-
 
         var hudStickerLayer = undefined;
         if (obj_params.sticker != 0) {
             //var startLayer = []; parent.layer(firstLayerIndex);
             hudStickerLayer = parent.layer(parseInt(obj_params.sticker));
         }
+    
+    if(hudStickerLayer instanceof  AVLayer){
         var item = new ImportOptions();
         item.file = new File(projPath);
         var hudFolder = proj.importFile(item);
@@ -749,7 +750,7 @@ function importBasicHud(projPath, params, projectName) {
         var hudCompInParent = parent.layer(1);
         hudCompInParent.name = hudCompInParent.name + "-" + parent.layers.length
 
-        if (hudStickerLayer !== undefined) {
+        if (hudStickerLayer !== undefined && hudStickerLayer ) {
 
             //hudCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(hudStickerLayer.index);
 
@@ -796,6 +797,7 @@ function importBasicHud(projPath, params, projectName) {
         hudFolder.remove();
 
         return JSON.stringify({ res: 'ok' })
+        }
     }
     catch (e) {
         var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message });
@@ -803,7 +805,7 @@ function importBasicHud(projPath, params, projectName) {
     }
 }
 
-//importBasicSizeline("/c/Program Files/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/Size Lines/sizeline-1/sizeline-1.aep",
+//mportBasicSizeline("/c/Program Files/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/wonder HUDs/Size Lines/sizeline-1/sizeline-1.aep",
 //'{"comp":"0","start":"1","end":"2","cti":{"fromCti":true,"startTime":"0","endTime":"0"}}','sizeline-1');
 function importBasicSizeline(projPath, params, projectName) {
 
@@ -823,16 +825,16 @@ function importBasicSizeline(projPath, params, projectName) {
 
         if (obj_params.cti.fromCti) {
             _startTime = parent.time;
+            _endTime = parent.duration
         } else {
-            if (parseFloat(obj_params.cti.startTime) !== 0) {
-                _startTime = parseFloat(obj_params.cti.startTime);
-            } else {
-                _startTime = parent.time;
-            }
-        }
-        if (parseFloat(obj_params.cti.endTime) !== 0) {
+            _startTime = parseFloat(obj_params.cti.startTime);
             _endTime = parseFloat(obj_params.cti.endTime);
         }
+
+        if (_endTime === 0) {
+            _endTime = parent.duration;
+        }
+
 
         if (_endTime !== 0) {
             if (_startTime >= _endTime) {
@@ -840,7 +842,7 @@ function importBasicSizeline(projPath, params, projectName) {
             }
 
             if (_endTime > parent.workAreaDuration) {
-                return "{'error' :'wrong time range!'}"
+                _endTime = parent.duration;
             }
         }
 

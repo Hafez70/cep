@@ -15,6 +15,7 @@ var callout_linecount = 1;
 (function () {
     'use strict';
     var path;
+    
     path = location.href;
     var x = path.indexOf("index_WonderCallOuts.html");
     if (x == -1) {
@@ -55,6 +56,7 @@ function getOS() {
 
 ///-----------------create menu part ----
 function getFilesTree(myPath) {
+    ShowLoader();
     const csInterface = new CSInterface();
     csInterface.evalScript("getMainDirectories('" + myPath+"');", function (res) {
         var result = JSON.parse(res);
@@ -96,6 +98,7 @@ function generateSideBar() {
 }
 
 function generateContentView(menuIndex, subMenIndex, element) {
+    
     $('#gridSystem').empty();
     $(".sideMenu-selected").parent().parent().removeClass(" border rounded-pill border-light ");
     $(".sideMenu-selected").removeClass("sideMenu-selected");
