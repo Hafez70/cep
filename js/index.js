@@ -2,63 +2,40 @@ var contentTree = {};
 var importProjPath = '';
 var importProjName = '';
 var setingNeede = null;
-var textPath = 'assets/packages';
-var linePath = 'assets/basicRequiers/line';
 var lineFullPath = '';
+var sizetextFullPath = '';
 var helpjsonPath = '';
 var helpDirPath = '';
 var packagesPath = '';
 var ads = {};
 var callout_linecount = 1;
-
+var csInterface = new CSInterface();
 
 (function () {
     'use strict';
-    var path;
-    
-    path = location.href;
-    var x = path.indexOf("index_WonderCallOuts.html");
-    if (x == -1) {
-        x = path.indexOf("packageImport.html");
-    }
-    if (getOS() == "MAC") {
-        linePath = path.substring(0, x) + linePath;
-        helpjsonPath = path.substring(0, x) + 'assets/help/help.json';
-        helpDirPath = path.substring(0, x) + 'assets/help/';
-        path = path.substring(0, x) + textPath;
-    }
-    if (getOS() == "WIN") {
-        linePath = path.substring(8, x) + linePath;
-        helpjsonPath = path.substring(8, x) + 'assets/help/help.json';
-        helpDirPath = path.substring(8, x) + 'assets/help/';
-        path = path.substring(8, x) + textPath;
-    }
-    packagesPath = path;
-    lineFullPath = linePath;
-    getFilesTree(path);
+
+    var extensionPath = csInterface.getSystemPath(SystemPath.EXTENSION);
+    lineFullPath = extensionPath + '/assets/basicRequiers/line';
+    sizetextFullPath = extensionPath + '/assets/basicRequiers/textsize';
+    helpjsonPath = extensionPath + '/assets/help/help.json';
+    helpDirPath = extensionPath + '/assets/help/';
+    packagesPath = extensionPath + '/assets/packages';
+
+    var jsxFile = extensionPath + '/jsx/hostjs.jsx';
+
+    //csInterface.evalScript("try{\n var jsxFile = new File('" + jsxFile + "');\n $.evalFile(jsxFile); \n }catch(e){alert(e.toString())}", function (params) {
+
+    //})
+
+    getFilesTree(packagesPath);
 }());
-
-function getOS() {
-    var userAgent = window.navigator.userAgent,
-        platform = window.navigator.platform,
-        macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'],
-        windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'],
-        os = null;
-
-    if (macosPlatforms.indexOf(platform) != -1) {
-        os = "MAC";
-    } else if (windowsPlatforms.indexOf(platform) != -1) {
-        os = "WIN";
-    }
-    return os;
-}
 
 
 ///-----------------create menu part ----
 function getFilesTree(myPath) {
     ShowLoader();
-    const csInterface = new CSInterface();
-    csInterface.evalScript("getMainDirectories('" + myPath+"');", function (res) {
+
+    csInterface.evalScript("getMainDirectories('" + myPath + "');", function (res) {
         var result = JSON.parse(res);
 
         if (result.err) {
@@ -80,7 +57,7 @@ function generateSideBar() {
         Array.prototype.map.call(val.subMenuNames, function (ch_val, ch_indx) {
             child_li += '<li class="w-100 pl-2 mt-1" onclick="generateContentView(' + indx + ',' + ch_indx + ',this)">\n' +
                 '           <a href="#" class="px-0 align-self-end text-light pkg"> ' +
-                '<span class="d-inline">' + ch_val.subMenuName + '</span>\n' +
+                '               <span class="d-inline">' + ch_val.subMenuName + '</span>\n' +
                 '           </a>\n' +
                 '       </li>\n';
         });
@@ -97,18 +74,20 @@ function generateSideBar() {
     });
 }
 
+
+
 function generateContentView(menuIndex, subMenIndex, element) {
-    
+
     $('#gridSystem').empty();
     $(".sideMenu-selected").parent().parent().removeClass(" border rounded-pill border-light ");
     $(".sideMenu-selected").removeClass("sideMenu-selected");
     $(element).find("span").addClass("sideMenu-selected");
-    $(element).addClass(" border rounded-pill border-light ");
+    $(element).addClass(" border rounded border-light ");
     var newelements = [];
     Array.prototype.map.call(contentTree[menuIndex].subMenuNames[subMenIndex].subFiles,
         function (val, indx, arr) {
             newelements.push($('<div class="shadow-fancy card bg-dark small-card" ' +
-                '                       onclick="importFile(' + menuIndex + ',' + subMenIndex + ',' + indx + ')">\n' +
+                '                       onclick="importFile(' + menuIndex + ',' + subMenIndex + ',' + indx + ', \'' + val.fileName + '\')">\n' +
                 '      <div class="card-body m-0 p-0">\n' +
                 '           <div class="card-img-top">\n' +
                 '               <img id="img' + indx + '" src="' + val.demoGifFilePath + '" class="card-img-top" >' +
@@ -122,12 +101,43 @@ function generateContentView(menuIndex, subMenIndex, element) {
     $('#gridSystem').append(newelements);
 }
 
-function importFile(menuIndex, subMenuIndex, fileIndex) {
+function searchItems(inputValue) {
+    $('#gridSystem').empty();
+    if (inputValue !== '') {
+        $(".sideMenu-selected").parent().parent().removeClass(" border rounded-pill border-light ");
+        $(".sideMenu-selected").removeClass("sideMenu-selected");
+        var newelements = [];
+        Array.prototype.map.call(contentTree, function (contentTree_Val, contentTreeVal_indx) {
+            Array.prototype.map.call(contentTree_Val.subMenuNames, function (subMenuNames_Val, subMenuNames_indx) {
+                Array.prototype.map.call(subMenuNames_Val.subFiles,
+                    function (subFiles_val, subFiles_indx) {
+                        if (subFiles_val.fileName.toLowerCase().indexOf(inputValue.toLowerCase(), 0) !== -1) {
+                            newelements.push($('<div class="shadow-fancy card bg-dark small-card" ' +
+                                '                       onclick="importFile(' + contentTreeVal_indx + ',' + subMenuNames_indx + ',' + subFiles_indx + ', \'' + subFiles_val.fileName + '\')">\n' +
+                                '      <div class="card-body m-0 p-0">\n' +
+                                '           <div class="card-img-top">\n' +
+                                '               <img id="img' + subFiles_indx + '" src="' + subFiles_val.demoGifFilePath + '" class="card-img-top" >' +
+                                '           </div>\n' +
+                                '           <div class=" bg-fancy">\n' +
+                                '               <p class="m-0 p-0 text-neon text-center ">' + subFiles_val.fileName + '</p>\n' +
+                                '           </div>\n' +
+                                '    </div>\n' +
+                                '  </div>').hide().fadeIn(500));
+                        }
+                    });
+            });
+        });
+
+        $('#gridSystem').append(newelements);
+    }
+}
+
+function importFile(menuIndex, subMenuIndex, fileIndex, projName) {
     var selected_file = contentTree[menuIndex].subMenuNames[subMenuIndex].subFiles[fileIndex];
     importProjPath = selected_file.projectPath;
     importProjName = selected_file.fileName
     var settingPath = selected_file.settingPath;
-    const csInterface = new CSInterface();
+
     csInterface.evalScript('getAllComps()', function (res) {
         if (res !== "") {
             var allComps = JSON.parse(res);
@@ -137,13 +147,13 @@ function importFile(menuIndex, subMenuIndex, fileIndex) {
                 return;
             }
 
-           opneSetting(settingPath, allComps);
+            opneSetting(settingPath, allComps, projName);
 
         }
     });
 }
 
-function opneSetting(settingPath, comps) {
+function opneSetting(settingPath, comps, projName) {
 
     $.ajax({
         cache: false,
@@ -151,11 +161,15 @@ function opneSetting(settingPath, comps) {
         success: function (settingResult) {
             setingNeede = JSON.parse(settingResult);
             rawModal();
+
+            $('.lbl_projname').text(function () {
+                return projName + " Pre-setup";
+            });
+
             var items = '<option value="0" selected>Active Comp</option>\n';
             $('#compSelect_hud').empty();
             $('#compSelect_sizeline').empty();
             $('#compSelect_callout').empty();
-            $('#compSelect_witchEffect').empty();
 
             Array.prototype.map.call(comps, function (val) {
                 items += '<option value="' + val.compItemIndex + '">' + val.compName + '</option> \n';
@@ -164,7 +178,6 @@ function opneSetting(settingPath, comps) {
             $('#compSelect_hud').append(items);
             $('#compSelect_sizeline').append(items);
             $('#compSelect_callout').append(items);
-            $('#compSelect_witchEffect').append(items);
 
             compSelected(0);
 
@@ -177,10 +190,6 @@ function opneSetting(settingPath, comps) {
             if (setingNeede.type === "sizeline") {
 
                 $('#sizelineSettingModal').modal('show');
-            }
-            else if (setingNeede.type === "WitchEffect") {
-
-                $('#witchEffectSettingModal').modal('show');
             }
             else if (setingNeede.type === "Sample") {
 
@@ -203,7 +212,7 @@ function opneSetting(settingPath, comps) {
                     $("div .cti").show();
                 }
 
-                
+
                 if (_setting.text.indexOf("main", 0) !== -1) {
                     $("#div_mainText_callout").show();
                 }
@@ -221,11 +230,11 @@ function opneSetting(settingPath, comps) {
         }
     });
 
-    
+
 }
 
 function compSelected(this_val) {
-    const csInterface = new CSInterface();
+
     csInterface.evalScript('getAllLayersInComp(' + this_val + ')', function (res) {
         if (res !== "") {
 
@@ -239,7 +248,7 @@ function compSelected(this_val) {
             var _layers_first = '<option value="0" selected>Do not Stick</option> \n';
             var _layers_first_withNull = '<option value="" selected>Choose layer ...</option> \n';
 
-            Array.prototype.map.call(layers, function (val) { 
+            Array.prototype.map.call(layers, function (val) {
                 _layers += '<option value="' + val.layerIndex + '">' + val.layerName + '</option> \n'
             });
 
@@ -280,7 +289,6 @@ function compSelected(this_val) {
 }
 
 function reloadComps() {
-    const csInterface = new CSInterface();
     csInterface.evalScript('getAllComps()', function (res) {
         if (res !== "") {
             var allComps = JSON.parse(res);
@@ -291,14 +299,12 @@ function reloadComps() {
 
             $('#compSelect_hud').empty();
             $('#compSelect_callout').empty();
-            $('#compSelect_witchEffect').empty();
             var items = '<option value="0" selected>Active Comp</option>\n';
-            Array.prototype.map.call(allComps, function (val) { 
+            Array.prototype.map.call(allComps, function (val) {
                 items += '<option value="' + val.compItemIndex + '">' + val.compName + '</option> \n';
             });
             $('#compSelect_hud').append(items);
             $('#compSelect_callout').append(items);
-            $('#compSelect_witchEffect').append(items);
             compSelected(0);
         }
     });
@@ -311,7 +317,6 @@ function rawModal() {
     $('#compSelect_hud').empty();
     $('#compSelect_sizeline').empty();
     $('#compSelect_callout').empty();
-    $('#compSelect_witchEffect').empty();
 
     $('#start_point_sizeline').empty();
     $('#end_point_sizeline').empty();
@@ -334,7 +339,7 @@ function rawModal() {
     $('#startlayerSelect_callout_line2').val('');
     $('#div_startlayerSelect_callout_line2').addClass('d-none');
 
-    $('#startlayerSelect_callout_line3' ).val('');
+    $('#startlayerSelect_callout_line3').val('');
     $('#div_startlayerSelect_callout_line3').addClass('d-none');
 
     $('#startlayerSelect_callout_line4').val('');
@@ -353,10 +358,6 @@ function startTimeChangestickyImportFomr(value) {
         $("#startTimeSpecificValue_callout").prop("disabled", false).parent().parent().css("opacity", "1");
         $("#endTimeSpecificValue_callout").prop("disabled", false).parent().parent().css("opacity", "1");
 
-        $("#startTimeSwitchlabel_witchEffect").text("from - to (Seconds - accept decimal)");
-        $("#startTimeSpecificValue_witchEffect").prop("disabled", false).parent().parent().css("opacity", "1");
-        $("#endTimeSpecificValue_witchEffect").prop("disabled", false).parent().parent().css("opacity", "1");
-
         $("#startTimeSpecificValue_sizeline").text("from - to (Seconds - accept decimal)");
         $("#startTimeSpecificValue_sizeline").prop("disabled", false).parent().parent().css("opacity", "1");
         $("#endTimeSpecificValue_sizeline").prop("disabled", false).parent().parent().css("opacity", "1");
@@ -372,12 +373,6 @@ function startTimeChangestickyImportFomr(value) {
         $("#endTimeSpecificValue_callout")[0].value = 0;
         $("#endTimeSpecificValue_callout").prop("disabled", true).parent().parent().css("opacity", "0.2");
         $("#startTimeSpecificValue_callout").prop("disabled", true).parent().parent().css("opacity", "0.2");
-
-        $("#startTimeSwitchlabel_witchEffect").text("start from current CTI");
-        $("#startTimeSpecificValue_witchEffect")[0].value = 0;
-        $("#endTimeSpecificValue_witchEffect")[0].value = 0;
-        $("#endTimeSpecificValue_witchEffect").prop("disabled", true).parent().parent().css("opacity", "0.2");
-        $("#startTimeSpecificValue_witchEffect").prop("disabled", true).parent().parent().css("opacity", "0.2");
 
         $("#startTimeSpecificValue_sizeline").text("start from current CTI");
         $("#startTimeSpecificValue_sizeline")[0].value = 0;
@@ -435,6 +430,10 @@ function generateJsonSetting() {
             json_result.start = $('#start_point_sizeline').find("option:selected").val();
             json_result.end = $('#end_point_sizeline').find("option:selected").val();
 
+            if ($('#TextSourceInput_SizeText_sizeline').val() !== "") {
+                json_result.sizeText = $('#TextSourceInput_SizeText_sizeline').val();
+            }
+
             if (_setting.time) {
 
                 json_result.cti = {
@@ -444,35 +443,8 @@ function generateJsonSetting() {
                 };
             }
 
-            if (_setting.thd) {
-                json_result.thd = $('#select_3D_sizeline')[0].checked
-            }
 
             importSizeline(json_result);
-        }
-        else if (setingNeede.type === "WitchEffect") {
-            var json_result = {};
-
-            $('#witchEffectImportForm').addClass('was-validated');
-
-            var _setting = setingNeede.setting;
-            if (!$('#compSelect_witchEffect').find("option:selected").val()) {
-
-                return;
-            }
-
-            json_result.comp = (!$('#compSelect_witchEffect').find("option:selected").val() ? 0 : $('#compSelect_witchEffect').find("option:selected").val());
-
-            if (_setting.time) {
-
-                json_result.cti = {
-                    fromCti: (!$('#startTimeSwitch_witchEffect')[0].checked),
-                    startTime: (!$('#startTimeSpecificValue_witchEffect')[0].value ? 0 : $('#startTimeSpecificValue_witchEffect')[0].value),
-                    endTime: (!$('#endTimeSpecificValue_witchEffect')[0].value ? 0 : $('#endTimeSpecificValue_witchEffect')[0].value),
-                };
-            }
-
-            importWitchEffect(json_result);
         }
         else if (setingNeede.type === "CallOut") {
 
@@ -524,14 +496,14 @@ function generateJsonSetting() {
                 }
             }
 
-            if (_setting.text.indexOf("sub", 0) !== -1){
+            if (_setting.text.indexOf("sub", 0) !== -1) {
 
                 if ($('#TextSourceInput_SubText_callout').val() !== "") {
                     json_result.subText = $('#TextSourceInput_SubText_callout').val();
                 }
             }
 
-            if (_setting.text.indexOf("desc", 0) !== -1){
+            if (_setting.text.indexOf("desc", 0) !== -1) {
                 if ($('#TextSourceInput_DescText_callout').val() !== "") {
                     json_result.descText = $('#TextSourceInput_DescText_callout').val();
                 }
@@ -539,16 +511,11 @@ function generateJsonSetting() {
 
             importCallOut(json_result);
         }
-        else if (setingNeede.type === "Sample") {
-            importSample();
-        }
     }
 }
 
 function importCallOut(jsonInput) {
     var str_input = JSON.stringify(jsonInput);
-    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
-    const csInterface = new CSInterface();
     const strEval = 'importCallOut("' + importProjPath + '","' + lineFullPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
     ShowLoader();
     csInterface.evalScript(strEval
@@ -557,6 +524,7 @@ function importCallOut(jsonInput) {
             var result = JSON.parse(res);
             if (result.err) {
                 alert(result.msg);
+                reloadComps();
                 return;
             }
             else {
@@ -564,15 +532,11 @@ function importCallOut(jsonInput) {
                 $('#calloutImportFomr').removeClass('was-validated');
             }
         });
-    //} else {
-
-    //}
+    
 }
 
 function importHud(jsonInput) {
     var str_input = JSON.stringify(jsonInput);
-    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
-    const csInterface = new CSInterface();
     const strEval = 'importBasicHud("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
     ShowLoader();
     csInterface.evalScript(strEval
@@ -581,6 +545,7 @@ function importHud(jsonInput) {
             var result = JSON.parse(res);
             if (result.err) {
                 alert(result.msg);
+                reloadComps();
                 return;
             }
             else {
@@ -589,16 +554,12 @@ function importHud(jsonInput) {
             }
 
         });
-    //} else {
-
-    //}
-}
+    }
 
 function importSizeline(jsonInput) {
     var str_input = JSON.stringify(jsonInput);
     // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
-    const csInterface = new CSInterface();
-    const strEval = 'importBasicSizeline("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
+    const strEval = 'importBasicSizeline("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\', "' + sizetextFullPath + '" )';
     ShowLoader();
     csInterface.evalScript(strEval
         , function (res) {
@@ -606,6 +567,7 @@ function importSizeline(jsonInput) {
             var result = JSON.parse(res);
             if (result.err) {
                 alert(result.msg);
+                reloadComps();
                 return;
             }
             else {
@@ -618,54 +580,9 @@ function importSizeline(jsonInput) {
     //}
 }
 
-//function importWitchEffect(jsonInput) {
-//    var str_input = JSON.stringify(jsonInput);
-//    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
-//    const csInterface = new CSInterface();
-//    const strEval = 'importWithEffect("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\')';
-//    ShowLoader();
-//    csInterface.evalScript(strEval
-//        , function (res) {
-//            HideLoader();
-//            var result = JSON.parse(res);
-//            if (result.err) {
-//                alert(result.msg);
-//                return;
-//            }
-//            else {
-//                $('#witchEffectSettingModal').modal('hide');
-//                $('#witchEffectImportForm').removeClass('was-validated');
-//            }
-//        });
-//    //} else {
-
-//    //}
-//}
-
-//function importSample() {
-//    const csInterface = new CSInterface();
-//    const strEval = 'importSamples("' + importProjPath + '")';
-//    ShowLoader();
-//    csInterface.evalScript(strEval
-//        , function (res) {
-//            HideLoader();
-//            var result = JSON.parse(res);
-//            if (result.err) {
-//                alert(result.msg);
-//                return;
-//            }
-//            else {
-//                $('#SampleSettingModal').modal('hide');
-//            }
-//        });
-//    //} else {
-
-//    //}
-//}
 
 
 //function importPackage() {
-//    const csInterface = new CSInterface();
 //    const strEval = 'importNewPackage("' + packagesPath + '")';
 //    csInterface.evalScript(strEval
 //        , function (res) {
@@ -676,7 +593,6 @@ function importSizeline(jsonInput) {
 //}
 
 function openUrl(url) {
-    const csInterface = new CSInterface();
     const strEval = 'openURL("' + url + '")';
     csInterface.evalScript(strEval);
 }
@@ -712,7 +628,7 @@ function openHelp(key) {
             var helpObj = JSON.parse(helpResult);
             Array.prototype.find.call(helpObj.texts, function (val, indx) {
                 if (val.key === key) {
-                    $('#helperGifContainer').css('background-image', 'url(./assets/help/' + key+'.gif)');
+                    $('#helperGifContainer').css('background-image', 'url(./assets/help/' + key + '.gif)');
                     $('#helpText').text(val.text);
                     $('#helper').fadeIn();
                     return;

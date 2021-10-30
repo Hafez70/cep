@@ -43,24 +43,39 @@
 </head>
 <body class="bg-dark position-relative">
     <div class=" d-flex flex-column " id="mainContainer" style="height: 100vh; min-height: 100vh;">
-        <div id="mybanner " class="homeSlider d-flex flex-row">
-            <div class="col-6 h-100 w-100 slider-background"
-                 onclick="getCCversion"
-                 style="cursor: pointer; background-image: url('./assets/images/banner-1.jpg');">
+        <div id="mybanner" class="homeSlider row d-flex flex-row m-0">
+            <div class="col-6 w-100 slider-background"
+                 onclick="openUrl('https://themeforest.net/user/wondertools')"
+                 style="cursor: pointer; background-image: url('./assets/images/banner-1.jpg');height: 60px;">
             </div>
-            <div class="col-6 h-100 w-100 slider-background"
-                 onclick=""
-                 style="cursor: pointer; background-image: url('./assets/images/banner-2.jpg');">
+            <div class="col-6 w-100 slider-background"
+                 onclick="openUrl('https://www.youtube.com/channel/UCNRVLqoNOfqFfNYTPFaEUYA')"
+                 style="cursor: pointer; background-image: url('./assets/images/banner-2.jpg');height: 60px;">
             </div>
+            <div class="col-12 border-light border p-1 searchbar">
+                <div class="input-group">
+                    <input type="text"
+                           aria-label="Search" aria-describedby="search-addon"
+                           class="col-12 text-light bg-dark rounded border-left border-top border-light"
+                           id="searchBar" placeholder="search"
+                           style="height:25px"
+                           onkeyup="searchItems(this.value)"
+                           maxlength="50">
+                    <button type="button" class="text-light btn bg-transparent" style="margin-left: -40px; z-index: 100;"
+                            onclick="$('#searchBar').val('');searchItems('')">
+                        <i class="fa fa-times" style=" font-size: 0.8rem;"></i>
+                    </button>
+                </div>
+            </div>0
         </div>
-
+        
         <div class="container-fluid d-flex flex-fill mainContainer p-0" id="mainContent">
             <div class="w-100 d-flex align-items-stretch mainContent">
                 <div class="sideMenu-width p-0 d-flex flex-column m-0 overflow-auto mySidebar"
                      style=" background-color: #2f2e2e !important;" id="mySidebar">
                     <div class="d-flex flex-column align-items-start p-2 text-white "
                          style="min-height:125px;height: 80%; overflow-y: auto;">
-                        <ul class="flex-column mb-sm-auto mb-0 align-items-start pl-0 list-group-flush"
+                        <ul class="flex-column mb-sm-auto mb-0 align-items-start pl-0 list-group-flush w-100"
                             id="sidebarMenu">
                         </ul>
                     </div>
@@ -79,18 +94,17 @@
         <div class="modal-fullscreen modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
             <div class="modal-content text-light bg-dark">
                 <div class="modal-header p-1">
-                    <h5 class="modal-title text-light">Pre-setup</h5>
+                    <h6 class="modal-title text-light lbl_projname">Pre-setup</h6>
                     <button type="button" class="btn-close bg-dark text-light border-0" data-dismiss="modal" aria-label="Close">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>
                 <div class="modal-body position-relative">
                     <form class="row needs-validation" id="hudImportForm" novalidate>
-
                         <!--//CompSelector-->
                         <div class="col-12 position-relative" id="div_compSelect_hud">
-                            <label for="compSelect_hud" class="my-form-label">Select Comp.  
-                            <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('comp-edit')"></i>
+                            <label for="compSelect_hud" class="my-form-label">
+                                Select Comp.
                             </label>
                             <div class="input-group  input-group-sm">
                                 <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
@@ -124,7 +138,7 @@
                         <!--//layer stick-->
                         <div class="col-12 pt-2">
                             <div class="input-group input-group-sm">
-                                <label class="my-form-label m-1">reload to get newly added layer and Comps</label>
+                                <label class="my-form-label m-1">If you cannot find your layer reload the layer-list here</label>
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-primary border-right-0 border-left-0 border-light rounded-pill p-2"
                                             onclick="reloadComps()" type="button">
@@ -222,17 +236,36 @@
         <div class="modal-fullscreen modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
             <div class="modal-content text-light bg-dark">
                 <div class="modal-header p-1">
-                    <h5 class="modal-title text-light" id="exampleModalLongTitle">Import Setting</h5>
+                    <h6 class="modal-title text-light lbl_projname" id="exampleModalLongTitle">Import Setting</h6>
                     <button type="button" class="btn-close bg-dark text-light border-0" data-dismiss="modal" aria-label="Close">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>
                 <div class="modal-body position-relative">
                     <form class="row needs-validation" id="sizelineImportForm" novalidate>
-
+                        <!--//sizeText-->
+                        <div class="col-12 position-relative pb-1" id="div_SizeText_sizeline">
+                            <label for="TextSourceInput_DescText_sizeline" class="my-form-label ">
+                                size postfix.
+                                <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('text-edit')"></i>
+                            </label>
+                            <div class="input-group input-group-sm">
+                                <input type="text"
+                                       class="form-control text-light bg-dark rounded-pill border-light "
+                                       id="TextSourceInput_SizeText_sizeline" placeholder="postfix"
+                                       maxlength="15">
+                                <span class="input-group-append">
+                                    <div class="input-group-text border-0 bg-transparent   pl-1 p-0  ml-n5">
+                                        <img class="modal-icon-controls pr-1"
+                                             src="./assets/images/icons/Text-Title.png" />
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <!--//sizeText-->
                         <!--//CompSelector-->
                         <div class="col-12 position-relative" id="div_compSelect_sizeline">
-                            <label for="compSelect_sizeline" class="my-form-label">Select Comp.  <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('comp-edit')"></i></label>
+                            <label for="compSelect_sizeline" class="my-form-label">Select Comp.</label>
                             <div class="input-group  input-group-sm">
                                 <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
@@ -282,7 +315,7 @@
                         <!--//end point-->
                         <div class="col-12 pt-2">
                             <div class="input-group input-group-sm">
-                                <label class="my-form-label m-1">reload to get newly added layer and Comps</label>
+                                <label class="my-form-label m-1">If you cannot find your layer reload the layer-list here</label>
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-primary border-right-0 border-left-0 border-light rounded-pill p-2"
                                             onclick="reloadComps()" type="button">
@@ -291,27 +324,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!--//2d/3d-->
-                        <div class="col-12 has-validation position-relative mt-3" id="div_3D_hud">
-                            <div class="col-12 form-switch p-0">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text border-0 bg-transparent pl-1 p-0">
-                                        <img class="modal-icon-controls pr-1"
-                                             src="./assets/images/icons/Three-D.png" />
-                                    </div>
-                                    <label class="d-none-xxs col-3 col-sm-5 text-center pt-2 p-0 m-0" for="select_3D_sizeline">
-                                        Import 2D
-                                    </label>
-                                    <label class="switch mt-2 p-0 m-0">
-                                        <input type="checkbox"
-                                               id="select_3D_sizeline">
-                                        <span class="slider round"></span>
-                                    </label>
-                                    <label class="col-3 form-check-label pt-2 pl-2 m-0" for="select_3D_sizeline"> 3D  <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('3d-edit')"></i></label>
-                                </div>
-                            </div>
-                        </div>
-                        <!--//2d/3d-->
+
                         <!--//Cti-->
                         <div class="col-12 has-validation position-relative mt-3 cti">
                             <div class="col-12 form-switch p-0">
@@ -382,14 +395,13 @@
         <div class="modal-fullscreen modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
             <div class="modal-content text-light bg-dark">
                 <div class="modal-header p-1">
-                    <h5 class="modal-title text-light">Pre-setup</h5>
+                    <h6 class="modal-title text-light lbl_projname">Pre-setup</h6>
                     <button type="button" class="btn-close bg-dark text-light border-0" data-dismiss="modal" aria-label="Close">
                         <i class="fa fa-times"></i>
                     </button>
                 </div>
                 <div class="modal-body position-relative">
                     <form class="row needs-validation" id="calloutImportFomr" novalidate>
-
                         <!--//mainText-->
                         <div class="col-12 position-relative pb-1" id="div_mainText_callout">
                             <label for="TextSourceInput_DescText_callout" class="my-form-label ">
@@ -446,10 +458,7 @@
 
                         <!--//CompSelector-->
                         <div class="col-12 position-relative" id="div_compSelect_callout">
-                            <label for="compSelect_callout" class="my-form-label">
-                                Select Comp.
-                                <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('comp-edit')"></i>
-                            </label>
+                            <label for="compSelect_callout" class="my-form-label">Select Comp.</label>
                             <div class="input-group  input-group-sm">
                                 <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
                                         aria-label=".form-select-md"
@@ -562,7 +571,7 @@
                         <!--//line4-->
                         <div class="col-12 pt-2">
                             <div class="input-group input-group-sm">
-                                <label class="my-form-label m-1">reload to get newly added layer and Comps</label>
+                                <label class="my-form-label m-1">If you cannot find your layer reload the layer-list here</label>
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-primary border-right-0 border-left-0 border-light rounded-pill p-2"
                                             onclick="reloadComps()" type="button">
@@ -633,133 +642,6 @@
         </div>
     </div>
 
-    <div class="modal modal-fullscreen fade" id="witchEffectSettingModal" tabindex="-1" role="dialog"
-         aria-labelledby="witchEffectTextSetting"
-         aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-scrollable modal-dialog-centered" role="document">
-            <div class="modal-content text-light bg-dark">
-                <div class="modal-header p-1">
-                    <h5 class="modal-title text-light" id="witchEffectSettingModalTitle">Pre-setup</h5>
-                    <button type="button" class="btn-close bg-dark text-light border-0" data-dismiss="modal" aria-label="Close">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-body position-relative">
-                    <form class="row g-3 needs-validation" id="witchEffectImportForm" novalidate>
-
-                        <!--//CompSelector-->
-                        <div class="col-12 position-relative" id="div_compSelect_witchEffect">
-                            <label for="compSelect_witchEffect" class="my-form-label">Select Comp.  <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('comp-edit')"></i></label>
-                            <div class="input-group input-group-sm">
-                                <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
-                                        aria-label=".form-select-md"
-                                        onchange="compSelected(this.value)" id="compSelect_witchEffect">
-                                </select>
-                                <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Comp.png" />
-                                    </div>
-                                </span>
-                            </div>
-                        </div>
-                        <!--//CompSelector-->
-                        <div class="col-12">
-                            <div class="input-group input-group-sm pt-2">
-                                <label class="my-form-label m-1">reload to get newly added layer and Comps</label>
-                                <div class="input-group-append">
-                                    <button class="btn btn-outline-primary border-right-0 border-left-0 border-light rounded-pill p-2"
-                                            onclick="reloadComps()" type="button">
-                                        <i class="fa fa-sync"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <!--//Cti-->
-                        <div class="col-12 has-validation position-relative mt-3 cti">
-                            <div class="col-12 form-switch p-0">
-                                <div class="input-group input-group-sm">
-                                    <label class="switch ml-2">
-                                        <input type="checkbox"
-                                               onchange="startTimeChangestickyImportFomr(this.checked)"
-                                               id="startTimeSwitch_witchEffect">
-                                        <span class="slider round"></span>
-                                    </label>
-                                    <label id="startTimeSwitchlabel_witchEffect" class="pl-2 form-check-label"
-                                           for="startTimeSwitch_witchEffect">
-                                        start from current CTI to end of timeline
-                                    </label>
-                                    <div class="input-group-append">
-                                        <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
-                                            <img class="modal-icon-controls pr-1"
-                                                 src="./assets/images/icons/Indicator.png" />
-                                        </div>
-                                        <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('time-edit')"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 has-validation position-relative disabled cti pr-1" style="opacity:0.2;">
-                            <label for="startTimeSpecificValue_witchEffect" class="my-form-label">Start Time</label>
-                            <div class="input-group input-group-sm">
-                                <input type="number" value="0" disabled
-                                       class="form-control text-center text-light bg-dark pl-4 rounded-pill border-right-0 rounded-pill-right border-light"
-                                       id="startTimeSpecificValue_witchEffect"
-                                       placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
-                            </div>
-                        </div>
-                        <div class="col-6 has-validation position-relative disabled cti p-0" style="opacity:0.2;">
-                            <label for="endTimeSpecificValue_witchEffect" class="my-form-label">End Time</label>
-                            <div class="input-group input-group-sm">
-                                <input type="number" value="0" disabled
-                                       class="form-control text-center text-light bg-dark  rounded-pill rounded-pill-left border-left-0 border-light"
-                                       id="endTimeSpecificValue_witchEffect"
-                                       placeholder="e.g. 0.45 or 4.20 seconds" maxlength="10">
-                                <span class="input-group-append">
-                                    <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
-                                        <img class="modal-icon-controls pr-1" src="./assets/images/icons/Time.png" />
-                                    </div>
-                                </span>
-                            </div>
-                        </div>
-                        <!--//Cti-->
-
-                    </form>
-                </div>
-                <div class="modal-footer p-1">
-                    <button type="button"
-                            class="btn btn-secondary btn-sm" onclick="rawModal()"
-                            data-dismiss="modal">
-                        Close
-                    </button>
-                    <button class="btn btn-primary btn-sm" onclick="generateJsonSetting()" type="submit">Import</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal modal-fullscreen fade" id="SampleSettingModal" tabindex="-1" role="dialog"
-         aria-labelledby="witchEffectTextSetting"
-         aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen-sm-down modal-dialog-scrollable modal-dialog-centered" role="document">
-            <div class="modal-content text-light bg-dark">
-                <div class="modal-header p-1">
-                    <h5 class="modal-title text-light">Are you sure about Import?</h5>
-                    <button type="button" class="btn-close bg-dark text-light border-0" data-dismiss="modal" aria-label="Close">
-                        <i class="fa fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-footer p-1">
-                    <button type="button"
-                            class="btn btn-secondary btn-sm" onclick="rawModal()"
-                            data-dismiss="modal">
-                        Close
-                    </button>
-                    <button class="btn btn-primary btn-sm" onclick="generateJsonSetting()" type="submit">Import</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div id="Loader" class="col-12 div-loader">
         <div class="div-loader-content">
             <div class="sk-double-bounce">
@@ -783,7 +665,7 @@
 
                         </div>
                         <div class="input-group input-group-sm mt-3 col-12">
-                            <label class="my-form-label m-1 text-dark text-center col-12" id="helpText">reload to get newly added layer and Comps</label>
+                            <label class="my-form-label m-1 text-dark text-center col-12" id="helpText">If you cannot find your layer reload the layer-list here</label>
                         </div>
                     </div>
                 </div>
