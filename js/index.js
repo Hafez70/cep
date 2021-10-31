@@ -104,6 +104,7 @@ function generateContentView(menuIndex, subMenIndex, element) {
 function searchItems(inputValue) {
     $('#gridSystem').empty();
     if (inputValue !== '') {
+        $('#btnSearch').attr('disabled', false);
         $(".sideMenu-selected").parent().parent().removeClass(" border rounded-pill border-light ");
         $(".sideMenu-selected").removeClass("sideMenu-selected");
         var newelements = [];
@@ -129,6 +130,9 @@ function searchItems(inputValue) {
         });
 
         $('#gridSystem').append(newelements);
+    }
+    else {
+        $('#btnSearch').attr('disabled', 'disabled');
     }
 }
 

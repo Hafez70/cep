@@ -61,7 +61,10 @@
                            style="height:25px"
                            onkeyup="searchItems(this.value)"
                            maxlength="50">
-                    <button type="button" class="text-light btn bg-transparent" style="margin-left: -40px; z-index: 100;"
+                    <button type="button" class="text-light btn bg-transparent"
+                            id="btnSearch"
+                            disabled="disabled"
+                            style="margin-left: -40px; z-index: 100;"
                             onclick="$('#searchBar').val('');searchItems('')">
                         <i class="fa fa-times" style=" font-size: 0.8rem;"></i>
                     </button>
