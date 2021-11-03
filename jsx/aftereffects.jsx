@@ -4,157 +4,6 @@
     //  Public Domain.
     //  NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
 
-    //  USE YOUR OWN COPY. IT IS EXTREMELY UNWISE TO LOAD CODE FROM SERVERS YOU DO
-    //  NOT CONTROL.
-
-    //  This file creates a global JSON object containing two methods: stringify
-    //  and parse. This file provides the ES5 JSON capability to ES3 systems.
-    //  If a project might run on IE8 or earlier, then this file should be included.
-    //  This file does nothing on ES5 systems.
-
-    //      JSON.stringify(value, replacer, space)
-    //          value       any JavaScript value, usually an object or array.
-    //          replacer    an optional parameter that determines how object
-    //                      values are stringified for objects. It can be a
-    //                      function or an array of strings.
-    //          space       an optional parameter that specifies the indentation
-    //                      of nested structures. If it is omitted, the text will
-    //                      be packed without extra whitespace. If it is a number,
-    //                      it will specify the number of spaces to indent at each
-    //                      level. If it is a string (such as "\t" or "&nbsp;"),
-    //                      it contains the characters used to indent at each level.
-    //          This method produces a JSON text from a JavaScript value.
-    //          When an object value is found, if the object contains a toJSON
-    //          method, its toJSON method will be called and the result will be
-    //          stringified. A toJSON method does not serialize: it returns the
-    //          value represented by the name/value pair that should be serialized,
-    //          or undefined if nothing should be serialized. The toJSON method
-    //          will be passed the key associated with the value, and this will be
-    //          bound to the value.
-
-    //          For example, this would serialize Dates as ISO strings.
-
-    //              Date.prototype.toJSON = function (key) {
-    //                  function f(n) {
-    //                      // Format integers to have at least two digits.
-    //                      return (n < 10)
-    //                          ? "0" + n
-    //                          : n;
-    //                  }
-    //                  return this.getUTCFullYear()   + "-" +
-    //                       f(this.getUTCMonth() + 1) + "-" +
-    //                       f(this.getUTCDate())      + "T" +
-    //                       f(this.getUTCHours())     + ":" +
-    //                       f(this.getUTCMinutes())   + ":" +
-    //                       f(this.getUTCSeconds())   + "Z";
-    //              };
-
-    //          You can provide an optional replacer method. It will be passed the
-    //          key and value of each member, with this bound to the containing
-    //          object. The value that is returned from your method will be
-    //          serialized. If your method returns undefined, then the member will
-    //          be excluded from the serialization.
-
-    //          If the replacer parameter is an array of strings, then it will be
-    //          used to select the members to be serialized. It filters the results
-    //          such that only members with keys listed in the replacer array are
-    //          stringified.
-
-    //          Values that do not have JSON representations, such as undefined or
-    //          functions, will not be serialized. Such values in objects will be
-    //          dropped; in arrays they will be replaced with null. You can use
-    //          a replacer function to replace those with JSON values.
-
-    //          JSON.stringify(undefined) returns undefined.
-
-    //          The optional space parameter produces a stringification of the
-    //          value that is filled with line breaks and indentation to make it
-    //          easier to read.
-
-    //          If the space parameter is a non-empty string, then that string will
-    //          be used for indentation. If the space parameter is a number, then
-    //          the indentation will be that many spaces.
-
-    //          Example:
-
-    //          text = JSON.stringify(["e", {pluribus: "unum"}]);
-    //          // text is '["e",{"pluribus":"unum"}]'
-
-    //          text = JSON.stringify(["e", {pluribus: "unum"}], null, "\t");
-    //          // text is '[\n\t"e",\n\t{\n\t\t"pluribus": "unum"\n\t}\n]'
-
-    //          text = JSON.stringify([new Date()], function (key, value) {
-    //              return this[key] instanceof Date
-    //                  ? "Date(" + this[key] + ")"
-    //                  : value;
-    //          });
-    //          // text is '["Date(---current time---)"]'
-
-    //      JSON.parse(text, reviver)
-    //          This method parses a JSON text to produce an object or array.
-    //          It can throw a SyntaxError exception.
-
-    //          The optional reviver parameter is a function that can filter and
-    //          transform the results. It receives each of the keys and values,
-    //          and its return value is used instead of the original value.
-    //          If it returns what it received, then the structure is not modified.
-    //          If it returns undefined then the member is deleted.
-
-    //          Example:
-
-    //          // Parse the text. Values that look like ISO date strings will
-    //          // be converted to Date objects.
-
-    //          myData = JSON.parse(text, function (key, value) {
-    //              var a;
-    //              if (typeof value === "string") {
-    //                  a =
-    //   /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
-    //                  if (a) {
-    //                      return new Date(Date.UTC(
-    //                         +a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]
-    //                      ));
-    //                  }
-    //                  return value;
-    //              }
-    //          });
-
-    //          myData = JSON.parse(
-    //              "[\"Date(09/09/2001)\"]",
-    //              function (key, value) {
-    //                  var d;
-    //                  if (
-    //                      typeof value === "string"
-    //                      && value.slice(0, 5) === "Date("
-    //                      && value.slice(-1) === ")"
-    //                  ) {
-    //                      d = new Date(value.slice(5, -1));
-    //                      if (d) {
-    //                          return d;
-    //                      }
-    //                  }
-    //                  return value;
-    //              }
-    //          );
-
-    //  This is a reference implementation. You are free to copy, modify, or
-    //  redistribute.
-
-    /*jslint
-        eval, for, this
-    */
-
-    /*property
-        JSON, apply, call, charCodeAt, getUTCDate, getUTCFullYear, getUTCHours,
-        getUTCMinutes, getUTCMonth, getUTCSeconds, hasOwnProperty, join,
-        lastIndex, length, parse, prototype, push, replace, slice, stringify,
-        test, toJSON, toString, valueOf
-    */
-
-
-    // Create a JSON object only if one does not already exist. We create the
-    // methods in a closure to avoid creating global variables.
-
     if (typeof JSON !== "object") {
         JSON = {};
     }
@@ -531,6 +380,107 @@
     }());
 })();
 
+var $http = (function() {
+
+	// JSON library for javascript, I took from somewhere but i don't remember where i took it.
+	"object"!=typeof JSON&&(JSON={}),function(){"use strict";function f(t){return 10>t?"0"+t:t}function this_value(){return this.valueOf()}function quote(t){return escapable.lastIndex=0,escapable.test(t)?'"'+t.replace(escapable,function(t){var e=meta[t];return"string"==typeof e?e:"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+t+'"'}function str(t,e){var n,r,o,u,f,i=gap,a=e[t];switch(a&&"object"==typeof a&&"function"==typeof a.toJSON&&(a=a.toJSON(t)),"function"==typeof rep&&(a=rep.call(e,t,a)),typeof a){case"string":return quote(a);case"number":return isFinite(a)?String(a):"null";case"boolean":case"null":return String(a);case"object":if(!a)return"null";if(gap+=indent,f=[],"[object Array]"===Object.prototype.toString.apply(a)){for(u=a.length,n=0;u>n;n+=1)f[n]=str(n,a)||"null";return o=0===f.length?"[]":gap?"[\n"+gap+f.join(",\n"+gap)+"\n"+i+"]":"["+f.join(",")+"]",gap=i,o}if(rep&&"object"==typeof rep)for(u=rep.length,n=0;u>n;n+=1)"string"==typeof rep[n]&&(r=rep[n],o=str(r,a),o&&f.push(quote(r)+(gap?": ":":")+o));else for(r in a)Object.prototype.hasOwnProperty.call(a,r)&&(o=str(r,a),o&&f.push(quote(r)+(gap?": ":":")+o));return o=0===f.length?"{}":gap?"{\n"+gap+f.join(",\n"+gap)+"\n"+i+"}":"{"+f.join(",")+"}",gap=i,o}}"function"!=typeof Date.prototype.toJSON&&(Date.prototype.toJSON=function(){return isFinite(this.valueOf())?this.getUTCFullYear()+"-"+f(this.getUTCMonth()+1)+"-"+f(this.getUTCDate())+"T"+f(this.getUTCHours())+":"+f(this.getUTCMinutes())+":"+f(this.getUTCSeconds())+"Z":null},Boolean.prototype.toJSON=this_value,Number.prototype.toJSON=this_value,String.prototype.toJSON=this_value);var cx,escapable,gap,indent,meta,rep;"function"!=typeof JSON.stringify&&(escapable=/[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,meta={"\b":"\\b","	":"\\t","\n":"\\n","\f":"\\f","\r":"\\r",'"':'\\"',"\\":"\\\\"},JSON.stringify=function(t,e,n){var r;if(gap="",indent="","number"==typeof n)for(r=0;n>r;r+=1)indent+=" ";else"string"==typeof n&&(indent=n);if(rep=e,e&&"function"!=typeof e&&("object"!=typeof e||"number"!=typeof e.length))throw new Error("JSON.stringify");return str("",{"":t})}),"function"!=typeof JSON.parse&&(cx=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,JSON.parse=function(text,reviver){function walk(t,e){var n,r,o=t[e];if(o&&"object"==typeof o)for(n in o)Object.prototype.hasOwnProperty.call(o,n)&&(r=walk(o,n),void 0!==r?o[n]=r:delete o[n]);return reviver.call(t,e,o)}var j;if(text=String(text),cx.lastIndex=0,cx.test(text)&&(text=text.replace(cx,function(t){return"\\u"+("0000"+t.charCodeAt(0).toString(16)).slice(-4)})),/^[\],:{}\s]*$/.test(text.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g,"@").replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,"]").replace(/(?:^|:|,)(?:\s*\[)+/g,"")))return j=eval("("+text+")"),"function"==typeof reviver?walk({"":j},""):j;throw new SyntaxError("JSON.parse")})}();
+
+	return function(config) {
+		var url = (/^(.*):\/\/([A-Za-z0-9\-\.]+):?([0-9]+)?(.*)$/).exec(config.url);
+		if(url == null) {
+			throw "unable to parse URL";
+		}
+
+		url = {
+			scheme: url[1],
+			host: url[2],
+			port: url[3] || (url[1] == "https" ? 443 : 80),
+			path: url[4]
+		};
+
+		if(url.scheme != "http") {
+			throw "non-http url's not supported yet!";
+		}
+
+		var s = new Socket();
+
+		if(!s.open(url.host + ':' + url.port, 'binary')) {
+			throw 'can\'t connect to ' + url.host + ':' + url.port;
+		}
+
+		var method = config.method || 'GET';
+
+		var request = method + ' ' + url.path + " HTTP/1.0\r\nConnection: close\r\nHost: " + url.host;
+		var header;
+
+		if(config.payload) {
+			if(typeof config.payload === 'object') {
+				config.payload = JSON.stringify(config.payload);
+				(config.headers = config.headers || {})["Content-Type"] = "application/json";
+			}
+
+			(config.headers = config.headers || {})["Content-Length"] = config.payload.length;
+		}
+
+		for(header in (config.headers || {})) {
+			request += "\r\n" + header + ': ' + config.headers[header] ;
+		}
+
+		s.write(request+"\r\n\r\n");
+
+		if(config.payload) {
+			s.write(config.payload);
+		}
+
+		var data, response, payload, http = {};
+
+		data = s.read();
+		while(!s.eof) {
+			data += s.read();
+		}
+
+		var response = data.indexOf("\r\n\r\n");
+		if(response == -1) {
+			throw "No HTTP payload found in the response!";
+		}
+
+		payload = data.substr(response + 4);
+		response = data.substr(0, response);
+
+		var http = /^HTTP\/([\d\.?]+) (\d+) (.*)\r/.exec(response), header;
+		if(http == null) {
+			throw "No HTTP payload found in the response!";
+		}
+
+		http = {
+			ver: Number(http[1]),
+			status: Number(http[2]),
+			statusMessage: http[3],
+			headers: {}
+		};
+
+		var httpregex = /(.*): (.*)\r/g;
+
+		while(header = httpregex.exec(response)) {
+			http.headers[header[1]] = header[2];
+		}
+
+		var contenttype = (http.headers["Content-Type"] || http.headers["content-type"] || '').split(";");
+		var charset = config.charset || (contenttype[1] ? /charset=(.*)/.exec(contenttype[1])[1] : null);
+		if(charset) payload = payload.toString(charset);
+		contenttype = contenttype[0];
+
+		if(config.forcejson || contenttype == "application/json") {
+			http.payload = JSON.parse(payload);
+		} else {
+			http.payload = payload;
+		}
+
+		return http;
+	};
+})();
+
+
 function getSubFileItems(subFilePath, sourcPath) {
     try {
         var sunbfiles = [];
@@ -598,7 +548,6 @@ function getSubMenuItems(subMenuPath, sourcPath) {
     }
 }
 
-//getMainDirectories("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/packages");
 function getMainDirectories(myPath) {
     try {
 
@@ -626,7 +575,6 @@ function getMainDirectories(myPath) {
     }
 }
 
-//getAllComps();
 function getAllComps() {
     try {
         var comps = [];
@@ -647,7 +595,6 @@ function getAllComps() {
     }
 }
 
-//getAllLayersInComp(0)
 function getAllLayersInComp(compIndex) {
     try {
         var allLayers = [];
@@ -677,8 +624,6 @@ function getAllLayersInComp(compIndex) {
     }
 }
 
-//importBasicHud("~/AppData/Roaming/Adobe/CEP/extensions/wonder-2018/assets/packages/H-U-D.s/basic shapes/element-01/element-01.aep",
-//'{"comp":"1","sticker":"5","cti":{"fromCti":true,"startTime":"0","endTime":"0"},"thd":false}', "element-01");
 function importBasicHud(projPath, params, projectName) {
 
     try {
@@ -808,9 +753,6 @@ function importBasicHud(projPath, params, projectName) {
     }
 }
 
-//importBasicSizeline("~/AppData/Roaming/Adobe/CEP/extensions/wonder-2018/assets/packages/H-U-D.s/Size Lines/SizeLine-01/SizeLine-01.aep",
-//'{"comp":"1","start":"1","end":"2","sizeText":"mm","cti":{"fromCti":true,"startTime":"0","endTime":"0"}}','SizeLine-01',
-//"file:///C:/Users/Ali-Pc2/AppData/Roaming/Adobe/CEP/extensions/wonder-2018/assets/basicRequiers/textsize");
 function importBasicSizeline(projPath, params, projectName,textsizePath) {
 
     try {
@@ -985,6 +927,16 @@ function importLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, 
         myfile.file = new File(linePath);
         var lineFolder = proj.importFile(myfile);
 
+
+        if(lineFolder.name != "line.aep"){
+            for (var i = 1; i <= proj.rootFolder.numItems; i++) {
+                if (proj.rootFolder.item(i).typeName === "Folder" && proj.rootFolder.item(i).name === "line.aep") {
+                    lineFolder = proj.rootFolder.item(i);
+                    break;
+                }
+            }
+        }
+    
         var RootComp = undefined;
         var lineFolder_numitems = lineFolder.numItems
 
@@ -1044,13 +996,21 @@ function checkIfBeamExist() {
 
 function importBeamLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, endTime) {
     try {
-        var lineFolder =checkIfBeamExist();
-        if(lineFolder == null){
-            var proj = app.project;
-            var myfile = new ImportOptions();
-            myfile.file = new File(linePath);
-            lineFolder = proj.importFile(myfile);
+       
+        var proj = app.project;
+        var myfile = new ImportOptions();
+        myfile.file = new File(linePath);
+        var lineFolder = proj.importFile(myfile);
+        
+        if(lineFolder.name != "line-Beam.aep"){
+            for (var i = 1; i <= proj.rootFolder.numItems; i++) {
+                if (proj.rootFolder.item(i).typeName === "Folder" && proj.rootFolder.item(i).name === "line-Beam.aep") {
+                    lineFolder = proj.rootFolder.item(i);
+                    break;
+                }
+            }
         }
+    
         var RootComp = undefined;
         var lineFolder_numitems = lineFolder.numItems
 
@@ -1112,10 +1072,6 @@ function getWonderFolder() {
     }
 }
 
-//importCallOut("~/AppData/Roaming/Adobe/CEP/extensions/wonder-2018/assets/packages/Call Out/PoP Calls/OP-1-R/OP-1-R.aep",
-///"C:/Users/h-ghods/AppData/Roaming/Adobe/CEP/extensions/wonder-2018/assets/basicRequiers/line",
-//'{"comp":"0","sticker":"5","layers":[{"start":"7","end":"5"}],"cti":{"fromCti":true,"startTime":"0","endTime":"0"},"mainText":"یشسیشسی","subText":"سسیشیشسی"}',
-//"OP-1-R")
 function importCallOut(projPath, linePath, params, projectName) {
     try {
         var obj_params = JSON.parse(params);
@@ -1174,6 +1130,7 @@ function importCallOut(projPath, linePath, params, projectName) {
             for (var i = 1; i <= proj.rootFolder.numItems; i++) {
                 if (proj.rootFolder.item(i).typeName === "Folder" && proj.rootFolder.item(i).name === projectName+".aep") {
                     TextIFolder = proj.rootFolder.item(i);
+                    break;
                 }
             }
         }
@@ -1403,7 +1360,6 @@ function importWithEffect(projPath, params, projectName) {
     }
 }
 
-//importSamples("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/hafez-test/assets/packages/Call Out/samples/sample-callout/sample-callout.aep");
 function importSamples(projPath) {
 
     try {
@@ -1420,7 +1376,6 @@ function importSamples(projPath) {
     }
 }
 
-//importNewPackage("C:/Program%20Files%20(x86)/Common%20Files/Adobe/CEP/extensions/hafez-test/assets/packages");
 function importNewPackage(appPackagePath) {
     try {
         var locFolder = new Folder();
@@ -1523,7 +1478,6 @@ function removePackage(pkg_folder) {
     return "";
 }
 
-//openURL("https://www.google.com")
 function openURL(url) {
     try {
         var os = system.osName;
@@ -1547,4 +1501,75 @@ function getversion() {
         var err = { err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message };
         return err;
     }
+}
+
+function verifyCustomer(mail , code){}
+
+function checkVerification(mail , code){}
+
+function deleteVerification(mail , code){}
+
+function canWriteFiles() {
+    
+	var appVersion, commandID, scriptName, tabName;
+
+	appVersion = parseFloat(app.version);
+
+	commandID = 2359;
+	tabName = 'General';
+	if (appVersion >= 16.1) {
+		commandID = 3131;
+		tabName = 'Scripting & Expressions';
+	}
+
+	if (isSecurityPrefSet()) return true;
+
+    
+	alert(message = 'Wonder-callouts requires access to write files.\n' +
+		'Go to the "' + tabName + '" panel of the application preferences and make sure ' +
+		'"Allow Scripts to Write Files and Access Network" is checked.');
+
+	app.executeCommand(commandID);
+
+	return isSecurityPrefSet();
+
+	function isSecurityPrefSet() {
+		return app.preferences.getPrefAsLong(
+			'Main Pref Section',
+			'Pref_SCRIPTING_FILE_NETWORK_SECURITY'
+		) === 1;
+	}
+}
+
+
+function getUserName(){
+    return $.getenv('USERNAME');
+}
+
+function getmac(){
+
+
+    if(canWriteFiles()){
+        var name;
+         if($.os.indexOf('Macintosh')!=-1){
+             try{
+            name = system.callSystem("ifconfig en1 | awk '/ether/{print $2}'");
+            name = name.replace (/[:]/g, "");
+            }catch(err){
+                name = "1111111111";
+                }
+        }else{
+            var name = (system.callSystem("getmac"))
+            name=name.replace("\n",'')
+            var patt = /[0-9A-Z]-[0-9A-Z]{2}-[0-9A-Z]{2}-[0-9A-Z]{2}-[0-9A-Z]{2}-[0-9A-Z]{2}/ig;
+            name = patt.exec(name);
+            name = name[0]
+            name = name.replace (/[-]/g, "");
+        }
+    }
+    return name;
+}
+
+function getMachinId(){
+    return getmac () + "|" + getUserName ();
 }

@@ -10,7 +10,7 @@ var packagesPath = '';
 var ads = {};
 var callout_linecount = 1;
 var csInterface = new CSInterface();
-
+var canWriteFiles = false;
 (function () {
     'use strict';
 
@@ -24,7 +24,9 @@ var csInterface = new CSInterface();
     var jsxFile = extensionPath + '/jsx/hostjs.jsx';
 
     //csInterface.evalScript("try{\n var jsxFile = new File('" + jsxFile + "');\n $.evalFile(jsxFile); \n }catch(e){alert(e.toString())}", function (params) {
-
+        csInterface.evalScript("canWriteFiles();", function (params) {
+            canWriteFiles = params;
+        })
     //})
 
     getFilesTree(packagesPath);
