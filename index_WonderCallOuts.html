@@ -39,7 +39,11 @@
     <script type="text/javascript" src="external-libs/bootstrap-5/js/bootstrap.js"></script>
     <link rel="stylesheet" href="external-libs/fontawesome/css/all.css">
     <link rel="stylesheet" href="css/styles.css">
-
+    <script>
+        $(document).ready(function () {
+            getFilesTree();
+        });
+    </script>
 </head>
 <body class="bg-dark position-relative">
     <div class=" d-flex flex-column " id="mainContainer" style="height: 100vh; min-height: 100vh;">
@@ -52,11 +56,17 @@
                  onclick="openUrl('https://www.youtube.com/channel/UCNRVLqoNOfqFfNYTPFaEUYA')"
                  style="cursor: pointer; background-image: url('./assets/images/banner-2.jpg');height: 60px;">
             </div>
-            <div class="col-12 border-light border p-1 searchbar">
-                <div class="input-group">
+            <div class="d-flex col-12 border-light border p-1 m-0 searchbar">
+                <button type="button" class="flex-shrink-1 text-light btn bg-transparent p-1 m-0"
+                        id="btnturnOff"
+                        style="z-index: 100;"
+                        onclick="openLogOutWindow()">
+                    <i class="fa fa-power-off" style=" font-size: 0.8rem;"></i>
+                </button>
+                <div class="input-group input-group-sm pr-1 flex-grow-1">
                     <input type="text"
                            aria-label="Search" aria-describedby="search-addon"
-                           class="col-12 text-light bg-dark rounded border-left border-top border-light"
+                           class="col-12 pl-1  text-light bg-dark rounded border-left border-top border-light"
                            id="searchBar" placeholder="search"
                            style="height:25px"
                            onkeyup="searchItems(this.value)"
@@ -71,7 +81,7 @@
                 </div>
             </div>0
         </div>
-        
+
         <div class="container-fluid d-flex flex-fill mainContainer p-0" id="mainContent">
             <div class="w-100 d-flex align-items-stretch mainContent">
                 <div class="sideMenu-width p-0 d-flex flex-column m-0 overflow-auto mySidebar"
@@ -127,6 +137,7 @@
                             <label for="layerSticker_hud" class="my-form-label">select a layer to Stick </label>
                             <div class="input-group input-group-sm">
                                 <select class="form-control  form-select form-select-md custom-select  text-light bg-dark rounded-pill border-light"
+                                        required
                                         aria-label=".form-select-md"
                                         id="layerSticker_hud">
                                 </select>
@@ -141,7 +152,9 @@
                         <!--//layer stick-->
                         <div class="col-12 pt-2">
                             <div class="input-group input-group-sm">
-                                <label class="my-form-label m-1">If you cannot find your layer reload the layer-list here</label>
+                                <label class="my-form-label m-1 form-control text-light bg-dark">
+                                    If you cannot find your layer reload the layer-list here
+                                </label>
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-primary border-right-0 border-left-0 border-light rounded-pill p-2"
                                             onclick="reloadComps()" type="button">
@@ -150,40 +163,46 @@
                                 </div>
                             </div>
                         </div>
-                        <!--//2d/3d-->
-                        <div class="col-12 has-validation position-relative mt-3" id="div_3D_hud">
-                            <div class="col-12 form-switch p-0">
-                                <div class="input-group input-group-sm">
-                                    <div class="input-group-text border-0 bg-transparent pl-1 p-0">
-                                        <img class="modal-icon-controls pr-1"
-                                             src="./assets/images/icons/Three-D.png" />
-                                    </div>
-                                    <label class="d-none-xxs col-3 col-sm-5 text-center pt-2 p-0 m-0" for="select_3D_hud">
-                                        Import 2D
-                                    </label>
-                                    <label class="switch mt-2 p-0 m-0">
-                                        <input type="checkbox"
-                                               id="select_3D_hud">
+                        <!--//attributes-->
+                        <div class="col-12 position-relative mt-3 cti">
+                            <div class="col-12 p-0">
+                                <label id="attribuiteslabel_hud" class="p-0 form-check-label flex-shrink-1 m-1" for="attribuites_callout">attributes :</label>
+                                <div class="input-group input-group-sm flex-row form-switch ">
+                                    <label id="attribuiteslabel_hud" class="p-0 form-check-label flex-shrink-1 m-1" for="attribuites_hud">Just copy </label>
+                                    <label class="switch ml-2 flex-shrink-1 m-1">
+                                        <input type="checkbox" class="form-switch-input"
+                                               id="attribuites_hud">
                                         <span class="slider round"></span>
                                     </label>
-                                    <label class="col-3 form-check-label pt-2 pl-2 m-0" for="select_3D_hud"> 3D  <i class="far fa-question-circle" style="cursor: pointer;" onclick="openHelp('3d-edit')"></i></label>
+                                    <label id="attribuiteslabel_hud" class="pl-2 form-check-label flex-grow-1 m-1"
+                                           for="attribuites_hud">Link to sticker layer</label>
+                                </div>
+                                <div class="input-group input-group-sm border border-light rounded flex-column p-2">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input  flex-shrink-1" id="position_CheckBox_hud">
+                                        <label class="form-check-label flex-grow-1" for="exampleCheck1">Position</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input flex-shrink-1" id="rotation_CheckBox_hud">
+                                        <label class="form-check-label flex-grow-1" for="exampleCheck1">Rotation</label>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <!--//2d/3d-->
+                        <!--//attributes-->
                         <!--//Cti-->
                         <div class="col-12 has-validation position-relative mt-3 cti">
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
                                     <label class="switch ml-2">
-                                        <input type="checkbox"
+                                        <input type="checkbox" class="form-switch-input"
                                                onchange="startTimeChangestickyImportFomr(this.checked)"
                                                id="startTimeSwitch_hud">
                                         <span class="slider round"></span>
                                     </label>
                                     <label id="startTimeSwitchlabel_hud" class="pl-2 form-check-label"
                                            for="startTimeSwitch_hud">
-                                        start from current CTI to end of timeline
+                                        start from current CTI
                                     </label>
                                     <div class="input-group-append">
                                         <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
@@ -219,7 +238,22 @@
                             </div>
                         </div>
                         <!--//Cti-->
+                        <!--//colorSelect-->
+                        <!--<div class="col-12 mt-2" id="div_colorSelect_hud">
+                            <div class="dropdown d-flex flex-row ">
+                                <button class="btn bg-dark btn-sm dropdown-toggle rounded border-left-0 color-palette-toggler"
+                                        type="button" id="colorSelect_hud"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select label color
+                                </button>
+                                <div class="dropdown-menu p-0 m-0 col-3 bg-dark" aria-labelledby="colorSelect_hud">
+                                    <div class="row color-palette p-1 m-0">
 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                        <!--//colorSelect-->
                     </form>
                 </div>
                 <div class="modal-footer p-1">
@@ -318,7 +352,9 @@
                         <!--//end point-->
                         <div class="col-12 pt-2">
                             <div class="input-group input-group-sm">
-                                <label class="my-form-label m-1">If you cannot find your layer reload the layer-list here</label>
+                                <label class="my-form-label m-1 form-control text-light bg-dark">
+                                    If you cannot find your layer reload the layer-list here
+                                </label>
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-primary border-right-0 border-left-0 border-light rounded-pill p-2"
                                             onclick="reloadComps()" type="button">
@@ -333,14 +369,14 @@
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
                                     <label class="switch ml-2">
-                                        <input type="checkbox"
+                                        <input type="checkbox" class="form-switch-input"
                                                onchange="startTimeChangestickyImportFomr(this.checked)"
                                                id="startTimeSwitch_sizeline">
                                         <span class="slider round"></span>
                                     </label>
                                     <label id="startTimeSwitchlabel_sizeline" class="pl-2 form-check-label"
                                            for="startTimeSwitch_sizeline">
-                                        start from current CTI to end of timeline
+                                        start from current CTI
                                     </label>
                                     <div class="input-group-append">
                                         <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
@@ -378,7 +414,22 @@
                             </div>
                         </div>
                         <!--//Cti-->
+                        <!--//colorSelect-->
+                        <!--<div class="col-12 mt-2" id="div_colorSelect_sizeline">
+                            <div class="dropdown d-flex flex-row ">
+                                <button class="btn bg-dark btn-sm dropdown-toggle rounded border-left-0 color-palette-toggler"
+                                        type="button" id="colorSelect_sizeline"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select label color
+                                </button>
+                                <div class="dropdown-menu p-0 m-0 col-3 bg-dark" aria-labelledby="colorSelect_sizeline">
+                                    <div class="row color-palette p-1 m-0">
 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                        <!--//colorSelect-->
                     </form>
                 </div>
                 <div class="modal-footer p-1">
@@ -458,7 +509,33 @@
                         </div>
                         <!--//desc Text-->
                         <hr />
-
+                        <!--//attributes-->
+                        <div class="col-12 position-relative mt-3 cti">
+                            <div class="col-12 p-0">
+                                <label id="attribuiteslabel_callout" class="p-0 form-check-label flex-shrink-1 m-1" for="attribuites_callout">attributes :</label>
+                                <div class="input-group input-group-sm flex-row form-switch ">
+                                    <label id="attribuiteslabel_callout" class="p-0 form-check-label flex-shrink-1 m-1" for="attribuites_callout">Just copy </label>
+                                    <label class="switch ml-2 flex-shrink-1 m-1">
+                                        <input type="checkbox" class="form-switch-input"
+                                               id="attribuites_callout">
+                                        <span class="slider round"></span>
+                                    </label>
+                                    <label id="attribuiteslabel_callout" class="pl-2 form-check-label flex-grow-1 m-1"
+                                           for="attribuites_callout">Link to sticker layer</label>
+                                </div>
+                                <div class="input-group input-group-sm border border-light rounded flex-column p-2">
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input  flex-shrink-1" id="position_CheckBox_callout">
+                                        <label class="form-check-label flex-grow-1" for="exampleCheck1">Position</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input flex-shrink-1" id="rotation_CheckBox_callout">
+                                        <label class="form-check-label flex-grow-1" for="exampleCheck1">Rotation</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--//attributes-->
                         <!--//CompSelector-->
                         <div class="col-12 position-relative" id="div_compSelect_callout">
                             <label for="compSelect_callout" class="my-form-label">Select Comp.</label>
@@ -574,7 +651,9 @@
                         <!--//line4-->
                         <div class="col-12 pt-2">
                             <div class="input-group input-group-sm">
-                                <label class="my-form-label m-1">If you cannot find your layer reload the layer-list here</label>
+                                <label class="my-form-label m-1 form-control text-light bg-dark">
+                                    If you cannot find your layer reload the layer-list here
+                                </label>
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-primary border-right-0 border-left-0 border-light rounded-pill p-2"
                                             onclick="reloadComps()" type="button">
@@ -588,14 +667,14 @@
                             <div class="col-12 form-switch p-0">
                                 <div class="input-group input-group-sm">
                                     <label class="switch ml-2">
-                                        <input type="checkbox"
+                                        <input type="checkbox" class="form-switch-input"
                                                onchange="startTimeChangestickyImportFomr(this.checked)"
                                                id="startTimeSwitch_callout">
                                         <span class="slider round"></span>
                                     </label>
                                     <label id="startTimeSwitchlabel_callout" class="pl-2 form-check-label"
                                            for="startTimeSwitch_callout">
-                                        start from current CTI to end of timeline
+                                        start from current CTI
                                     </label>
                                     <div class="input-group-append">
                                         <div class="input-group-text border-0 bg-transparent pl-1 p-0  ml-n5">
@@ -631,6 +710,22 @@
                             </div>
                         </div>
                         <!--//Cti-->
+                        <!--//colorSelect-->
+                        <!--<div class="col-12 mt-2" id="div_colorSelect_callout">
+                            <div class="dropdown d-flex flex-row ">
+                                <button class="btn bg-dark btn-sm dropdown-toggle rounded border-left-0 color-palette-toggler"
+                                        type="button" id="colorSelect_callout"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Select label color
+                                </button>
+                                <div class="dropdown-menu p-0 m-0 col-3 bg-dark" aria-labelledby="colorSelect_callout">
+                                    <div class="row color-palette p-1 m-0">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>-->
+                        <!--//colorSelect-->
                     </form>
                 </div>
                 <div class="modal-footer p-1">
@@ -645,10 +740,67 @@
         </div>
     </div>
 
-    <div id="Loader" class="col-12 div-loader">
+    <div id="Loader" class="col-12 div-loader" style="z-index:15000;">
         <div class="div-loader-content">
             <div class="sk-double-bounce">
                 <img src="./assets/images/loader.gif" alt="logoLoader" class="col-12 p-0 m-0" />
+            </div>
+        </div>
+    </div>
+
+    <div id="registerModal" class="col-12 div-helper p-0 m-0 show">
+        <div class="modal-fullscreen modal-dialog modal-dialog-scrollable modal-dialog-centered p-1 m-0">
+
+            <div class="modal-content  text-light bg-dark">
+                <div class="modal-header p-1 d-flex flex-row-reverse border-0">
+                    <h4 class="col-12 text-light text-center pt-3">Wonder Call-Outs</h4>
+                </div>
+                <div class="d-flex align-items-center flex-column justify-content-center h-100 position-relative" style="back">
+                    <div class="pt-2 col-10 p-0 m-0">
+                        <div class="col-12 position-relative pb-1 p-0 m-0 d-flex flex-column" id="div_purchaseCode">
+
+                            <button type="button"
+                                    class="col-12 btn btn-signin-envato mt-1" onclick="openUrl('http://wondertools-official.com/verify')"
+                                    data-dismiss="modal">
+                                Get Activation Code
+                            </button>
+
+                            <label for="txt_Activation-Code" class="my-form-label ">
+                                Paste Activation-Code here*
+                            </label>
+                            <div class="input-group input-group-sm">
+                                <input type="text"
+                                       class="col-12 form-control text-light text-center bg-dark rounded-pill border-light "
+                                       id="txt_Activation-Code" placeholder="xxxxxxxx-xxxxx..."
+                                       maxlength="50">
+                            </div>
+
+                            <button type="button" id="btnActivation"
+                                    class="col-12 btn btn-secondary btn-sm mt-1" onclick="register()"
+                                    disabled="disabled"
+                                    data-dismiss="modal">
+                                Activate!
+                            </button>
+
+                            <div class="mt-3">
+                                <div class="p-0 m-auto d-flex justify-content-center">
+                                    <input type="checkbox" class="flex-shrink-1 mt-2 p-0" id="position_CheckBox_callout"
+                                           onchange="$('#btnActivation').attr('disabled', !this.checked);">
+                                    <label for="txt_Activation-Code" class="my-form-label p-1 m-0">
+                                        I have read and accept
+                                        <a onclick="openUrl('http://wondertools-official.com/terms')">
+                                            terms and conditions
+                                        </a>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <p class="col-12 text-center mt-2 justify-self-center text-danger" id="txtregistererror">
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -668,9 +820,43 @@
 
                         </div>
                         <div class="input-group input-group-sm mt-3 col-12">
-                            <label class="my-form-label m-1 text-dark text-center col-12" id="helpText">If you cannot find your layer reload the layer-list here</label>
+                            <label class="my-form-label m-1 text-dark text-center col-12" id="helpText"></label>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="logoutAlert" class="col-12 div-helper p-0 m-0 modal">
+        <div class="modal-fullscreen modal-dialog modal-dialog-scrollable modal-dialog-centered p-1 m-0">
+
+            <div class="modal-content  text-light bg-light">
+                <div class="modal-header p-1 d-flex flex-row-reverse">
+                    <button type="button" class="text-dark border-0 bg-transparent" data-dismiss="modal" aria-label="Close" onclick="closeHelp()">
+                        <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                <div class="d-flex align-items-center flex-column justify-content-center h-100 position-relative">
+                    <div class="pt-2">
+                        <div class="input-group input-group-sm mt-3 col-12">
+                            <h5 class="my-form-label m-1 text-dark text-center col-12">
+                                Are you sure ?
+                            </h5>
+                            <label class="my-form-label m-1 text-dark text-center col-12">
+                                After logOut you will see activation page,but you can always activate your extension throught there again
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer p-1">
+                    <button type="button"
+                            class="btn btn-secondary btn-sm"
+                            onclick="$('#logoutAlert').fadeOut();"
+                            data-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button class="btn btn-primary btn-sm" onclick="logOut()" type="submit">Log Out</button>
                 </div>
             </div>
         </div>
