@@ -549,9 +549,7 @@ function getSubMenuItems(subMenuPath, sourcPath) {
 }
 
 
-//getMainDirectories("C:/Users/h-ghods/AppData/Roaming/Adobe/CEP/extensions/wonder-2018",
-//'{"appVersion":"14.2.1","appSkinInfo":{"systemHighlightColor":{"alpha":255,"green":120,"blue":215,"red":0},"baseFontSize":9,"appBarBackgroundColorSRGB":{"antialiasLevel":0,"type":1,"color":{"alpha":255,"green":38.25,"blue":38.25,"red":38.25}},"appBarBackgroundColor":{"antialiasLevel":0,"type":1,"color":{"alpha":255,"green":38.25,"blue":38.25,"red":38.25}},"panelBackgroundColor":{"antialiasLevel":0,"type":1,"color":{"alpha":255,"green":38.25,"blue":38.25,"red":38.25}},"baseFontFamily":"Tahoma","panelBackgroundColorSRGB":{"antialiasLevel":0,"type":1,"color":{"alpha":255,"green":38.25,"blue":38.25,"red":38.25}}},"appLocale":"en_US","isAppOnline":true,"appUILocale":"en_US","appName":"AEFT","appId":"AEFT"}');
-function getMainDirectories(myPath,appInfo) {
+function getMainDirectories(myPath, appInfo) {
     try {
         var appInfo_params = JSON.parse(appInfo);
 
@@ -682,10 +680,9 @@ function importBasicHud(projPath, params, projectName) {
             var comps = [];
             var _startTime = 0;
             var _endTime = 0;
-            obj_params.labelColor = Math.floor((Math.random()* 17) + 1);
+            obj_params.labelColor = Math.floor((Math.random() * 17));
             var proj = app.project;
             var parent = undefined;
-
             if (parseInt(obj_params.comp) === 0) {
                 if (proj.activeItem.typeName === "Composition") {
                     parent = proj.activeItem;
@@ -694,7 +691,16 @@ function importBasicHud(projPath, params, projectName) {
                     return err;
                 }
             } else {
-                parent = proj.item(parseInt(obj_params.comp));
+                if (proj.item(parseInt(obj_params.comp)).typeName === "Composition") {
+                    parent = proj.item(parseInt(obj_params.comp));
+                } else {
+                    var err = JSON.stringify({ err: true, msg: 'no Comp found found. please select a comp and click refresh button!' });
+                    return err;
+                }
+                if (parent === undefined || parent === null) {
+                    var err = JSON.stringify({ err: true, msg: 'no Comp found, please select composition again!' });
+                    return err;
+                }
             }
 
             if (parent === undefined || parent === null) {
@@ -727,7 +733,6 @@ function importBasicHud(projPath, params, projectName) {
 
             var hudStickerLayer = undefined;
             if (obj_params.sticker != 0) {
-                //var startLayer = []; parent.layer(firstLayerIndex);
                 hudStickerLayer = parent.layer(parseInt(obj_params.sticker));
             }
 
@@ -735,7 +740,6 @@ function importBasicHud(projPath, params, projectName) {
                 var item = new ImportOptions();
                 item.file = new File(projPath);
                 var hudFolder = proj.importFile(item);
-                //var textLayer = parent.layers.add(TextIFolder.item(1));
                 var RootComp = undefined;
 
                 var hudFolder_numitems = hudFolder.numItems
@@ -760,7 +764,7 @@ function importBasicHud(projPath, params, projectName) {
                 if (hudStickerLayer !== undefined && hudStickerLayer) {
 
                     hudCompInParent.Effects.addProperty("Layer Control").property("Layer").setValue(hudStickerLayer.index);
-                    
+
 
                     if (hudStickerLayer.threeDLayer == true) {
                         hudCompInParent.threeDLayer = true;
@@ -841,13 +845,33 @@ function importBasicSizeline(projPath, params, projectName, textsizePath) {
             var comps = [];
             var _startTime = 0;
             var _endTime = 0;
-            obj_params.labelColor = Math.floor((Math.random()* 17) + 1);
+            obj_params.labelColor = Math.floor((Math.random() * 17));
             var proj = app.project;
+
             var parent = undefined;
             if (parseInt(obj_params.comp) === 0) {
-                parent = proj.activeItem;
+                if (proj.activeItem.typeName === "Composition") {
+                    parent = proj.activeItem;
+                } else {
+                    var err = JSON.stringify({ err: true, msg: 'no active comp found. please select a comp and click refresh button!' });
+                    return err;
+                }
             } else {
-                parent = proj.item(parseInt(obj_params.comp));
+                if (proj.item(parseInt(obj_params.comp)).typeName === "Composition") {
+                    parent = proj.item(parseInt(obj_params.comp));
+                } else {
+                    var err = JSON.stringify({ err: true, msg: 'no Comp found found. please select a comp and click refresh button!' });
+                    return err;
+                }
+                if (parent === undefined || parent === null) {
+                    var err = JSON.stringify({ err: true, msg: 'no Comp found, please select composition again!' });
+                    return err;
+                }
+            }
+
+            if (parent === undefined || parent === null) {
+                var err = JSON.stringify({ err: true, msg: 'no active comp found. please select a comp and click refresh button!' });
+                return err;
             }
 
             if (obj_params.cti.fromCti) {
@@ -923,7 +947,7 @@ function importBasicSizeline(projPath, params, projectName, textsizePath) {
                 hudCompInParent.selected = false;
 
             } else {
-                
+
                 hudCompInParent.startTime = _startTime;
 
                 if (_endTime !== 0) {
@@ -944,7 +968,7 @@ function importBasicSizeline(projPath, params, projectName, textsizePath) {
     }
 }
 
-function importSizeText(SizePath, parentComp, startPointLayer, endPointLayer, startTime, endTime, sizeText ,labelColor) {
+function importSizeText(SizePath, parentComp, startPointLayer, endPointLayer, startTime, endTime, sizeText, labelColor) {
     if (everythingOk()) {
         try {
             var proj = app.project;
@@ -963,9 +987,6 @@ function importSizeText(SizePath, parentComp, startPointLayer, endPointLayer, st
             }
 
             var controlItem = RootComp.layers.byName("textsize")
-
-
-            //var y = nodeLayers.length;
 
             controlItem.copyToComp(parentComp);
             var parentcontrolItem = parentComp.layer(1);
@@ -1000,7 +1021,7 @@ function importSizeText(SizePath, parentComp, startPointLayer, endPointLayer, st
     }
 }
 
-function importLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, endTime,labelColor) {
+function importLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, endTime, labelColor) {
     if (everythingOk()) {
         try {
             var proj = app.project;
@@ -1034,10 +1055,10 @@ function importLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, 
             var y = nodeLayers.length;
             for (var i = 0; i < y; i++) {
                 controlItem.copyToComp(parentComp);
-                
+
                 solids.push(parentComp.layer(1));
                 var parentcontrolItem = parentComp.layer(1);
-                
+
                 parentcontrolItem.Effects("StartPoint").property("Layer").setValue(nodeLayers[i].start.index);
                 parentcontrolItem.Effects("EndPoint").property("Layer").setValue(endPointLayer.index);
                 parentcontrolItem.startTime = startTime;
@@ -1080,7 +1101,7 @@ function checkIfBeamExist() {
     }
 }
 
-function importBeamLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, endTime,labelColor) {
+function importBeamLine(linePath, nodeLayers, parentComp, endPointLayer, startTime, endTime, labelColor) {
     if (everythingOk()) {
         try {
 
@@ -1160,9 +1181,6 @@ function getWonderFolder() {
         return err;
     }
 }
-//importCallOut("/c/Program Files (x86)/Common Files/Adobe/CEP/extensions/WonderCallOuts/assets/packages/Call Out/PoP Calls/Bo1Lo-L/Bo1Lo-L.aep",
-//"C:/Program Files (x86)/Common Files/Adobe/CEP/extensions/WonderCallOuts/assets/basicRequiers/line",
-//'{"comp":"1","sticker":"6","layers":[{"start":"5","end":"6"}],"cti":{"fromCti":true,"startTime":"0","endTime":"0"},"link":true,"position":true,"scale":true,"rotation":true}','Bo1Lo-L');
 function importCallOut(projPath, linePath, params, projectName) {
     if (everythingOk()) {
         try {
@@ -1170,9 +1188,10 @@ function importCallOut(projPath, linePath, params, projectName) {
             var comps = [];
             var _startTime = 0;
             var _endTime = 0;
-            obj_params.labelColor = Math.floor((Math.random()* 17) + 1);
+            obj_params.labelColor = Math.floor((Math.random() * 17));
             var proj = app.project;
             var parent = undefined;
+
             if (parseInt(obj_params.comp) === 0) {
                 if (proj.activeItem.typeName === "Composition") {
                     parent = proj.activeItem;
@@ -1181,7 +1200,17 @@ function importCallOut(projPath, linePath, params, projectName) {
                     return err;
                 }
             } else {
-                parent = proj.item(parseInt(obj_params.comp));
+                if (proj.item(parseInt(obj_params.comp)).typeName === "Composition") {
+                    parent = proj.item(parseInt(obj_params.comp));
+                } else {
+                    var err = JSON.stringify({ err: true, msg: 'no Comp found found. please select a comp and click refresh button!' });
+                    return err;
+                }
+                if (parent === undefined || parent === null) {
+                    var err = JSON.stringify({ err: true, msg: 'no Comp found, please select composition again!' });
+                    return err;
+                }
+
             }
 
             if (parent === undefined || parent === null) {
@@ -1256,19 +1285,25 @@ function importCallOut(projPath, linePath, params, projectName) {
 
             var nodeLayers = [];
 
-            for (var i = 0; i < obj_params.layers.length; i++) {
-                nodeLayers.push({
-                    start: parent.layer(parseInt(obj_params.layers[i].start)),
-                    end: parent.layer(parseInt(obj_params.layers[i].end))
-                });
+            try {
+                for (var i = 0; i < obj_params.layers.length; i++) {
+                    nodeLayers.push({
+                        start: parent.layer(parseInt(obj_params.layers[i].start)),
+                        end: parent.layer(parseInt(obj_params.layers[i].end))
+                    });
+                }
             }
-
+            catch (e) {
+                TextIFolder.remove();
+                var err = JSON.stringify({ err: true, msg: 'wrong start-point line selected!'});
+                return err;
+            }
             var textCompInParent = parent.layers.add(TextComp);
 
             var y = RootComp.layers.byName(projectName).transform.anchorPoint;
 
             textCompInParent.transform.anchorPoint.setValue(y.value);
-            
+
 
             textCompInParent.Effects.addProperty("Slider Control").property("Slider").setValue(70);
             textCompInParent.effect("Slider Control").name = "Text-Size"
@@ -1278,45 +1313,45 @@ function importCallOut(projPath, linePath, params, projectName) {
 
             if (callOutStickerLayer.threeDLayer == true) {
                 textCompInParent.threeDLayer = true;
-            }else{
+            } else {
                 textCompInParent.threeDLayer = false;
             }
 
-            if(obj_params.link){
+            if (obj_params.link) {
 
-                if(obj_params.position){
+                if (obj_params.position) {
                     if (textCompInParent.transform.position.canSetExpression) {
                         textCompInParent.transform.position.expression = 'effect("Layer Control")("Layer").position;'
                     }
                 }
 
-                if(obj_params.rotation){
+                if (obj_params.rotation) {
 
                     if (textCompInParent.threeDLayer == false) {
                         if (textCompInParent.transform.rotation.canSetExpression) {
                             textCompInParent.transform.rotation.expression = 'effect("Layer Control")("Layer").transform.rotation;'
                         }
-                    }else{
+                    } else {
                         textCompInParent.transform.orientation.expression = 'effect("Layer Control")("Layer").transform.orientation;'
                     }
                 }
-            }else{
-                if(obj_params.position){
-                    
-                        textCompInParent.transform.position.setValue(callOutStickerLayer.transform.position.value);
+            } else {
+                if (obj_params.position) {
+
+                    textCompInParent.transform.position.setValue(callOutStickerLayer.transform.position.value);
                 }
 
-                if(obj_params.rotation){
+                if (obj_params.rotation) {
                     if (textCompInParent.threeDLayer == false) {
                         textCompInParent.transform.rotation.setValue(callOutStickerLayer.transform.rotation.value);
-                    }else{
+                    } else {
                         textCompInParent.transform.orientation.setValue(callOutStickerLayer.transform.orientation.value);
                     }
 
-                    
+
                 }
             }
-           
+
             var base_Duration = TextComp.duration;
             var new_duration = _endTime - _startTime;
             textCompInParent.stretch = (new_duration * 100) / base_Duration;
@@ -1384,7 +1419,7 @@ function importCallOut(projPath, linePath, params, projectName) {
                 if (getversion() >= 15) {
                     lineResult = importLine(linePath + '/line.aep', nodeLayers, parent, textCompInParent, _startTime, _endTime, obj_params.labelColor);
                 }
-                else {//beam
+                else {
                     lineResult = importBeamLine(linePath + '/line-Beam.aep', nodeLayers, parent, textCompInParent, _startTime, _endTime, obj_params.labelColor);
                 }
                 if (lineResult && lineResult.err) { return JSON.stringify(lineResult); }
@@ -1398,7 +1433,9 @@ function importCallOut(projPath, linePath, params, projectName) {
             return JSON.stringify({ res: 'ok' })
         }
         catch (e) {
-            var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message });
+            TextIFolder.remove();
+            var z = e.message.replace('“', '"').replace('”', '"');
+            var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message.replace('“', '"').replace('”', '"') });
             return err;
         }
     }
@@ -1414,85 +1451,6 @@ function getmarkers(comp) {
     var x = (M === 0 ? "NO_KEYS" : a);
 }
 
-function importWithEffect(projPath, params, projectName) {
-
-    try {
-        var obj_params = JSON.parse(params);
-        var comps = [];
-        var _startTime = 0;
-        var _endTime = 0;
-
-        var proj = app.project;
-        var parent = undefined;
-        if (parseInt(obj_params.comp) === 0) {
-            parent = proj.activeItem;
-        } else {
-            parent = proj.item(parseInt(obj_params.comp));
-        }
-
-        if (obj_params.cti.fromCti) {
-            _startTime = parent.time;
-        } else {
-            if (parseFloat(obj_params.cti.startTime) !== 0) {
-                _startTime = parseFloat(obj_params.cti.startTime);
-            } else {
-                _startTime = parent.time;
-            }
-        }
-        if (parseFloat(obj_params.cti.endTime) !== 0) {
-            _endTime = parseFloat(obj_params.cti.endTime);
-        }
-
-        if (_endTime !== 0) {
-            if (_startTime >= _endTime) {
-                return "{'error' :'end time is not correct!'}"
-            }
-
-            if (_endTime > parent.workAreaDuration) {
-                return "{'error' :'wrong time range!'}"
-            }
-        }
-
-        var item = new ImportOptions();
-        item.file = new File(projPath);
-        var witchEffect_Folder = proj.importFile(item);
-        var RootComp = undefined;
-
-        var witchEffect_Folder_numitems = witchEffect_Folder.numItems
-        for (var i = 1; i <= witchEffect_Folder_numitems; i++) {
-            if (witchEffect_Folder.item(i).typeName === "Composition" && witchEffect_Folder.item(i).name === projectName) {
-                RootComp = witchEffect_Folder.item(i);
-                continue;
-            }
-        }
-
-        var selectedLayers = parent.selectedLayers;
-        for (var i = 0; i < selectedLayers.length; i++) {
-            selectedLayers[i].selected = false;
-        }
-
-        var x = RootComp.layer(1);
-        x.copyToComp(parent);
-
-        var witchEffect_CompInParent = parent.layer(1);
-        witchEffect_CompInParent.name = witchEffect_CompInParent.name + "-" + parent.layers.length
-        witchEffect_CompInParent.startTime = _startTime;
-
-        witchEffect_CompInParent.startTime = _startTime;
-
-        if (_endTime !== 0) {
-            witchEffect_CompInParent.outPoint = _endTime;
-        }
-        witchEffect_CompInParent.selected = false;
-        witchEffect_Folder.remove();
-        //proj.autoFixExpressions("fixme",RootComp.name);
-        return JSON.stringify({ res: 'ok' })
-    }
-    catch (e) {
-        var err = JSON.stringify({ err: true, msg: ' -- line : ' + e.line + ' --- err.msg : ' + e.message });
-        return err;
-    }
-}
 
 function importSamples(projPath) {
 
@@ -1523,7 +1481,6 @@ function importNewPackage(appPackagePath) {
                 return { error: "you need to import each package seperatly!!" }
             }
 
-            /// check if pkg exists remove!!!
             var pkg_NewFolder = new Folder(appPackagePath + "/" + newPkgFolder_files[0].name.replace(/%20/, " "));
             if (pkg_NewFolder.exists) {
                 error = removePackage(pkg_NewFolder);
@@ -1616,7 +1573,6 @@ function openURL(url) {
     try {
         var os = system.osName;
         if (!os.length) {
-            // I never remember which one is available, but I think $.os always is, you'll have to check
             os = $.os;
         }
         var app_os = (os.indexOf("Win") != -1) ? system.callSystem('explorer ' + url) : system.callSystem('open ' + url);
@@ -1696,7 +1652,7 @@ function getmac() {
 }
 
 function getMachinId(path) {
-    return getmac() + "|" + getUserName() + "|" + getAppNameFromSetting() + "|" + app.version + "|" + getExtensionName(path) + "|" + getExtensionVersion(path);
+    return getUserName() + "|" + getAppNameFromSetting() + "|" + app.version + "|" + getExtensionName(path) + "|" + getExtensionVersion(path);
 }
 
 function getExtensionVersion(path) {
@@ -1718,7 +1674,6 @@ function getExtensionName(path) {
     var name = xmlDoc.@ExtensionBundleId.toString();
     return name;
 }
-//mactichekti(getpathFromSetting())
 function mactichekti(myPath) {
     var __a = "!";
     if (app.settings.haveSetting("_wt", "a__" + app.version)) {
@@ -1732,16 +1687,6 @@ function mactichekti(myPath) {
         app.settings.saveSetting("_wt", "a__" + app.version, "!");
     }
 
-    //var configPath = '/assets/help/help.json';
-    //var helpFile = new File(myPath + configPath);
-
-    //helpFile.open('r');
-
-    //var content = helpFile.read();
-
-    //helpFile.close();
-
-    //var help_json = JSON.parse(content)
     var res;
     if (__a === "!") {
         res = { err: true, msg: '!' };
@@ -1757,6 +1702,14 @@ function mactichekti(myPath) {
                 url: 'http://wondertools-official.com/api/lic/check/' + homeStr
             });
             var data_json = data.payload;
+
+            if (data.statusMessage != 'OK') {
+                var atts = getConnectionFromSetting();
+                atts = parseInt(atts) + 1;
+                app.settings.saveSetting("_wt", "internet__" + app.version, atts.toString());
+                alert('Please check the Internet connection, something went wrong');
+                return { err: true, msg: 'connectionerror' };
+            }
 
             if (data_json.boolResult == true) {
                 app.settings.saveSetting("_wt", "internet__" + app.version, "0");
@@ -1776,7 +1729,6 @@ function mactichekti(myPath) {
         }
     }
 }
-//registerRequest('071c3638-b08f-43a8-a289-a9989780917f');
 function registerRequest(activationCode) {
     try {
         if (canWriteFiles()) {
@@ -1799,7 +1751,6 @@ function registerRequest(activationCode) {
             var data_json = data.payload;
 
             if (data_json.boolResult === false) {
-                //alert(data_json.description);
                 var err = JSON.stringify({ err: true, msg: data_json.description });
                 return err;
             }
@@ -1917,25 +1868,25 @@ function backtohome(s) {
 
 };
 
-function getLabelsFromPrefs(){
-  $.appEncoding = 'CP1252';
+function getLabelsFromPrefs() {
+    $.appEncoding = 'CP1252';
 
-  var sectionName = "Label Preference Color Section 5";
-  var prefFile = PREFType.PREF_Type_MACHINE_INDEPENDENT;
-  var keyName;
-  var mypref;
-  var resArray = [];
+    var sectionName = "Label Preference Color Section 5";
+    var prefFile = PREFType.PREF_Type_MACHINE_INDEPENDENT;
+    var keyName;
+    var mypref;
+    var resArray = [];
 
-  for(var i = 1; i <= 16; i++){
-    keyName = "Label Color ID 2 # " + i.toString();
-    mypref = app.preferences.getPrefAsString(sectionName, keyName, prefFile);
+    for (var i = 1; i <= 16; i++) {
+        keyName = "Label Color ID 2 # " + i.toString();
+        mypref = app.preferences.getPrefAsString(sectionName, keyName, prefFile);
 
-    var res = '';
-    for(var j = 1; j < mypref.length; j++) {
-        var charCode = mypref.charCodeAt(j)
-        res += charCode.toString(16).toUpperCase();
+        var res = '';
+        for (var j = 1; j < mypref.length; j++) {
+            var charCode = mypref.charCodeAt(j)
+            res += charCode.toString(16).toUpperCase();
+        }
+        resArray.push(res);
     }
-    resArray.push(res);
-  }
     return resArray;
 };

@@ -2,11 +2,11 @@
 <ExtensionManifest
 	Version="4.0"
 	ExtensionBundleId="WonderCallOuts"
-	ExtensionBundleVersion="1.5"
+	ExtensionBundleVersion="1.7"
 	ExtensionBundleName="WonderCallOuts">
 
   <ExtensionList>
-    <Extension Id="WonderCallOuts" Version="1.6" />
+    <Extension Id="WonderCallOuts" Version="1.7" />
   </ExtensionList>
 
   <ExecutionEnvironment>
@@ -41,7 +41,7 @@
         </Lifecycle>
         <UI>
           <Type>Panel</Type>
-          <Menu>Wonder-CallOuts V.1.6</Menu>
+          <Menu>Wonder-CallOuts V.1.7</Menu>
           <Geometry>
             <Size>
               <Height>400</Height>
