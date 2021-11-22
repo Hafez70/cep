@@ -24,18 +24,13 @@ var canWriteFiles = false;
 
     var jsxFile = extensionPath + '/jsx/hostjs.jsx';
 
-    //debug
-    //csInterface.evalScript("try{\n var jsxFile = new File('" + jsxFile + "');\n $.evalFile(jsxFile); \n }catch(e){alert(e.toString())}", function (params) {
-    //    csInterface.evalScript("canWriteFiles();", function (params) {
-    //        canWriteFiles = params;
-    //    });
-    //});
-    //release
+    
     csInterface.evalScript("try{\n var jsxFile = new File('" + jsxFile + "');\n $.evalFile(jsxFile); \n }catch(e){alert(e.toString())}", function (params) {
         csInterface.evalScript("canWriteFiles();", function (params) {
             canWriteFiles = params;
         });
-    //});
+    });
+    
 }());
 
 
