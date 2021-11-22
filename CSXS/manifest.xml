@@ -2,11 +2,11 @@
 <ExtensionManifest
 	Version="4.0"
 	ExtensionBundleId="WonderCallOuts"
-	ExtensionBundleVersion="1.5"
+	ExtensionBundleVersion="1.8"
 	ExtensionBundleName="WonderCallOuts">
 
   <ExtensionList>
-    <Extension Id="WonderCallOuts" Version="1.6" />
+    <Extension Id="WonderCallOuts" Version="1.8" />
   </ExtensionList>
 
   <ExecutionEnvironment>
@@ -29,8 +29,7 @@
         <Resources>
          
           <MainPath>./index_WonderCallOuts.html</MainPath>
-          <!-- <ScriptPath>./jsx/aftereffects.jsx</ScriptPath> -->
-          
+          <ScriptPath>./jsx/aftereffects.jsx</ScriptPath>
           <CEFCommandLine>
             <Parameter>--allow-file-access</Parameter>
             <Parameter>--allow-file-access-from-files</Parameter>
@@ -41,7 +40,7 @@
         </Lifecycle>
         <UI>
           <Type>Panel</Type>
-          <Menu>Wonder-CallOuts V.1.6</Menu>
+          <Menu>Wonder-CallOuts V.1.8</Menu>
           <Geometry>
             <Size>
               <Height>400</Height>

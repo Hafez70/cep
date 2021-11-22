@@ -57,7 +57,7 @@ input[type=number] {
 }
 
 .border-light {
-    border-color: #707375 !important;
+    border-color: #707375;
 }
 
 .text-light {

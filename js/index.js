@@ -24,11 +24,12 @@ var canWriteFiles = false;
 
     var jsxFile = extensionPath + '/jsx/hostjs.jsx';
 
-    csInterface.evalScript("try{\n var jsxFile = new File('" + jsxFile + "');\n $.evalFile(jsxFile); \n }catch(e){alert(e.toString())}",
-        function (params) {csInterface.evalScript("canWriteFiles();", function (params) {
+   
+    //csInterface.evalScript("try{\n var jsxFile = new File('" + jsxFile + "');\n $.evalFile(jsxFile); \n }catch(e){alert(e.toString())}", function (params) {
+        csInterface.evalScript("canWriteFiles();", function (params) {
             canWriteFiles = params;
         });
-    });
+    //});
 }());
 
 
@@ -51,7 +52,8 @@ function getFilesTree() {
 
     ShowLoader();
     var info = JSON.stringify(csInterface.getHostEnvironment());
-    csInterface.evalScript("getMainDirectories('" + csInterface.getSystemPath(SystemPath.EXTENSION) + "','" + info + "');",
+    var _script = "getMainDirectories('" + csInterface.getSystemPath(SystemPath.EXTENSION) + "','" + info + "');";
+    csInterface.evalScript(_script,
         function (res) {
             var result = JSON.parse(res);
             HideLoader();
@@ -64,12 +66,13 @@ function getFilesTree() {
                     alert(result.msg);
                     return;
                 }
-            }
+            } else {
 
-            $('#registerModal').fadeOut();
-            contentTree = result;
-            if (contentTree.length > 0) {
-                generateSideBar();
+                $('#registerModal').fadeOut();
+                contentTree = result;
+                if (contentTree.length > 0) {
+                    generateSideBar();
+                }
             }
         });
 }
@@ -266,7 +269,8 @@ function compSelected(this_val) {
 
             var layers = JSON.parse(res);
             if (layers.err) {
-                alert(layers.msg);
+                alert('Comp moved or removed, select the Comp again!');
+                reloadComps();
                 return;
             }
 
@@ -337,6 +341,18 @@ function reloadComps() {
 }
 
 function rawModal() {
+
+    $('#calloutImportFomr').removeClass('was-validated');
+    $('#sizelineImportForm').removeClass('was-validated');
+    $('#hudImportForm').removeClass('was-validated');
+
+    $("#startlayerSelect_callout_line1").removeClass("border-danger");
+    $("#startlayerSelect_callout_line2").removeClass("border-danger");
+    $("#startlayerSelect_callout_line3").removeClass("border-danger");
+    $("#startlayerSelect_callout_line4").removeClass("border-danger");
+    $("#compSelect_callout").removeClass("border-danger");
+    $("#compSelect_hud").removeClass("border-danger");
+
     $("#stickyImportFomr>div.position-relative").hide();
     $("#calloutImportFomr>div.position-relative").hide();
 
@@ -442,8 +458,6 @@ function generateJsonSetting() {
             json_result.position = $('#position_CheckBox_hud')[0].checked;
             json_result.rotation = $('#rotation_CheckBox_hud')[0].checked;
 
-            //json_result.labelColor = $('#colorSelect_hud').attr('data-color');
-
             importHud(json_result);
         }
         if (setingNeede.type === "sizeline") {
@@ -477,8 +491,6 @@ function generateJsonSetting() {
                     endTime: (!$('#endTimeSpecificValue_sizeline')[0].value ? 0 : $('#endTimeSpecificValue_sizeline')[0].value),
                 };
             }
-
-            //json_result.labelColor = $('#colorSelect_sizeline').attr('data-color');
 
             importSizeline(json_result);
         }
@@ -550,7 +562,6 @@ function generateJsonSetting() {
             json_result.position = $('#position_CheckBox_callout')[0].checked;
             json_result.rotation = $('#rotation_CheckBox_callout')[0].checked;
 
-            //json_result.labelColor = $('#colorSelect_callout').attr('data-color');
             importCallOut(json_result);
         }
     }
@@ -565,11 +576,30 @@ function importCallOut(jsonInput) {
             HideLoader();
             var result = JSON.parse(res);
             if (result.err) {
-                alert(result.msg);
                 reloadComps();
+                if (result.msg.indexOf('Unable to call "layer" because of parameter 1', 0) !== -1) {
+                    alert("Wrong sticker-Layer selected!");
+                    $("#layerTextSticker_callout").addClass("border-danger");
+                } else if (result.msg.indexOf('no Comp found', 0) !== -1 ||
+                    result.msg.indexOf('no active comp found', 0) !== -1) {
+                    alert("Wrong Comp selected!");
+                    $("#compSelect_callout").addClass("border-danger");
+                } else if (result.msg.indexOf('start-point', 0) !== -1) {
+                    alert(result.msg);
+
+                    $("#startlayerSelect_callout_line1").addClass("border-danger");
+                    $("#startlayerSelect_callout_line2").addClass("border-danger");
+                    $("#startlayerSelect_callout_line3").addClass("border-danger");
+                    $("#startlayerSelect_callout_line4").addClass("border-danger");
+                }
+                else {
+                    alert(result.msg);
+                }
+
                 return;
             }
             else {
+                
                 $('#calloutSettingModal').modal('hide');
                 $('#calloutImportFomr').removeClass('was-validated');
             }
@@ -586,7 +616,15 @@ function importHud(jsonInput) {
             HideLoader();
             var result = JSON.parse(res);
             if (result.err) {
-                alert(result.msg);
+                if (result.msg.indexOf('no Comp found', 0) !== -1 ||
+                    result.msg.indexOf('no active comp found', 0) !== -1) {
+                    alert("Wrong Comp selected!");
+                    $("#compSelect_hud").addClass("border-danger");
+
+                } else {
+                    alert(result.msg);
+                }
+
                 reloadComps();
                 return;
             }
@@ -600,7 +638,6 @@ function importHud(jsonInput) {
 
 function importSizeline(jsonInput) {
     var str_input = JSON.stringify(jsonInput);
-    // if (compSelectvalue && startlayerSelectvalue !== 0 && endlayerSelectvalue !== 0) {
     const strEval = 'importBasicSizeline("' + importProjPath + '",\'' + str_input + '\',\'' + importProjName + '\', "' + sizetextFullPath + '" )';
     ShowLoader();
     csInterface.evalScript(strEval
@@ -617,9 +654,6 @@ function importSizeline(jsonInput) {
                 $('#sizelineImportForm').removeClass('was-validated');
             }
         });
-    //} else {
-
-    //}
 }
 
 
@@ -693,16 +727,17 @@ function openLogOutWindow() {
 }
 
 function register() {
-    ShowLoader();
-    var pc = $("#txt_Activation-Code").val();
+
+    var pc = $("#txt_Activation_Code").val();
 
     if (pc.length > 0) {
+        ShowLoader();
         var script = "registerRequest('" + pc.trim() + "')";
         csInterface.evalScript(script, function (res) {
             HideLoader();
 
             var result = JSON.parse(res);
-
+            $("#txt_Activation_Code").removeClass("border-danger");
             if (result.err === false) {
                 $('#registerModal').fadeOut();
                 getFilesTree();
@@ -710,6 +745,8 @@ function register() {
                 $('#txtregistererror').text(result.msg);
             }
         });
+    } else {
+        $("#txt_Activation_Code").addClass("border-danger");
     }
 }
 
