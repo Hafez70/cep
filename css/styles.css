@@ -52,6 +52,11 @@ input[type=number] {
     background-color: #0a1117 !important;
 }
 
+.bg-mainContainer {
+    background-image: url('./assets/images/logo-bg.png');
+    background-position: center;
+}
+
 .shadow-fancy {
     box-shadow: 0rem 0rem 0.10rem 0rem #1CB2C3;
 }
